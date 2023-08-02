@@ -1,0 +1,13 @@
+﻿  var reader = new FileReader();
+  reader.addEventListener("load", function () {
+    // convert file to base64 string
+		console.log(reader.result);
+  }, false);
+  reader.readAsDataURL(new Blob(['ABC']));
+
+/* FileStream is base64 string */
+let dlLink = $("<a href='data:application/octet-stream;base64," + FileStream + "' target='_blank' download='" + FileName + "'>download</a>");
+dlLink[0].click();
+
+Research - 
+URL.createObjectURL(blob)和FileReader.readAsDataURL(file)很相似

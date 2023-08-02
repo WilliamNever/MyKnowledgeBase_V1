@@ -1,0 +1,47 @@
+﻿How to create the code coverage report for the solution?
+
+To reference the following pkg in project - 
+
+    <PackageReference Include="coverlet.msbuild" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+Run the following commands in Package Manager Console
+1. build solution -
+dotnet build
+
+2. install report generator for Unit tests
+dotnet new tool-manifest
+dotnet tool install --local dotnet-reportgenerator-globaltool
+
+3. create Collect Coverage for solution, the created xml exists at the root of the test unit -
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+
+4. restore generator tool -
+dotnet tool restore
+
+5. create reports for solution -
+dotnet tool run reportgenerator -reports:./Test.Unit/coverage.cobertura.xml -targetdir:./CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+
+
+If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
+- [ASP.NET Core](https://github.com/aspnet/Home)
+- [Visual Studio Code](https://github.com/Microsoft/vscode)
+- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+- [Code Coverage](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-code-coverage?tabs=windows)
+
+Moq demos - 
+https://github.com/Moq/moq4/wiki/Quickstart
+
+
+The needed pkg for code coverage tools -
+
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>

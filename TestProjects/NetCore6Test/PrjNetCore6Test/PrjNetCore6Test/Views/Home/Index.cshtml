@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<dl>
+    <dt>TempData["aaa"]</dt>
+    @{
+        var list = new string[] { };
+        if (TempData.TryGetValue("aaa", out var obj))
+        {
+            list = (string[]?)obj;
+        }
+    }
+    <dd>@($"Value - {string.Join(", ", list)}")</dd>
+    <dt>TempData["bbb"]</dt>
+    @{
+        string noti = "- Nothing -";
+        if (TempData.TryGetValue("bbb", out var obj1))
+        {
+            noti = obj1.ToString();
+        }
+    }
+    <dd>@($"Value - {noti}")</dd>
+</dl>

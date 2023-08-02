@@ -1,0 +1,12 @@
+function ConvertToLocalDateTime() {
+    $("[oriUtcDatetime]").each(function () {
+        let dts = $(this).attr("oriUtcDatetime");
+        if (isNaN(dts) && !isNaN(Date.parse(dts))) {
+            let indt = new Date(Date.parse(dts));
+            indt.setMinutes(indt.getMinutes() - indt.getTimezoneOffset());
+            dts = indt.toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+        }
+        $(this).text(dts);
+        $(this).val(dts);
+    });
+}

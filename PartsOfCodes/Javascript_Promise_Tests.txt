@@ -1,0 +1,24 @@
+var i = 100;
+var ss = new Promise((s, r) => {
+	if (i < 100) {
+		s({
+			index: i
+		});
+	} else {
+		r({
+			index: i
+		});
+	}
+});
+async function fun() {
+	try {
+		var aa = await ss;
+		console.log("ss - ", aa);
+	} catch (ex) {
+		console.log("ex - ", ex);
+	} finally {
+		console.log("In finally part");
+	}
+}
+await fun();
+console.log("out of funcs");

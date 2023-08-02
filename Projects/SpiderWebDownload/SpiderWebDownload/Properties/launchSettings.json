@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SpiderWebDownload": {
+      "commandName": "Project",
+      "commandLineArgs": "-url https://w.linovelib.com/novel/3579/catalog -tag li -m -l -sub 5 -stt 2"
+    }
+  }
+}

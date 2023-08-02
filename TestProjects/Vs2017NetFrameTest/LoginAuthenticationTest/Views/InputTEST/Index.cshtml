@@ -1,0 +1,77 @@
+﻿@model LoginAuthenticationTest.Controllers.ViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    var modelState = ViewBag.ModelState as Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
+    var er = modelState;
+}
+@(modelState==null?"NullState":modelState.ToString())
+<h2>Index</h2>
+
+<h4>ViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <a href="#" type="button" class="btn btn-warning"
+           data-placement="bottom" title="<h2>Title</h2>"
+           data-container="body" data-toggle="popover" data-content="javascript:getHtml()"
+           data-trigger='click hover'>
+            Popover
+        </a>
+        <script type="text/javascript">
+            $(function () {
+                $("[data-toggle='popover']").attr("data-content", getHtml());
+                $("[data-toggle='popover']").popover({ html: true });
+            });
+            function getHtml() {
+                return $("#formShow").html();//"<h4>Popover 中的一些内容 —— options 方法</h4><div>sss</div>";
+            }
+        </script>
+        <form id="tosub" onsubmit="return false;">
+            <input name="telNum" type="tel" required />
+            <div class="text-danger field-validation-valid" data-valmsg-for="telNum" data-valmsg-replace="true"></div>
+            <input name="charge" type="number" maxlength="12" required />
+            <div class="text-danger field-validation-valid" data-valmsg-for="charge" data-valmsg-replace="true"></div>
+            <input name="email" type="email" data-val-email="needs an ok email" required data-val="true" />
+            <div class="text-danger field-validation-valid" data-valmsg-for="email" data-valmsg-replace="true"></div>
+
+            <select name="selection" required>
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <div class="text-danger field-validation-valid" data-valmsg-for="selection" data-valmsg-replace="true"></div>
+            <input type="submit" value="Create" class="btn btn-default" />
+        </form>
+        <form id="formShow" asp-action="Index" onsubmit="return false;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="UserAge" class="control-label"></label>
+                <input asp-for="UserAge" class="form-control" />
+                <span asp-validation-for="UserAge" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

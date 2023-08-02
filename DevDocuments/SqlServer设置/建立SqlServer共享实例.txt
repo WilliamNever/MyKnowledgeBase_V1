@@ -1,0 +1,13 @@
+﻿"Server=(localdb)\\MSSQLLocalDB;Initial Catalog=Speedway;Integrated Security=true;AttachDbFilename=D:\\ProjectsTest\\App_Data\\Speedway.mdf;"
+server=(localdb)\MSSQLLocalDB;uid=sa;pwd=123456;Initial Catalog=MyDB1
+
+(localdb)\MSSQLLocalDB
+sqllocaldb h "MSSQLLocalDB" "mylocaldb"  //建立共享实例
+
+sqllocaldb i ".\mylocaldb"  //列出当前共享实例状态
+
+
+sqllocaldb s ".\mylocaldb"  //激活共享实例名
+
+ // 使用MSSM连接工具连接时,也要使用管理员权限打开.实例名变成   (localdb)\.\mylocaldb   第一个\后面的.\mylocaldb 就是共享实例别名
+"server=(localdb)\\.\\mylocaldb;Initial Catalog=Apis;user id=sa;pwd=sa"

@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    Layout = "_Layout";
+}
+
+<div>
+    AHelpArea - HomeController.Index()
+</div>
+<div>
+    @Url.RouteUrl("Apis", new { action = "ReadFromId", controller = "TVT", id=35 })
+</div>
+<div>
+    @Url.RouteUrl("Apis", new { action = "ReadFromSId", controller = "TVT", id=35 })
+</div>
+<div>
+    @Url.RouteUrl("Apis", new { action = "PostRecord", controller = "TVT" })
+</div>
+<div>
+    @Url.RouteUrl("Apis", new { action = "PutRecord", controller = "TVT" })
+</div>
+<div>
+    @Url.RouteUrl("Apis", new { action = "PostRecordById", controller = "TVT", id=35 })
+</div>

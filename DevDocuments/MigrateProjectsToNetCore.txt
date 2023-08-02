@@ -1,0 +1,21 @@
+在命令行下运行以下命令以安装 .NET 升级助手。（它是一个全局工具，因此您可以在任何地方运行该命令。）
+
+dotnet tool install -g try-convert
+
+如果已经安装try-convert但需要升级到较新版本，请执行以下命令：
+
+dotnet tool update -g try-convert
+
+安装 .NET 升级助手
+
+我们现在已准备好安装 .NET 升级助手。为此，请从终端执行以下命令：
+
+dotnet tool install -g upgrade-assistant
+
+安装 .NET 升级助手后，切换到解决方案所在的文件夹并输入以下命令来运行它。
+
+upgrade-assistant upgrade <****.sln>
+
+other Arguments: please see the command, 
+upgrade-assistant upgrade -?
+

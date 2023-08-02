@@ -1,0 +1,1 @@
+powershell -file ".\RestoreItems.ps1" ".."

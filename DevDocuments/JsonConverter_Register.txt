@@ -1,0 +1,47 @@
+namespace System.Text.Json.Serialization
+{
+    public class BooleanConverter : JsonConverter<bool>
+    {
+
+        public override bool Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options) =>
+            bool.Parse(reader.GetString());
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            bool b,
+            JsonSerializerOptions options) =>
+            writer.WriteStringValue(b.ToString());
+    }
+}
+
+ps - By reader.TokenType to make sure wether the json value is String.
+
+
+
+Usages - 
+
+1 adding it to a property as an attribute - 
+
+[JsonConverter(typeof(BooleanConverter))]
+public bool IsComplete { get; set; }
+
+2 Register the converter in the startup.cs - 
+
+            builder.Services.AddMvc().AddJsonOptions(
+                config => {
+                    config.JsonSerializerOptions.Converters.Add(
+                        new System.Text.Json.Serialization.JsonStringEnumConverter()
+                        );
+                    config.JsonSerializerOptions.Converters.Add(
+                        new BooleanConverter()
+                        );
+                }
+                );
+
+
+
+
+

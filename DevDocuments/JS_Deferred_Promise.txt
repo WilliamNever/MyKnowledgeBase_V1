@@ -1,0 +1,87 @@
+var dtd = $.Deferred();
+SendAjaxUrl({
+	url: "/AdminApi/RecentNotifications?_A=1",
+	type: 'GET',
+	dataType: "json",
+	async: true,
+	SuccessHandler: function(results) {
+		console.log('In ajax-success action - ');
+		dtd.resolve({
+			addr: "a1"
+		});
+	},
+	ErrorHandler: function(err) {
+		dtd.reject({
+			addr: "err_a1"
+		});
+	}
+});
+
+
+dtd
+	.done(results => {
+		console.log('In done1 action - ', results);
+	})
+	.done(r => {
+		console.log('In done2 action - ', r);
+	})
+	.fail(function(err) {
+		console.log('In fail action - ', err);
+	})
+	.always(
+		r => {
+			console.log('In always action - ', r);
+		}
+	)
+	.catch(
+		r => {
+			console.log('In catch action - ', r);
+		}
+	);
+
+var dtd1 = $.Deferred();
+SendAjaxUrl({
+	url: "/AdminApi/RecentNotifications?_B=2",
+	type: 'GET',
+	dataType: "json",
+	async: true,
+	SuccessHandler: function(results) {
+		console.log('In se ajax-success action - ');
+		dtd1.resolve({
+			addr: "a2"
+		});
+	},
+	ErrorHandler: function(err) {
+		dtd1.reject({
+			addr: "err_a2"
+		});
+	}
+});
+dtd1
+	.done(results => {
+		console.log('In done1_2 action - ', results);
+	})
+	.done(r => {
+		console.log('In done2_2 action - ', r);
+	})
+	.fail(function(r) {
+		console.log('In fail_2 action - ', r);
+	})
+	.always(
+		r => {
+			console.log('In always_2 action - ', r);
+		}
+	)
+	.catch(
+		r => {
+			console.log('In catch action - ', r);
+		}
+	);
+await $.when(dtd.promise(), dtd1.promise())
+	.done(
+		(r1, r2) => {
+			console.log('In when done action - ', r1, r2);
+		}
+	);
+console.log(111111111);
+console.log(dtd.promise());

@@ -1,0 +1,31 @@
+1 - 
+open git-bash.exe
+
+2 - copy -
+id_rsa
+id_rsa.pub
+To the %USERPROFILE%/.ssh/
+
+3 - Commands -
+ ssh-agent -s
+ ssh-add ~/.ssh/id_rsa
+
+//if get an error, which likes 'Could not open a connetion to yor authentication agent.', please runs the following commands
+
+ ssh-agent bash
+ ssh-add ~/.ssh/id_rsa
+
+//if an error still exists, runs the followings
+eval 'ssh-agent -s'
+ssh-add ~/.ssh/id_rsa
+
+//until getting 'Identity added: ........'
+
+ ssh -T git@github.com
+//Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+//ps - it must be 'yes'. The known_hosts file is created in '.ssh' folder.
+
+
+others - 
+- ls //it is a list command
+- cd //works as the cd command in DOS

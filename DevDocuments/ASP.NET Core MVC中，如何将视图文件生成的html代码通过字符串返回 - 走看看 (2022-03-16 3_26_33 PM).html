@@ -1,0 +1,250 @@
+<!DOCTYPE html> <html style lang=zh-CN><!--
+ Page saved with SingleFile 
+ url: http://t.zoukankan.com/OpenCoder-p-13849084.html 
+ saved date: Wed Mar 16 2022 15:26:33 GMT+0800 (China Standard Time)
+--><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name=referrer content=no-referrer>
+<style>body{font-family:Helvetica,Verdana,Arial,sans-serif}.cnblogs_code{background-color:#f5f5f5;font-family:Courier New!important;font-size:12px!important;border:1px solid #ccc;padding:5px;overflow:auto;margin:5px 0;color:#000}.cnblogs_code pre{font-family:Courier New!important;font-size:12px!important;word-wrap:break-word;white-space:pre-wrap}.cnblogs_code span{font-family:Courier New!important;font-size:12px!important;line-height:1.5!important}pre{margin-top:0;margin-bottom:0}pre{white-space:-moz-pre-wrap!important;white-space:-o-pre-wrap}#cnblogs_post_body{margin-bottom:20px}#cnblogs_post_body{word-break:break-word}#cnblogs_post_body p{margin:10px auto;text-indent:0}@-webkit-keyframes ui-dialog-loading{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes ui-dialog-loading{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+<style media="only screen and (max-width: 767px)">body{font-size:14px!important;font-family:'PingFang SC','Helvetica Neue','Helvetica','Arial',sans-serif;-webkit-text-size-adjust:none}body{margin:0;padding:0}</style>
+<meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>ASP.NET Core MVC中，如何将视图文件生成的html代码通过字符串返回 - 走看看</title>
+<meta name=keywords content="ASP.NET Core MVC中，如何将视图文件生成的html代码通过字符串返回">
+<meta name=description content="下面的方法可以在ASP.NET Core MVC中，将视图文件生成的html代码通过字符串返回。 首先定义一个静态类ControllerExtensions，里面包含Controller的扩展方法Re">
+<style>ul li a{color:#337ab7;text-decoration:none}h1{font-size:1.2rem;text-align:center;font-weight:bold}.ul-li-title{word-wrap:break-word}.ul-li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.95rem;line-height:1.5rem}.ul-li-bg{background-color:rgb(245,245,245)}.from-a{word-wrap:break-word;font-size:0.95rem}</style>
+<link rel="shortcut icon" href=data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE+0lEQVRYhcWXf2hVZRjHP8/ZVeZay9mwuY1poVM2yMl0nXO3e/2RMpM0+2P7w4qQ6K8gEEwKqegPkTAqo4Lsp0UQRRQaSmYLt7Z7p5uhqxRbxrrXMce0Mda4u7v3ffrjnF33606nq75wOPd934fv8z3ned/nfK9wC6h27DxLZBNQBljAb6p6pDEUjt4oh9xM4oBtW2LJ08CLwFxVvUYoMgi8boy+9GM4HJ9xAdVlZVh35OwDdqpLcAGoBxJANVDuhX6WNPpYUzicmIovYzrJa2trGYwPbQTeBFTgBdBtDc3hw52R6NGCBQvezbCsP4EHgOWWyKWk0tbf3z8zAgrz8kga846q3iMiHw4PJ3Y2tZw0I+vRS126sKDwJywBWAcszZmb+3YkEtF0nNZ0BMSG4zlApYgYYH/o1KkJMQ0tLQAHgBhQYpnkoqk4pyUAZB6QBcRUuZiWdDjRA1wFyLCs/JUrV86QAKEfiAOzRchLF2Z8GdlANoAxGsuaPWvjjAhIJE0f8CvgA7ZPFlNbWwsidUAO0I1QDmyvrKxML+C+FSsIOPai6wkoKi42wFvecFfQ72xZv2ZNan392rVcvhS1gX3e1HvADsDO9GX4JuMUgA0bNjD098DLIuw+0RSa8tz6V63y+Wb5vgIexD37hwS+Vff3aqAO1UxEWoH9wCeAAZY2NIc6xvNlAAwODnJnbu5mYF5nJHp2KgGRri6zsKjoMCJFwHJVLUVkM/CQqi4XEQuRo6rUifAqUOQ9aFtSOTO+J1gA3d3dAGeA54N+J3MqAQANofDAsEk+Djgi8gZwHKgXkQNADcZsFuFeYHThA8XFxRO4UnVR1VYRWQxsAz64nohQ+CTASe8ag2CVbaHsZuwmr85IJCzccqSQChCj54E+4JmA3z/phrlhqGwFguNmS8Rn5Y8PTQnounIljvs0ywTdcrO5g46dB7zGxCNugdhpBXR0dAB87w13BBxnml0SVlc5PkTeByYW20WgpqZmcgEe6r27X4T0/XMSVJSXW6rsBaZ6e/bVrq70Aoyan4EuVbWAp240+doqv3Vb1pw9wM5xSx3A6Iylc27Pzk4rIPHLuThwXEQAtgb8Ttp+P4KgY2cnVQ8Cz45bOiTgAM+NmstRZVFaAWG3SRweCRZ4NF3iasch6HdsRFoYG9cDbM9QHj7RHOpF9Wvc0wWACKVpBQCgehwY9EZP3m/bY2KqqqoI+p0SSzgINEKKsA94BSi7q7Doox9CIQPQEAr3A8dcagUoGc034bzHksm+TJ+vHrfXlw5bYgPNAb+dJcg61DwBbPLER4EG4DvgSHtr29W/4pP60C+BOq+0d1dUVNDW1ja5AGMU4AtPAMDeoN/pwW2rUeA08AjQatRE9fc/Ek09PZMlTUGVY+J6iRygYCQ5pHHFAcfOE5FOXPczHglcUzKA63p6vXsP0CPQqXBekXBjc3PqdQT9zqequk1ETi+bN1Rx4JvTQBpDEu2+3Itbz17c/RDzrj6g30vY54kY8OZ6cZNfEKGDxPD4z/pBrwR550cdzLT/C+bPn0/p4sW+JOrD87Q+yzJqkqY/NmSS8bjJLyoiEomwZMkS2tvbuXgxrU0k4Pf7BD0H5EvS5J5oaUlMKeDfQNDv7AL2qGphYyjcA9N2xbcGVf0YiIlQMDL3nwpoDIW7gc9B/h8BHvbDNUt/a8bjJqBGzyLERsb/AKulzmJdLC+gAAAAAElFTkSuQmCC type=image/x-icon><link rel=canonical href=http://t.zoukankan.com/OpenCoder-p-13849084.html><meta http-equiv=content-security-policy content="default-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self' data:; script-src 'unsafe-inline' data:;"></head>
+<body>
+ 
+ <div class="row p-0 m-0">
+ <div class="container-fluid p-0 m-0">
+ <nav class="navbar navbar-expand-lg navbar-dark" style=background-color:rgb(34,34,34)>
+ <div class=container>
+ <a class=navbar-brand href=http://t.zoukankan.com/>
+ <svg xmlns=http://www.w3.org/2000/svg width=26 height=26 fill=currentColor class="bi bi-exclude" viewBox="0 0 16 16">
+ <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm12 2H5a1 1 0 0 0-1 1v7h7a1 1 0 0 0 1-1V4z"></path>
+ </svg>
+ </a>
+ <a class=navbar-brand href=http://t.zoukankan.com/ style=font-size:1.2rem>zoukankan</a>
+ <button class=navbar-toggler type=button data-toggle=collapse data-target=#navbarNav aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation">
+ <span class=navbar-toggler-icon></span>
+ </button>
+ <div class="collapse navbar-collapse" id=navbarNav style=font-size:0.8rem>
+ <ul class=navbar-nav>
+ <li class=nav-item>
+ <a class=nav-link>HTML</a>
+ </li>
+ <li class=nav-item>
+ <a class=nav-link>CSS</a>
+ </li>
+ <li class=nav-item>
+ <a class=nav-link>PHP</a>
+ </li>
+ <li class=nav-item>
+ <a class=nav-link>JAVA</a>
+ </li>
+ </ul>
+ </div>
+ </div>
+ </nav> 
+ </div> 
+ </div>
+ <div class=mt-4> 
+ </div>
+ 
+ <div class=container>
+ <div class=row>
+ <div class=col-lg-8>
+ <ul class=list-group>
+ <li class="list-group-item ul-li-title">
+ <h1>ASP.NET Core MVC中，如何将视图文件生成的html代码通过字符串返回</h1>
+ <hr>
+ <span class=pre-scrollable><div id=cnblogs_post_body class=blogpost-body>
+ <p>下面的方法可以在ASP.NET Core MVC中，将视图文件生成的html代码通过字符串返回。</p>
+<p>首先定义一个静态类ControllerExtensions，里面包含Controller的扩展方法RenderViewAsync，用于返回视图文件生成的html代码：</p>
+<div class=cnblogs_code>
+<pre><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.AspNetCore.Mvc;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.AspNetCore.Mvc.Rendering;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.AspNetCore.Mvc.ViewEngines;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.AspNetCore.Mvc.ViewFeatures;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> System.IO;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> System.Threading.Tasks;
+
+</span><span style=color:rgba(0,0,255,1)>namespace</span><span style=color:rgba(0,0,0,1)> AspNetCore3000ViewGenerator.Models
+{
+    </span><span style=color:rgba(0,0,255,1)>public</span> <span style=color:rgba(0,0,255,1)>static</span> <span style=color:rgba(0,0,255,1)>class</span><span style=color:rgba(0,0,0,1)> ControllerExtensions
+    {
+        </span><span style=color:rgba(0,0,255,1)>public</span> <span style=color:rgba(0,0,255,1)>static</span> <span style=color:rgba(0,0,255,1)>async</span> Task&lt;<span style=color:rgba(0,0,255,1)>string</span>&gt; RenderViewAsync(<span style=color:rgba(0,0,255,1)>this</span> Controller controller, <span style=color:rgba(0,0,255,1)>string</span> viewName, <span style=color:rgba(0,0,255,1)>object</span> model, <span style=color:rgba(0,0,255,1)>bool</span> <span style=color:rgba(0,0,255,1)>partial</span> = <span style=color:rgba(0,0,255,1)>false</span><span style=color:rgba(0,0,0,1)>)
+        {
+            </span><span style=color:rgba(0,0,255,1)>if</span> (<span style=color:rgba(0,0,255,1)>string</span><span style=color:rgba(0,0,0,1)>.IsNullOrEmpty(viewName))
+            {
+                viewName </span>=<span style=color:rgba(0,0,0,1)> controller.ControllerContext.ActionDescriptor.ActionName;
+            }
+
+            controller.ViewData.Model </span>=<span style=color:rgba(0,0,0,1)> model;
+
+            </span><span style=color:rgba(0,0,255,1)>using</span> (<span style=color:rgba(0,0,255,1)>var</span> writer = <span style=color:rgba(0,0,255,1)>new</span><span style=color:rgba(0,0,0,1)> StringWriter())
+            {
+                IViewEngine viewEngine </span>= controller.HttpContext.RequestServices.GetService(<span style=color:rgba(0,0,255,1)>typeof</span>(ICompositeViewEngine)) <span style=color:rgba(0,0,255,1)>as</span><span style=color:rgba(0,0,0,1)> ICompositeViewEngine;
+                ViewEngineResult viewResult </span>= viewEngine.FindView(controller.ControllerContext, viewName, !<span style=color:rgba(0,0,255,1)>partial</span><span style=color:rgba(0,0,0,1)>);
+
+                </span><span style=color:rgba(0,0,255,1)>if</span> (viewResult.Success == <span style=color:rgba(0,0,255,1)>false</span><span style=color:rgba(0,0,0,1)>)
+                {
+                    </span><span style=color:rgba(0,0,255,1)>return</span> $<span style=color:rgba(128,0,0,1)>"</span><span style=color:rgba(128,0,0,1)>A view with the name {viewName} could not be found</span><span style=color:rgba(128,0,0,1)>"</span><span style=color:rgba(0,0,0,1)>;
+                }
+
+                ViewContext viewContext </span>= <span style=color:rgba(0,0,255,1)>new</span><span style=color:rgba(0,0,0,1)> ViewContext(
+                    controller.ControllerContext,
+                    viewResult.View,
+                    controller.ViewData,
+                    controller.TempData,
+                    writer,
+                    </span><span style=color:rgba(0,0,255,1)>new</span><span style=color:rgba(0,0,0,1)> HtmlHelperOptions()
+                );
+
+                </span><span style=color:rgba(0,0,255,1)>await</span><span style=color:rgba(0,0,0,1)> viewResult.View.RenderAsync(viewContext);
+
+                </span><span style=color:rgba(0,0,255,1)>return</span><span style=color:rgba(0,0,0,1)> writer.GetStringBuilder().ToString();
+            }
+        }
+    }
+}</span></pre>
+</div>
+<p>然后可以在ASP.NET Core MVC的Controller中调用RenderViewAsync方法，返回一个视图文件生成的html代码：</p>
+<div class=cnblogs_code>
+<pre><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> System.Threading.Tasks;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.AspNetCore.Mvc;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> Microsoft.Extensions.Logging;
+</span><span style=color:rgba(0,0,255,1)>using</span><span style=color:rgba(0,0,0,1)> AspNetCore3000ViewGenerator.Models;
+
+</span><span style=color:rgba(0,0,255,1)>namespace</span><span style=color:rgba(0,0,0,1)> AspNetCore3000ViewGenerator.Controllers
+{
+    </span><span style=color:rgba(0,0,255,1)>public</span> <span style=color:rgba(0,0,255,1)>class</span><span style=color:rgba(0,0,0,1)> HomeController : Controller
+    {
+        </span><span style=color:rgba(0,0,255,1)>private</span> <span style=color:rgba(0,0,255,1)>readonly</span> ILogger&lt;HomeController&gt;<span style=color:rgba(0,0,0,1)> _logger;
+
+        </span><span style=color:rgba(0,0,255,1)>public</span> HomeController(ILogger&lt;HomeController&gt;<span style=color:rgba(0,0,0,1)> logger)
+        {
+            _logger </span>=<span style=color:rgba(0,0,0,1)> logger;
+        }
+
+        </span><span style=color:rgba(0,0,255,1)>public</span> <span style=color:rgba(0,0,255,1)>async</span> Task&lt;IActionResult&gt;<span style=color:rgba(0,0,0,1)> Index()
+        {
+            </span><span style=color:rgba(0,0,255,1)>this</span>.ViewData[<span style=color:rgba(128,0,0,1)>"</span><span style=color:rgba(128,0,0,1)>Message</span><span style=color:rgba(128,0,0,1)>"</span>] = <span style=color:rgba(128,0,0,1)>"</span><span style=color:rgba(128,0,0,1)>This is a demo message!</span><span style=color:rgba(128,0,0,1)>"</span>;<span style=color:rgba(0,128,0,1)>//</span><span style=color:rgba(0,128,0,1)>在Controller中设置ViewData的值后，就可以在下面调用RenderViewAsync方法生成视图Index.cshtml的html代码时，在视图Index.cshtml中获取到ViewData的值</span>
+            <span style=color:rgba(0,0,255,1)>string</span> html = <span style=color:rgba(0,0,255,1)>await</span> <span style=color:rgba(0,0,255,1)>this</span>.RenderViewAsync(<span style=color:rgba(128,0,0,1)>"</span><span style=color:rgba(128,0,0,1)>Index</span><span style=color:rgba(128,0,0,1)>"</span>, <span style=color:rgba(0,0,255,1)>null</span>);<span style=color:rgba(0,128,0,1)>//</span><span style=color:rgba(0,128,0,1)>获取HomeController下，通过视图Index.cshtml生成的html代码</span>
+
+            <span style=color:rgba(0,0,255,1)>return</span><span style=color:rgba(0,0,0,1)> View();
+        }
+    }
+}</span></pre>
+</div>
+<p>视图Index.cshtml的代码如下：</p>
+<div class=cnblogs_code>
+<pre><span style=color:rgba(0,0,0,1)>@{
+    Layout = null;
+}
+
+</span><span style=color:rgba(0,0,255,1)>&lt;!</span><span style=color:rgba(255,0,255,1)>DOCTYPE html</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+
+<span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>html</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+<span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>head</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>meta </span><span style=color:rgba(255,0,0,1)>name</span><span style=color:rgba(0,0,255,1)>="viewport"</span><span style=color:rgba(255,0,0,1)> content</span><span style=color:rgba(0,0,255,1)>="width=device-width"</span> <span style=color:rgba(0,0,255,1)>/&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>title</span><span style=color:rgba(0,0,255,1)>&gt;</span>Index<span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>title</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+<span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>head</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+<span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>body</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>div</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+        <span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>h1</span><span style=color:rgba(0,0,255,1)>&gt;</span>Index view!<span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>h1</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>div</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;</span><span style=color:rgba(128,0,0,1)>div</span><span style=color:rgba(0,0,255,1)>&gt;</span><span style=color:rgba(0,0,0,1)>
+        @ViewData["Message"].ToString()</span><span style=color:rgba(0,128,0,1)>&lt;!--</span><span style=color:rgba(0,128,0,1)>在视图Index.cshtml中，获取ViewData的值</span><span style=color:rgba(0,128,0,1)>--&gt;</span>
+    <span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>div</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+<span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>body</span><span style=color:rgba(0,0,255,1)>&gt;</span>
+<span style=color:rgba(0,0,255,1)>&lt;/</span><span style=color:rgba(128,0,0,1)>html</span><span style=color:rgba(0,0,255,1)>&gt;</span></pre>
+</div>
+<p>参考文献：</p>
+<p><a href=https://stackoverflow.com/questions/40912375/return-view-as-string-in-net-core target=_blank>Return View as String in .NET Core</a>，特别是<a href=https://stackoverflow.com/questions/40912375/return-view-as-string-in-net-core/50024209#50024209 target=_blank>这个回复</a>。</p>
+</div>
+</span>
+ </li>
+ <li class="list-group-item ul-li">
+ <b>相关阅读:</b><br>
+ <nobr>
+ <a href=http://t.zoukankan.com/Baronboy-p-8511810.html target=_blank>thinkphp在wamp 配置去掉url中index.php方法</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-8503008.html target=_blank>mysql新监语句需要前面加SET FOREIGN_KEY_CHECKS=0;</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-8502864.html target=_blank>ini_set的用法介绍</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-11218937.html target=_blank>SpringBoot项目启动报错：java.lang.RuntimeException: java.lang.reflect.InvocationTargetException</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-12811917.html target=_blank>我的分享：第八章： 用Redis轻松实现秒杀系统</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-12811918.html target=_blank>项目分享：第一章：个人电商项目</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-12811919.html target=_blank>SpringBoot框架：第二章：SpringBoot中static和templates二个目录下的页面和静态资源访问的三个常见问题</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-12811920.html target=_blank>我的分析：第八章：JAVA高级工程师知识点</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-11147309.html target=_blank>Springboot项目启动报org.springframework.beans.factory.UnsatisfiedDependencyException</a>
+ <br><a href=http://t.zoukankan.com/javawxid-p-11139047.html target=_blank>Disconnected from the target VM, address: '127.0.0.1:56577', transport: 'socket'</a>
+ <br> </nobr>
+ </li>
+ <li class="list-group-item from-a mb-2">
+ 原文地址：https://www.cnblogs.com/OpenCoder/p/13849084.html
+ </li>
+ </ul>
+ </div>
+ 
+ <div class="col-lg-4 col-sm-12">
+ <ul class=list-group style=word-break:break-all>
+ <li class="list-group-item ul-li-bg" aria-current=true>
+ 最新文章
+ </li>
+ <li class="list-group-item ul-li">
+ <nobr>
+ <a href=http://t.zoukankan.com/457248499-qq-com-p-7368404.html target=_blank>mysql中约束</a>
+ <br><a href=http://t.zoukankan.com/457248499-qq-com-p-7368204.html target=_blank>mysql有索引和无索引的查询速度对比</a>
+ <br><a href=http://t.zoukankan.com/457248499-qq-com-p-7368067.html target=_blank>Mysql中的索引</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6818678.html target=_blank>暴力破解</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6817502.html target=_blank>状态模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6814390.html target=_blank>策略模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6814130.html target=_blank>模板模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6813835.html target=_blank>代理模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6798673.html target=_blank>外观(Facade)模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6798289.html target=_blank>享元(FlyWeight)模式</a>
+ <br> </nobr>
+ </li>
+ </ul>
+ <ul class="list-group pt-2" style=word-break:break-all>
+ <li class="list-group-item ul-li-bg" aria-current=true>
+ 热门文章
+ </li>
+ <li class="list-group-item ul-li">
+ <nobr>
+ <a href=http://t.zoukankan.com/hupeng1234-p-6797046.html target=_blank>组合(composite)模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6795770.html target=_blank>装饰器模式</a>
+ <br><a href=http://t.zoukankan.com/hupeng1234-p-6767468.html target=_blank>构建者模式</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-9153986.html target=_blank>Linux常用命令总结</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-9149270.html target=_blank>存储过程入门例子</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-9130052.html target=_blank>基于 CentOS 搭建 FTP 文件服务</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-9022816.html target=_blank>计算机组成原理笔记</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-8888021.html target=_blank>一个示例让你明白适配器模式</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-8571886.html target=_blank>bootstrap记录</a>
+ <br><a href=http://t.zoukankan.com/Baronboy-p-8567424.html target=_blank>float和position的使用</a>
+ <br> </nobr>
+ </li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="text-center p-3">
+ <span>走看看 - 开发者的网上家园</span>
+ 
+ 
+ <span>
+ <span id=cnzz_stat_icon_1278882432></span>
+ </span>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <a href=http://t.zoukankan.com/OpenCoder-p-13849084.html id=redirect_url></a>
+ <a href=http://t.zoukankan.com/OpenCoder-p-13849084.html id=redirect_url2 target=_blank></a>
+ 

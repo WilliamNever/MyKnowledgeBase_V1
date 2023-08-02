@@ -1,0 +1,236 @@
+﻿@model NetCore5Test.Controllers.VMModel
+
+@{
+    ViewData["Title"] = "UploadTest";
+}
+
+<h2>UploadTest</h2>
+
+<h4>VMModel</h4>
+<hr />
+
+<script type="text/javascript">
+</script>
+<div class="row">
+    <form>@{var _htp = 3; }
+        @Html.TextBox("_Name","",new { _htp })
+        @Html.TextBox("_Name1","",new { _htp=4 })
+    </form>
+</div>
+<div class="row">
+    禁止输入小数点 ----- also be able to forbid inputting any value.
+    <input type="number" maxlength="5" name="aaa" onkeypress="return event.key!='.'" />
+    
+</div>
+<div class="row">
+    <div>
+        Input key value test:
+    </div>
+    <div>
+        <input type="text" maxlength="15" name="Long15" onkeypress="outter = event; console.log(event);" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="number" maxlength="5" name="aaa" onkeypress="" required />
+                <div>
+                    <span data-valmsg-for="aaa" data-valmsg-replace="true" class="text-danger field-validation-valid"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="file" name="fCollection" multiple required />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" enctype="multipart/form-data" method="post" onsubmit="return false;">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <div class="form-group">
+                <label for="sname" class="control-label">sname</label>
+                <input id="sname" name="sname" type="text" class="form-control" data-val="true" required 
+                       data-val-regex-pattern="^[\da-z]{1,5}"
+                       data-val-regex="SName format Error!"
+                       />
+                @*<input id="sname" name="sname" type="text" class="form-control" data-val="true" data-val-required="The name field is required." value="">*@
+                <span data-valmsg-for="sname" data-valmsg-replace="true" class="text-danger field-validation-valid"></span>
+            </div>
+            <div class="form-group">
+                <input type="file" name="file" multiple required />
+                @*<input class="form-control" type="file" data-val="true" name="file" id="file" accept=".esp,.png,.jpg,.ai,.pdf" required />*@
+                <div data-valmsg-for="file" data-valmsg-replace="true" class="text-danger field-validation-valid"></div>
+            </div>
+            <div class="form-group">
+                <input type="date" name="CreateDate" multiple required />
+                <div data-valmsg-for="CreateDate" data-valmsg-replace="true" class="text-danger field-validation-valid"></div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Validate" class="btn-default" />
+                <input type="button" value="Create" class="btn-default" onclick="AjaxPostBack(this);" />
+                <input type="button" value="Create_Spec" class="btn-default" onclick="AjaxPostBack_Spec(this);" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" enctype="multipart/form-data" method="post" onsubmit="return false;">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <div class="form-group">
+                <label for="mmmm" class="control-label">sname</label>
+                <input id="mmmm" name="mmmm" type="text" class="form-control" data-val="true" required />
+                @*<input id="sname" name="sname" type="text" class="form-control" data-val="true" data-val-required="The name field is required." value="">*@
+                <span data-valmsg-for="mmmm" data-valmsg-replace="true" class="text-danger field-validation-valid"></span>
+            </div>
+            <div class="form-group">
+                <input type="file" name="fCollection" multiple required />
+                @*<input class="form-control" type="file" data-val="true" name="file" id="file" accept=".esp,.png,.jpg,.ai,.pdf" required />*@
+                <div data-valmsg-for="fCollection" data-valmsg-replace="true" class="text-danger field-validation-valid"></div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Validate" class="btn-default" />
+                <input type="button" value="Create" class="btn-default" onclick="AjaxPostBack(this);" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<div class="row">
+    <input type="button" value="AjaxPostBack_AjaxUpdate_ViewJson" class="btn-default" onclick="AjaxPostBack_AjaxUpdate_ViewJson(this);" />
+</div>
+<div id="ReturnInfo">@DateTime.Now</div>
+<div id="ReturnInfo1"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+        var outter;
+        function AjaxPostBack(obj) {
+            if ($($(obj).parents("form")[0]).valid()) {
+                var data = new FormData($($(obj).parents("form")[0])[0]);
+                outter = data;
+                console.log(data);
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("AjaxUpdate", "InputTEST")",
+                    dataType: "json",
+                    data: data,
+                    async: true,
+                    contentType: false,//实体头部用于指示资源的MIME类型 media type 。这里要为false
+                    processData: false,//processData 默认为true，当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+                    success: function (data) {
+                        console.log(data);
+                        $("#ReturnInfo").html(data);
+                        $("#ReturnInfo1").html(data);
+                        console.log(jsModel);
+                    },
+                    error: function (data) {
+                        console.log("错误" + data);
+                    }
+                });
+            }
+        }
+
+    function AjaxPostBack_Spec(obj) {
+        var ss = {
+            "name": undefined, "sname": "qqq", "CreateDate": "2021-12-11T12:21:00Z",
+            ModifyDate: undefined,
+            Age: undefined
+        };
+        var mm = {
+            "name": null, "sname": "qqq", "CreateDate": "2021-12-11T12:21:00Z",
+            ModifyDate: "2021-12-11T12:21:00Z",
+            Age: 33
+        };
+
+        console.log("ss", ss);
+        console.log("mm before",mm);
+        $.extend(true, mm, ss);
+        console.log("mm after", mm);
+
+        outter = { MM: mm, SS:ss };
+
+        $.ajax({
+            type: "post",
+            url: "@Url.Action("AjaxUpdate_Spec", "InputTEST")",
+            dataType: "text",
+            data: JSON.stringify(ss),
+            contentType: 'application/json;charset=utf-8',
+            async: true,
+            success: function (data) {
+                console.log(data);
+                //console.log(jsModel);
+                var dls = $(data);
+                console.log(dls);
+                //console.log(jsModel);
+                $("#ReturnInfo").html(data);
+                $("#ReturnInfo1").html(data);
+                console.log(jsModel);
+            },
+            error: function (data) {
+                console.log("错误" + data);
+            }
+        });
+    }
+    function AjaxPostBack_AjaxUpdate_ViewJson(obj) {
+        var ss = {
+            "name": $(obj).val(), "sname": "qqq", "CreateDate": "2021-12-11T12:21:00Z",
+            ModifyDate: undefined,
+            Age: undefined
+        };
+        var mm = {
+            "name": $(obj).val(), "sname": "qqq", "CreateDate": "2021-12-11T12:21:00Z",
+            ModifyDate: "2021-12-11T12:21:00Z",
+            Age: 33
+        };
+
+        console.log("ss", ss);
+        console.log("mm before",mm);
+        $.extend(true, mm, ss);
+        console.log("mm after", mm);
+
+        outter = { MM: mm, SS:ss };
+
+        $.ajax({
+            type: "post",
+            url: "@Url.Action("AjaxUpdate_ViewJson", "InputTEST")",
+            dataType: "text",
+            data: JSON.stringify(ss),
+            contentType: 'application/json;charset=utf-8',
+            async: true,
+            success: function (data) {
+                console.log('-------------------');
+                console.log("data -", data);
+                var rslJson = JSON.parse(data);
+                console.log("rslJson -",rslJson);
+                var dls = $(rslJson.resultView);
+                console.log("dls -",dls);
+                //console.log(jsModel);
+                $("#ReturnInfo").html(rslJson.resultView);
+                $("#ReturnInfo1").html(rslJson.resultView);
+                console.log("jsModel -",jsModel);
+            },
+            error: function (data) {
+                console.log("错误" + data);
+            }
+        });
+    }
+</script>
+}

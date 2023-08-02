@@ -1,0 +1,43 @@
+
+Add references to project -
+
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.8.2" />
+
+
+
+            try
+            {
+                var config = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+                var configValues = config.Build();
+                var aps = configValues.GetSection(nameof(AppSettings)).Get<AppSettings>();
+                Uri vaultUri = new Uri("URL");
+                var certificateCredential = GetCertificateCredential(
+                    "tenantId",
+                    "clientId",
+                    "thumbprint");
+
+                Configuration = config.AddAzureKeyVault(vaultUri, certificateCredential).Build();
+                var s = Configuration[$"xxxxxxxx"];
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error authenticating with certificate to the KeyVault. " +
+                  "Ensure the certificate is installed in both the correct keystore and " +
+                  "the App Registration in the Azure Portal.");
+            }
+
+
+        private static ClientCertificateCredential GetCertificateCredential(string tenantId, string clientId, string thumbprint, bool validOnly = false)
+        {
+            using var certificateStore = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+            certificateStore.Open(OpenFlags.ReadOnly);
+            var collection = certificateStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
+            var certificate = collection.OfType<X509Certificate2>().Single();
+            return new ClientCertificateCredential(tenantId, clientId, certificate);
+        }
