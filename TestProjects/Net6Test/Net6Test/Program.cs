@@ -22,7 +22,9 @@ EntranceBase main
 //= new F1MainEntrance();
 //= new TasksTestsMainEntrance();
 var o1 = EntranceBase.b0;
+
 main.MainRun();
+
 var o2 = EntranceBase.b0;
 var isSame = object.ReferenceEquals(o1, o2);
 var ss = EntranceBase.b0.Base0_Name;
