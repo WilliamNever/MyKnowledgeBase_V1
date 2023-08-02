@@ -58,7 +58,7 @@ namespace Net6Test.TestEntrances
 
         private async Task Js_De_or_Serialize_Test()
         {
-            string js = "{\"State\":\"SC\",\"CompanyName\":\"cn_xxx\",\"Address1\":\"ad_xxx\",\"City\":\"c_Abbeville\",\"Zip\":\"xxx\",\"Phone\":\"(xxx) sxx-exxx\",\"CustomerOrderField1\":\"cof1_xxxr\",\"CustomerOrderField2\":\"cof2_xxx fww\",\"ShipToPostalAddressId\":\"xxx-xxxx-xxxx\",\"DisplayAddress\":\"xxx-xxxx-dddd-Sweeee Fvvvvvv-Avvvvv-SC-11111\",\"Attention1\":\"\",\"Address2\":\"\",\"Country\":\"\"}";
+            string js = "{\"State\":\"SC\",\"CompanyName\":\"cn_xxx\",\"Address1\":\"ad_xxx\",\"City\":\"c_XXXXXX\",\"Zip\":\"xxx\",\"Phone\":\"(xxx) sxx-exxx\",\"CustomerOrderField1\":\"cof1_xxxr\",\"CustomerOrderField2\":\"cof2_xxx fww\",\"ShipToPostalAddressId\":\"xxx-xxxx-xxxx\",\"DisplayAddress\":\"xxx-xxxx-dddd-Sweeee Fvvvvvv-Avvvvv-SC-11111\",\"Attention1\":\"\",\"Address2\":\"\",\"Country\":\"\"}";
             var dics = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(js);
             var dics1 = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(js);
         }
