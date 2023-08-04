@@ -51,7 +51,8 @@ namespace StandardLibrary
         {
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             var dics = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(js);
-            return dics?.GetValueOrDefault(key);
+            //return dics?.GetValueOrDefault(key); // This line does only work at 2.1 version.
+            return dics.TryGetValue(key, out string vl) ? vl : default;
         }
 
         private string GetValue(string key)
