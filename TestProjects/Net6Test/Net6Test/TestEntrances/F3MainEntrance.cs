@@ -10,12 +10,12 @@ namespace Net6Test.TestEntrances
     {
         public override void MainRun()
         {
-            Task.WaitAll(InitialTest());
+            InitialTest().Wait();
         }
 
         private async Task InitialTest()
         {
-            await Console.Out.WriteLineAsync("Hello - ");
+            await Console.Out.WriteLineAsync(string.Format("-{0}-", "xxx", 1, 2, 3));
         }
     }
 }
