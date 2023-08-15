@@ -14,7 +14,9 @@ namespace Net6WebSite.Pages
 
         public void OnGet()
         {
-
+            TempData["ddd"] = "Hello ddd!";
+            //TempData.Peek("ddd");
+            //TempData.Keep();
         }
     }
 }
