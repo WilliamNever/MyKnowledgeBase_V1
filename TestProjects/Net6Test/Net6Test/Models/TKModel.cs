@@ -43,7 +43,7 @@ namespace Net6Test.Models
 
         private string? GetValueFromJson1(string key)
         {
-            var js1 = System.Text.Json.JsonSerializer.Serialize(this, this.GetType());// as TKModel
+            var js1 = System.Text.Json.JsonSerializer.Serialize(this, GetType());// as TKModel
             var dics1 = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(js1)!;
             var pv = dics1[key].ToString();
             return pv;
