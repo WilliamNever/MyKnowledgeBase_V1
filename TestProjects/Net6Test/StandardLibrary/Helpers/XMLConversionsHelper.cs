@@ -17,7 +17,7 @@ namespace StandardLibrary.Helpers
         public string? xxItem { get; set; }
         public string? Item { get; set; }
         public string? TKMEx_Item { get; set; }
-        public string? BaseItem { get { return base.Item; } set { base.Item = value; } }
+        public string? BaseItem { get; set; }
     }
 
         outbound xml - 

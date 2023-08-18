@@ -18,13 +18,23 @@ namespace Net6Test.Models
     [XmlRoot(ElementName = "response", Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
     public class TKMEx : TKModel
     {
-        //[XmlAttribute(Namespace = XmlSchema.InstanceNamespace)]
-        //public string xmlns;
         [XmlElement(ElementName = "id")]
         public new string? xxItem { get; set; }
         public new string? Item { get; set; }
         public string? TKMEx_Item { get; set; }
         public string? BaseItem { get { return base.Item; } set { base.Item = value; } }
+    }
+
+    [XmlRoot(ElementName = "response", Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
+    public class TKMExx<T>
+    {
+        [XmlElement(ElementName = "Info_Message_Code")]
+        public T? Infor { get; set; }
+        [XmlElement(ElementName = "id")]
+        public string? xxItem { get; set; }
+        public string? Item { get; set; }
+        public string? TKMEx_Item { get; set; }
+        public string? BaseItem { get; set; }
     }
 
     public class BaseStringIndex
