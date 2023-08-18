@@ -42,13 +42,16 @@ namespace StandardLibrary.Helpers
         {
             using (var sww = new StringWriter())
             {
-                XmlSerializer xSerial;
-                xSerial = new XmlSerializer(typeof(T));
-                XmlSerializerNamespaces nsx = new XmlSerializerNamespaces();
-                nsx.Add("", "");
-                xSerial.Serialize(XmlWriter.Create(sww, XWS), model, nsx);
-                sww.Flush();
-                return sww.ToString();
+                using (var writer = XmlWriter.Create(sww, XWS))
+                {
+                    XmlSerializer xSerial = new XmlSerializer(typeof(T));
+                    XmlSerializerNamespaces nsx = new XmlSerializerNamespaces();
+                    nsx.Add("", "");
+                    xSerial.Serialize(writer, model, nsx);
+                    writer.Flush();
+                    sww.Flush();
+                    return sww.ToString();
+                }
             }
         }
     }
