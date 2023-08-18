@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -37,6 +38,16 @@ namespace Net6Test.Models
         public string? BaseItem { get; set; }
     }
 
+    [XmlRoot(ElementName = "TKME_Subx", Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
+    public class TKME_Sub
+    {
+        [XmlElement(ElementName = "id")]
+        public string? xxItem { get; set; }
+        public string? Item { get; set; }
+        public string? TKMEx_Item { get; set; }
+        public string? BaseItem { get; set; }
+    }
+    
     public class BaseStringIndex
     {
         public int PV { get; set; }

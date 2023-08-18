@@ -38,16 +38,24 @@ namespace Net6Test.TestEntrances
 
         private async Task InitialTest()
         {
-            var tkm = new TKMEx { access_token = "atk", expires_in = 33, token_type = "ttp" }; 
+            var tkm = new TKMEx { access_token = "atk", expires_in = 33, token_type = "ttp" };
             tkm.Item = "ds";
             tkm.item = "ds_item";
             tkm.BaseItem = "b_Item";
             tkm.TKMEx_Item = "TKMEx_Item_ex";
             tkm.xxItem = "xxID";
 
-            var tkm1 = new TKMExx<int> { Infor = 33, BaseItem= "b_Item", Item= "ds", TKMEx_Item= "TKMEx_Item_exx", xxItem= "xxID" };
+            var tkm1 = new TKMExx<TKME_Sub>
+            {
+                Infor = new TKME_Sub { xxItem = "idxx", Item = "sub item", TKMEx_Item = "v" }     //
+                ,
+                BaseItem = "b_Item",
+                Item = "ds",
+                TKMEx_Item = "TKMEx_Item_exx",
+                xxItem = "xxID"
+            };
 
-            var str = XMLConversionsHelper.SerializerToXML(tkm1);    
+            var str = XMLConversionsHelper.SerializerToXML(tkm1);
 
             var str1 = JsonConvert.SerializeObject(tkm).ToString();
             var str2 = JsonConvert.SerializeObject(str1, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
