@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Net6Test.Models
 {
@@ -13,9 +15,13 @@ namespace Net6Test.Models
         public int expires_in { get; set; }
         public string token_type { get; set; }
     }
-
+    [XmlRoot( ElementName = "response" ,Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
     public class TKMEx : TKModel
     {
+        //[XmlAttribute(Namespace = XmlSchema.InstanceNamespace)]
+        //public string xmlns;
+        [XmlElement(ElementName = "id")]
+        public new string? xxItem { get; set; }
         public new string? Item { get; set; }
         public string? TKMEx_Item { get; set; }
         public string? BaseItem { get { return base.Item; } set { base.Item = value; } }
