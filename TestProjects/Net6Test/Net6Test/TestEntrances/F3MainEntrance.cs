@@ -56,6 +56,9 @@ namespace Net6Test.TestEntrances
             };
 
             var str = XMLConversionsHelper.SerializerToXML(tkm1);
+            var isXml = XMLConversionsHelper.IsXMLString(str);
+            var isXml_f = XMLConversionsHelper.IsXMLString($"{str}<a>s</a>");
+            var isXml_t = XMLConversionsHelper.IsXMLString($"<a>{str}</a>");
 
             var str1 = JsonConvert.SerializeObject(tkm).ToString();
             var str2 = JsonConvert.SerializeObject(str1, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });

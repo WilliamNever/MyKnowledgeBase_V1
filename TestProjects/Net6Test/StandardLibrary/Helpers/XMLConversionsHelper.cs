@@ -54,5 +54,18 @@ namespace StandardLibrary.Helpers
                 }
             }
         }
+        public static bool IsXMLString(string xml)
+        {
+            var doc = new XmlDocument();
+            try
+            {
+                doc.LoadXml(xml);
+                return true;
+            }
+            catch
+            { 
+                return false; 
+            }
+        }
     }
 }
