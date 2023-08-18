@@ -15,7 +15,7 @@ namespace Net6Test.Models
         public int expires_in { get; set; }
         public string token_type { get; set; }
     }
-    [XmlRoot( ElementName = "response" ,Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
+    [XmlRoot(ElementName = "response", Namespace = "http://www.xxx.com/xxx/response", IsNullable = true)]
     public class TKMEx : TKModel
     {
         //[XmlAttribute(Namespace = XmlSchema.InstanceNamespace)]
