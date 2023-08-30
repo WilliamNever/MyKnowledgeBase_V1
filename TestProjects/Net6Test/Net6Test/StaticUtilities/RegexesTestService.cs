@@ -10,7 +10,7 @@ namespace Net6Test.StaticUtilities
     public class RegexesTestService
     {
         /// <summary>
-        /// to fit 3 or more continuous special charactors
+        /// Regex expression to fit 3 or more continuous special charactors
         /// </summary>
         public Regex RegexMultiSpecLetters { get; set; } = new Regex(@"([a-z0-9A-Z])\1{2,}");
 
