@@ -46,6 +46,7 @@ String.prototype.len=function(){return this.replace([^/x00-/xff]/g,"aa").length;
   *     只能是字母、数字、下划线；必须有@和.同时格式要规范 邮件
   * 13 ^/w+@/w+(/./w+)+(/,/w+@/w+(/./w+)+)*$上面表达式也可以写成这样子，更精练。
     14   ^/w+((-/w+)|(/./w+))*/@/w+((/.|-)/w+)*/./w+$ 
+  * 15 () 代表分组，可供后方的 '\1\2' 使用
 
   
 
@@ -357,3 +358,28 @@ String regex = "<img//ssrc=/"http://ww|3w.google.com/1.gif/"/>";
 那就不要使用 (?:a|$|&) 了，可以直接使用字符类 [a$&] 就可以了。
 
 说了那么多，不知道是否明白了？ 
+
+补充 ------> 
+1 - 分组重复字查询
+        Regex RegexMultiSpecLetters { get; set; } = new Regex(@"([a-z0-9A-Z])\1{2,}");
+        Regex RegexMultiSpecLetters1 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\2");
+        Regex RegexMultiSpecLetters2 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\1");
+
+            var isMatch = RegexMultiSpecLetters.IsMatch("aaaacbcbbcc");
+            var matches = RegexMultiSpecLetters.Matches("aaaacbcbbcc").ToList();
+
+            var isMatch1 = RegexMultiSpecLetters1.IsMatch("aaaacbcbbcc");
+            var matches1 = RegexMultiSpecLetters1.Matches("aaaacbcbbcc").ToList();
+
+            var isMatch2 = RegexMultiSpecLetters2.IsMatch("aaaacbacbbcc");
+            var matches2 = RegexMultiSpecLetters2.Matches("aaaacbacbbcc").ToList();
+
+	var regGrp3 = new Regex(@"(\b[a-zA-Z0-9]{2,})[\w\W]*?\1");
+
+2 - 关键字定义查询
+var regGrp1 = new Regex(@"\b(?<word>[\w ]{2,})([\w\s]*?)(\k<word>)\b");
+var regGrp2 = new Regex(@"\b(?'word'[\w ]{2,})([\w\W]*?)(\k'word')\b");
+
+Regex regGrp3 = new Regex(@"(\b[a-zA-Z0-9 ]{2,})[\w\W]*?\1");
+
+
