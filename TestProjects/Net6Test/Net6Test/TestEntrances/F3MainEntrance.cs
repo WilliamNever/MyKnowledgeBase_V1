@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
 using StandardLibrary.Helpers;
+using System.Text.Json;
 
 namespace Net6Test.TestEntrances
 {
@@ -18,8 +19,21 @@ namespace Net6Test.TestEntrances
     {
         public override void MainRun()
         {
-            InitialTest().Wait();
+            //InitialTest().Wait();
             //DictionaryTest().Wait();
+            JsonSerializerDeserializeTest().Wait();
+        }
+
+        private async Task JsonSerializerDeserializeTest()
+        {
+            var scx = new ExtClassModel();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var body = System.Text.Json.JsonSerializer.Deserialize<SimpleModel>(" ", options); //"{\"id\":5,\"Name\":\"22x\"}"
         }
 
         private async Task DictionaryTest()

@@ -10,6 +10,10 @@ namespace Net6Test.Models
 {
     public class ExtClassModel : Base2
     {
+        public ExtClassModel():base()
+        {
+            
+        }
         public string? HiFiInfor { get; set; }
         public string Name { get; set; } = "ExtClassModel";
     }
@@ -49,6 +53,10 @@ namespace Net6Test.Models
 
     public class Base2 : Base1
     {
+        public Base2()
+        {
+            
+        }
         public override int Rec { get; set; }
         public int Acx { get; set; }
     }

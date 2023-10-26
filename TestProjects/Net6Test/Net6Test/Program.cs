@@ -18,9 +18,9 @@ var secretValue = configuration["MySecret"];
 Console.WriteLine($"The secret value is: {secretValue}");
 
 EntranceBase main
-//= new F3MainEntrance();
+= new F3MainEntrance();
 //= new F2MainEntrance();
-= new F1MainEntrance();
+//= new F1MainEntrance();
 //= new TasksTestsMainEntrance();
 var o1 = EntranceBase.b0;
 
