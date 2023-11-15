@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using StandardLibrary.Helpers;
 using System.Text.Json;
+using Net6Test.TestGroups;
 
 namespace Net6Test.TestEntrances
 {
@@ -21,7 +22,13 @@ namespace Net6Test.TestEntrances
         {
             //InitialTest().Wait();
             //DictionaryTest().Wait();
-            JsonSerializerDeserializeTest().Wait();
+            //JsonSerializerDeserializeTest().Wait();
+            XmlDeserializeTest().Wait();
+        }
+
+        private async Task XmlDeserializeTest()
+        {
+            await XMLSchemaTest.Test1();
         }
 
         private async Task JsonSerializerDeserializeTest()
