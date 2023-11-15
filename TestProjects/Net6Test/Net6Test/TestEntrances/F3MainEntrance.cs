@@ -28,6 +28,12 @@ namespace Net6Test.TestEntrances
         {
             var scx = new ExtClassModel();
 
+            string xml = XMLConversionsHelper.SerializerToXML(scx);
+            System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+            xmlDoc.LoadXml(xml);
+            string json = JsonConvert.SerializeXmlNode(xmlDoc, Newtonsoft.Json.Formatting.Indented, true);
+
+
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
