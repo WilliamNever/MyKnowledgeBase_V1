@@ -4,11 +4,13 @@ using StandardLibrary.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Net6Test.TestGroups
 {
@@ -75,16 +77,50 @@ namespace Net6Test.TestGroups
 
         public async static Task Test3()
         {
-            var tsk = Task.Run(() => { 
-                var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>"; 
-                throw new Exception("HHere"); 
-                return xmlString; });
+            Console.WriteLine($"Test3 - ThreadID = {Thread.CurrentThread.ManagedThreadId}");
+            var tsk = Task.Run(() =>
+            {
+                var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>";
+                //throw new Exception("HHere");
+                return xmlString;
+            });
 
-            var str = await tsk.ContinueWith(async t => {
+            Working("AP");
+
+            await Task.Delay(30000);
+
+            var str = await tsk.ContinueWith(async t =>
+            {
                 var ptSt = t.Status;
                 var rsl = await t;
+                Working("APX");
                 return rsl;
             }).Result;
+        }
+
+        /// <summary>
+        /// async void should only be used for event handlers.
+        /// async void is the only way to allow asynchronous event handlers to work 
+        /// because events do not have return types (thus cannot make use of Task and Task<T>). 
+        /// Any other use of async void does not follow the TAP model and can be challenging to use, such as:
+        /// 
+        /// Exceptions thrown in an async void method can't be caught outside of that method.
+        /// async void methods are difficult to test.
+        /// async void methods can cause bad side effects if the caller isn't expecting them to be async.
+        /// </summary>
+        /// <param name="header"></param>
+        private async static void Working(string header = "")
+        {
+            await Task.Run(() =>
+            {
+                int i = 0;
+                while (i < 20)
+                {
+                    Console.WriteLine($"{header} i = {i} // ThreadID = {Thread.CurrentThread.ManagedThreadId}");
+                    i++;
+                    Task.Delay(1000).Wait();
+                }
+            });
         }
     }
 
