@@ -28,7 +28,9 @@ namespace Net6Test.TestEntrances
 
         private async Task XmlDeserializeTest()
         {
-            await XMLSchemaTest.Test1();
+            //await XMLSchemaTest.Test1();
+            //await XMLSchemaTest.Test2();
+            await XMLSchemaTest.Test3();
         }
 
         private async Task JsonSerializerDeserializeTest()

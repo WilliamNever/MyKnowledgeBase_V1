@@ -1,4 +1,6 @@
-﻿using StandardLibrary.Helpers;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using StandardLibrary.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,31 @@ namespace Net6Test.TestGroups
 {
     public static class XMLSchemaTest
     {
+        public static async Task Test2()
+        {
+            var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>";
+            var jsStr = ConvertXmlToJson(xmlString);
+
+            var jsObj = JObject.Parse(jsStr);
+            string xml = XMLConversionsHelper.SerializerToXML(jsObj);
+        }
+
+        public static string ConvertXmlToJson(string xml)
+        {
+            try
+            {
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml(xml);
+                string json = JsonConvert.SerializeXmlNode(xmlDoc);
+                return json;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred: " + ex.Message);
+                return string.Empty;
+            }
+        }
+
         public static async Task Test1()
         {
             var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>";
@@ -44,6 +71,20 @@ namespace Net6Test.TestGroups
                     }
                 }
             string str1 = xDocument.ToString();
+        }
+
+        public async static Task Test3()
+        {
+            var tsk = Task.Run(() => { 
+                var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>"; 
+                throw new Exception("HHere"); 
+                return xmlString; });
+
+            var str = await tsk.ContinueWith(async t => {
+                var ptSt = t.Status;
+                var rsl = await t;
+                return rsl;
+            }).Result;
         }
     }
 
