@@ -11,11 +11,23 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
 
 namespace Net6Test.TestGroups
 {
     public static class XMLSchemaTest
     {
+        public static async Task Test4()
+        {
+            var attr = typeof(SPO).GetCustomAttributes<XmlRootAttribute>(true).FirstOrDefault();
+            string nspace = attr?.Namespace;
+
+            Predicate<BaseOrder> oFilter = x => { return true; };
+
+            BaseOrder bs = new();
+            bs.SetOrder(@"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>");
+            var odr = bs.GetOrder();
+        }
         public static async Task Test2()
         {
             var xmlString = @"<Status><Code id='inforId' respcode='200'>SUCCESS</Code><Info /></Status>";
@@ -58,9 +70,9 @@ namespace Net6Test.TestGroups
 
             string xml = XMLConversionsHelper.SerializerToXML(spo);
 
-            XNamespace ns = "TSP";
+            XNamespace ns = "xx";// "TSP";
             XDocument xDocument = XDocument.Parse(xml);
-            xDocument.Root.Name = ns + xDocument.Root.Name.LocalName;
+            //xDocument.Root.Name = ns + xDocument.Root.Name.LocalName;
             string str = xDocument.ToString();
             var nodes = xDocument.Root?.Descendants().ToList();
             if (nodes != null)
@@ -87,15 +99,20 @@ namespace Net6Test.TestGroups
 
             Working("AP");
 
-            await Task.Delay(30000);
+            await Task.Delay(10000);
 
-            var str = await tsk.ContinueWith(async t =>
+            //var str =
+                tsk.ContinueWith(t =>
             {
                 var ptSt = t.Status;
-                var rsl = await t;
-                Working("APX");
-                return rsl;
-            }).Result;
+                var rsl = t.Result;
+                
+                Task.Delay(2000).Wait();
+                Console.WriteLine("in");
+                //Working("APX");
+                //return rsl;
+            }).Wait();
+            Console.WriteLine("out");
         }
 
         /// <summary>
@@ -114,7 +131,7 @@ namespace Net6Test.TestGroups
             await Task.Run(() =>
             {
                 int i = 0;
-                while (i < 20)
+                while (i < 8)
                 {
                     Console.WriteLine($"{header} i = {i} // ThreadID = {Thread.CurrentThread.ManagedThreadId}");
                     i++;
@@ -124,7 +141,7 @@ namespace Net6Test.TestGroups
         }
     }
 
-    [XmlRoot("STC", Namespace = "TSP")]
+    [XmlRoot("STC", Namespace = "TSP")]//
     public class SPO : BST<XmlDocument>
     {
     }
@@ -154,4 +171,22 @@ namespace Net6Test.TestGroups
         public T TPMessage { get; set; }
     }
 
+    public class BaseOrder
+    {
+        protected readonly string OrderKey = "Order";
+        public Guid ConversationID { get; set; }
+        public string Source { get; set; }
+        public string destination { get; set; }
+        public string orderNumber { get; set; }
+        public string status { get; set; }
+        public JObject Order { get; set; }
+        public void SetOrder(string order)
+        {
+            Order = JObject.Parse($"{{\"{OrderKey}\":\"{order}\"}}");
+        }
+        public string GetOrder()
+        {
+            return Order[OrderKey].ToString();
+        }
+    }
 }
