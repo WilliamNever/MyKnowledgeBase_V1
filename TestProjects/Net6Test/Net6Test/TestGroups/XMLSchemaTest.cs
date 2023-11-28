@@ -139,6 +139,13 @@ namespace Net6Test.TestGroups
                 }
             });
         }
+
+        public async static Task Test5()
+        {
+            var json = JsonConvert.SerializeObject(new { Order = "\"{\"Order\":\"Here\"}\"" });
+            JObject job = JObject.Parse(json);  //"{\"Order\":\"Here\"}"
+            string? order = job["Order"]?.ToString();
+        }
     }
 
     [XmlRoot("STC", Namespace = "TSP")]//
