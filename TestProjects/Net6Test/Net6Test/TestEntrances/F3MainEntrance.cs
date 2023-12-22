@@ -5,6 +5,7 @@ using Net6Test.Models;
 using Net6Test.TestGroups;
 using Newtonsoft.Json;
 using StandardLibrary.Helpers;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Net6Test.TestEntrances
@@ -24,6 +25,10 @@ namespace Net6Test.TestEntrances
         private async Task ReflectFindServicesTest()
         {
             var assembly = GetType().Assembly;
+            var refAssemblies = assembly.GetReferencedAssemblies();
+            var ass = Assembly.Load(refAssemblies[18]);
+            var sass = AppDomain.CurrentDomain.GetAssemblies();
+
             var Iface = assembly.DefinedTypes.Where(t => t.IsInterface).Select(x => x.AsType()).FirstOrDefault(x => x.Name.StartsWith("IDotTests"));
             var objs = assembly.DefinedTypes.Where(x => !x.IsAbstract && !x.IsInterface).ToList();
             var ics = objs.Where(x => x.ImplementedInterfaces.Any(ifc => ifc == Iface)).First();
