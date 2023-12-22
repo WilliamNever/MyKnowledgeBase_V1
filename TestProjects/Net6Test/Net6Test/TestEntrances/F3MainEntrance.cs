@@ -1,16 +1,9 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Net6Test.Models;
-using Net6Test.StaticUtilities;
+using Net6Test.TestGroups;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
 using StandardLibrary.Helpers;
+using System.Text.Json;
 
 namespace Net6Test.TestEntrances
 {
@@ -18,8 +11,49 @@ namespace Net6Test.TestEntrances
     {
         public override void MainRun()
         {
-            InitialTest().Wait();
+            //InitialTest().Wait();
             //DictionaryTest().Wait();
+            //JsonSerializerDeserializeTest().Wait();
+            //XmlDeserializeTest().Wait();
+            FuncTest().Wait();
+        }
+
+        private async Task FuncTest()
+        {
+            var v1 = new BaseOX { BaseOX_Name = "V1", Rec = 10 };
+            var v2 = new BaseOX { BaseOX_Name = "V2" };
+            var v3 = v1 + v2;
+            var str = (string)v3;
+            var str1 = v3.ToString();
+            var vs1 = (BaseOXSep1)v1;
+            BaseOXSep1 vs2 = v1;
+        }
+
+        private async Task XmlDeserializeTest()
+        {
+            //await XMLSchemaTest.Test1();
+            //await XMLSchemaTest.Test2();
+            //await XMLSchemaTest.Test3();
+            //await XMLSchemaTest.Test4();
+            await XMLSchemaTest.Test5();
+        }
+
+        private async Task JsonSerializerDeserializeTest()
+        {
+            var scx = new ExtClassModel();
+
+            string xml = XMLConversionsHelper.SerializerToXML(scx);
+            System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+            xmlDoc.LoadXml(xml);
+            string json = JsonConvert.SerializeXmlNode(xmlDoc, Newtonsoft.Json.Formatting.Indented, true);
+
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var body = System.Text.Json.JsonSerializer.Deserialize<SimpleModel>(" ", options); //"{\"id\":5,\"Name\":\"22x\"}"
         }
 
         private async Task DictionaryTest()

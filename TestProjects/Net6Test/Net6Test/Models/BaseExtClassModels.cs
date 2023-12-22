@@ -10,6 +10,10 @@ namespace Net6Test.Models
 {
     public class ExtClassModel : Base2
     {
+        public ExtClassModel():base()
+        {
+            
+        }
         public string? HiFiInfor { get; set; }
         public string Name { get; set; } = "ExtClassModel";
     }
@@ -23,6 +27,39 @@ namespace Net6Test.Models
         public string? OutterInfor { get; set; }
         public virtual int Rec { get; set; }
         public List<Base1> b1List { get; set; }
+        public Tuple<string, string> Union { get; set; }
+
+        public static BaseOX operator +(BaseOX ah, BaseOX ls)
+        {
+            var union = new Tuple<string, string>(ah.BaseOX_Name, ls.BaseOX_Name);
+            ah.Union = union;
+            ls.Union = union;
+            return new BaseOX() { Union = union };
+        }
+        public static implicit operator string(BaseOX bx)
+        {
+            return $"{bx.Union.Item1}@@{bx.Union.Item2}";
+        }
+        public override string ToString()
+        {
+            return (string)this;
+        }
+        public static implicit operator BaseOXSep1(BaseOX bx)
+        {
+            var bs = new BaseOXSep1();
+            bs.BaseOXSep1_Name = bx.BaseOX_Name;
+            bs.BaseOXSep1_HiFiInfor = bx.BaseOX_HiFiInfor;
+            bs.Rec = bx.Rec;
+            return bs;
+        }
+        //public static explicit operator BaseOXSep1(BaseOX bx)
+        //{
+        //    var bs = new BaseOXSep1();
+        //    bs.BaseOXSep1_Name = bx.BaseOX_Name;
+        //    bs.BaseOXSep1_HiFiInfor = bx.BaseOX_HiFiInfor;
+        //    bs.Rec = bx.Rec;
+        //    return bs;
+        //}
     }
     public class BaseOXSep1
     {
@@ -49,6 +86,10 @@ namespace Net6Test.Models
 
     public class Base2 : Base1
     {
+        public Base2()
+        {
+            
+        }
         public override int Rec { get; set; }
         public int Acx { get; set; }
     }

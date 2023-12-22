@@ -49,10 +49,10 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(NumberCalculate());
             //Task.WaitAll(HttpResponseMessage_Test());
             //Task.WaitAll(StringFormat_Test());
-            //Task.WaitAll(RegexesTestService_Test());
+            Task.WaitAll(RegexesTestService_Test());
             //Task.WaitAll(Encryption_Test());
             //Task.WaitAll(Parallel_ForEach_Test());
-            Task.WaitAll(String_Test());
+            //Task.WaitAll(String_Test());
             //Task.WaitAll(Js_De_or_Serialize_Test());
         }
 
@@ -169,7 +169,7 @@ namespace Net6Test.TestEntrances
         private async Task RegexesTestService_Test()
         {
             var svc = new RegexesTestService();
-            var rsl = svc.RegexMultiSpecLetters_Test("aaaacbcbbcc");
+            svc.RegexMultiSpecLetters_Test();
         }
 
         private async Task StringFormat_Test()
