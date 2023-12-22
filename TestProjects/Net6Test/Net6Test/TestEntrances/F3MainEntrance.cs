@@ -24,6 +24,39 @@ namespace Net6Test.TestEntrances
 
         private async Task ReflectFindServicesTest()
         {
+            var tinew = typeof(INew<>);
+
+            var assembly = GetType().Assembly;
+            var Iface = assembly.DefinedTypes.Where(t => t.IsInterface && t.AsType() == tinew).Select(x => x.AsType()).First();
+            var objs = assembly.DefinedTypes.Where(x => !x.IsAbstract && !x.IsInterface).ToList();
+
+            var list = objs.Where(x => x.ImplementedInterfaces.Any(y => TMakeGenericType(tinew, y))).ToList();
+
+
+            await ReflectFindServicesTest_Part1();
+        }
+        private static bool TMakeGenericType(Type Iface, Type obj)
+        {
+            try
+            {
+                var tp = Iface.MakeGenericType(obj.GenericTypeArguments);
+                return tp == obj;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private static bool CanBeCastTo(Type pluggedType, Type pluginType)
+        {
+            //if (pluggedType == null) return false;
+
+            //if (pluggedType == pluginType) return true;
+
+            return pluginType.GetTypeInfo().IsAssignableFrom(pluggedType.GetTypeInfo());
+        }
+        private async Task ReflectFindServicesTest_Part1()
+        {
             var assembly = GetType().Assembly;
             var refAssemblies = assembly.GetReferencedAssemblies();
             var ass = Assembly.Load(refAssemblies[18]);
