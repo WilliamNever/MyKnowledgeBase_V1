@@ -114,8 +114,9 @@ namespace Net6Test.Models
             return new Bxx1(str);
         }
 
-        public class UserException : Exception, INew<UserException>
+        public class UserException : Exception, INew<UserException>, IDotTests
         {
+            public Guid CID { get; set; } = Guid.NewGuid();
             public UserException()
             {
 
@@ -128,6 +129,16 @@ namespace Net6Test.Models
             public UserException Create(string str)
             {
                 return new UserException(str);
+            }
+
+            int IDotTests.GetId(string num)
+            {
+                return 32;
+            }
+
+            string IDotTests.GetIdx(int num)
+            {
+                return num.ToString();
             }
         }
     }

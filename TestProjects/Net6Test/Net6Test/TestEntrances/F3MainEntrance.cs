@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Net6Test.Interfaces;
 using Net6Test.Models;
 using Net6Test.TestGroups;
 using Newtonsoft.Json;
@@ -15,7 +17,26 @@ namespace Net6Test.TestEntrances
             //DictionaryTest().Wait();
             //JsonSerializerDeserializeTest().Wait();
             //XmlDeserializeTest().Wait();
-            FuncTest().Wait();
+            //FuncTest().Wait();
+            ReflectFindServicesTest().Wait();
+        }
+
+        private async Task ReflectFindServicesTest()
+        {
+            var assembly = GetType().Assembly;
+            var Iface = assembly.DefinedTypes.Where(t => t.IsInterface).Select(x => x.AsType()).FirstOrDefault(x => x.Name.StartsWith("IDotTests"));
+            var objs = assembly.DefinedTypes.Where(x => !x.IsAbstract && !x.IsInterface).ToList();
+            var ics = objs.Where(x => x.ImplementedInterfaces.Any(ifc => ifc == Iface)).First();
+
+            IServiceCollection isvrs = new ServiceCollection();
+            isvrs.AddTransient(Iface, ics);
+
+            var pvdr = isvrs.BuildServiceProvider();
+            var svr = pvdr.GetService<IDotTests>();
+            var svr1 = pvdr.GetService<IDotTests>();
+
+            var aa = svr.GetId("");
+            var bb = svr.GetIdx(321);
         }
 
         private async Task FuncTest()
