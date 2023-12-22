@@ -1,18 +1,9 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Net6Test.Models;
-using Net6Test.StaticUtilities;
+using Net6Test.TestGroups;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
 using StandardLibrary.Helpers;
 using System.Text.Json;
-using Net6Test.TestGroups;
 
 namespace Net6Test.TestEntrances
 {
@@ -23,7 +14,19 @@ namespace Net6Test.TestEntrances
             //InitialTest().Wait();
             //DictionaryTest().Wait();
             //JsonSerializerDeserializeTest().Wait();
-            XmlDeserializeTest().Wait();
+            //XmlDeserializeTest().Wait();
+            FuncTest().Wait();
+        }
+
+        private async Task FuncTest()
+        {
+            var v1 = new BaseOX { BaseOX_Name = "V1", Rec = 10 };
+            var v2 = new BaseOX { BaseOX_Name = "V2" };
+            var v3 = v1 + v2;
+            var str = (string)v3;
+            var str1 = v3.ToString();
+            var vs1 = (BaseOXSep1)v1;
+            BaseOXSep1 vs2 = v1;
         }
 
         private async Task XmlDeserializeTest()
