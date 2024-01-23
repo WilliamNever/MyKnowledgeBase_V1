@@ -24,10 +24,29 @@ namespace Net6Test.TestEntrances
             //new Assembly_Reflect_Tests().ReflectFindServicesTest().Wait();
 
             //SynSugarTest().Wait();
+            //QuartzCronExpressionTestAsync().Wait();
+            //ValueTupleTest().Wait();
 
-            QuartzCronExpressionTestAsync().Wait();
+            ThreadTasksTest.ConcurrentBag_T_Test().Wait();
         }
 
+        private async Task ValueTupleTest()
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
+            //cts.Cancel();
+            cts.Token.ThrowIfCancellationRequested();
+
+            ValueTuple<Guid, Guid, string, bool> vt = new(Guid.NewGuid(), Guid.Empty, "yyy", true);
+
+            List<ValueTuple<Guid, Guid, string, bool>> list = new();
+            //List<(Guid TPPrcsId, Guid PrcsOptId, string Desc, bool result)> list = new();
+            (Guid TPPrcsId, Guid PrcsOptId, string Status, bool result) step = new() { Status = "xxx", result = true };
+            (Guid TPPrcsId, Guid PrcsOptId, string Desc, bool result) step1 = new() { Desc = "xxx Desc" };
+
+            list.Add(step);
+            list.Add(step1);
+            list.Add(vt);
+        }
         private async Task QuartzCronExpressionTestAsync()
         {
             var bdt = DateTime.Parse("2024-01-10T00:45:33").ToUniversalTime();//.UtcNow;//
@@ -141,6 +160,17 @@ namespace Net6Test.TestEntrances
 
         private async Task JsonSerializerDeserializeTest()
         {
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "a", "va" },
+                { "b", "vb" },
+                { "c", "vc" }
+            };
+            var dicString = JsonConvert.SerializeObject(dic);
+            var deserial = JsonConvert.DeserializeObject<Dictionary<string, string>> (dicString);
+
+
+
             var scx = new ExtClassModel();
 
             string xml = XMLConversionsHelper.SerializerToXML(scx);
