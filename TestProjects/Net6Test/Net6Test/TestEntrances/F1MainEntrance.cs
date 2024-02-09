@@ -29,7 +29,6 @@ namespace Net6Test.TestEntrances
         {
             //Task.WaitAll(TestForNet6JsonSerialize());
             //Task.WaitAll(TestCutFileNameFromUrl());
-            //Task.WaitAll(ReadRunningProgress());
             //Task.WaitAll(DateTimeFormatString());
             //Task.WaitAll(XMLSerializeTest());
             //Task.WaitAll(AutoMapperTest());
@@ -49,10 +48,10 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(NumberCalculate());
             //Task.WaitAll(HttpResponseMessage_Test());
             //Task.WaitAll(StringFormat_Test());
-            //Task.WaitAll(RegexesTestService_Test());
+            Task.WaitAll(RegexesTestService_Test());
             //Task.WaitAll(Encryption_Test());
             //Task.WaitAll(Parallel_ForEach_Test());
-            Task.WaitAll(String_Test());
+            //Task.WaitAll(String_Test());
             //Task.WaitAll(Js_De_or_Serialize_Test());
         }
 
@@ -169,7 +168,7 @@ namespace Net6Test.TestEntrances
         private async Task RegexesTestService_Test()
         {
             var svc = new RegexesTestService();
-            var rsl = svc.RegexMultiSpecLetters_Test("aaaacbcbbcc");
+            svc.RegexMultiSpecLetters_Test();
         }
 
         private async Task StringFormat_Test()
@@ -610,29 +609,6 @@ namespace Net6Test.TestEntrances
             var dt1 = dt.ToString("yyyyMMddHHmmss_fff");
             var dt2 = dt.ToString("yyyyMMddHHmmss_fff");
             Console.WriteLine(dt.ToString("s"));
-        }
-
-        private async Task ReadRunningProgress()
-        {
-            var processId = Process.GetCurrentProcess().Id;
-            var enProcessId = Environment.ProcessId;
-            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            //var procs = Process.GetProcesses().Where(x =>
-            //    x.ProcessName?.Equals(assemblyName, StringComparison.OrdinalIgnoreCase) ?? false);
-
-            var proc = Process.GetProcesses().FirstOrDefault(x =>
-                x.ProcessName?.Equals("notepad", StringComparison.OrdinalIgnoreCase) ?? false);
-            proc?.Kill();
-            //proc?.WaitForExit();
-            proc?.Close();
-            Console.WriteLine("run nextly ...");
-
-            try {
-                await Task.Run(() => { throw new Exception("T_T"); });
-            }
-            catch (Exception ex) 
-            { 
-            }
         }
 
         private async Task TestCutFileNameFromUrl()

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Net6Test.Interfaces
 {
-    public interface IDotTests
+    public interface IDotTests : IBase
     {
         int GetId(string num);
         string GetIdx(int num);
     }
+    public interface IBase
+    { }
 }

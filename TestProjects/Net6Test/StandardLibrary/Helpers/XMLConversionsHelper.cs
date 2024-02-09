@@ -54,6 +54,22 @@ namespace StandardLibrary.Helpers
                 }
             }
         }
+
+        public static string SerializerToXML_1<T>(T model, string ns = null)
+        {
+            using (var sww = new Utf8StringWriter())
+            {
+                XmlSerializer xSerial;
+                if (string.IsNullOrEmpty(ns))
+                    xSerial = new XmlSerializer(typeof(T));
+                else
+                    xSerial = new XmlSerializer(typeof(T), ns);
+                xSerial.Serialize(sww, model);
+                sww.Flush();
+                return sww.ToString();
+            }
+        }
+
         public static bool IsXMLString(string xml)
         {
             var doc = new XmlDocument();
@@ -67,5 +83,9 @@ namespace StandardLibrary.Helpers
                 return false; 
             }
         }
+    }
+    public class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding => Encoding.UTF8;
     }
 }
