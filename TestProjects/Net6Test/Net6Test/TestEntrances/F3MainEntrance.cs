@@ -28,7 +28,8 @@ namespace Net6Test.TestEntrances
             //ValueTupleTest().Wait();
 
             //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
-            ConversionTest.TypeTest().Wait();
+            //ConversionTest.TypeTest().Wait();
+            CollectionListTest.DictionaryExtensionsModel_Test().Wait();
         }
 
         private async Task ValueTupleTest()
