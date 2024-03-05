@@ -29,7 +29,9 @@ namespace Net6Test.TestEntrances
 
             //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
             //ConversionTest.TypeTest().Wait();
-            CollectionListTest.DictionaryExtensionsModel_Test().Wait();
+            //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
+
+            InjectionTest.InjectScopeTest();
         }
 
         private async Task ValueTupleTest()
