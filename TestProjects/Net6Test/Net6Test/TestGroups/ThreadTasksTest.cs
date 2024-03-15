@@ -16,18 +16,28 @@ namespace Net6Test.TestGroups
             var bag = new ConcurrentBag<int>();
             var bagList = new List<int>();
 
+            Func<int, Task> act = async (i) =>
+                {
+                    await Task.Run(() =>
+                    {
+                        bag.Add(i);
+                        lock (bagList)
+                        {
+                            bagList.Add(i);
+                        }
+                        Console.WriteLine($"Enter - {i} - {Thread.CurrentThread.ManagedThreadId}");
+                        Thread.Sleep(3000);
+                        Console.WriteLine($"Exit - {i} - {Thread.CurrentThread.ManagedThreadId}");
+                    });
+                };
+
             List<Task> tasks = new List<Task>();
             for (int i = 0; i < 1000; i++)
             {
-                tasks.Add(Task.Run(() =>
-                {
-                    bag.Add(i);
-                    lock (bagList)
-                    {
-                        bagList.Add(i);
-                    }
-                }));
+                tasks.Add(act(i));
             }
+
+            Task.WaitAll(tasks.ToArray());
 
             var list = bag.ToList();
             var blst = bagList.ToList();
