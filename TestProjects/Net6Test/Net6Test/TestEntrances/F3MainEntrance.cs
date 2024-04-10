@@ -27,11 +27,12 @@ namespace Net6Test.TestEntrances
             //QuartzCronExpressionTestAsync().Wait();
             //ValueTupleTest().Wait();
 
-            ThreadTasksTest.ConcurrentBag_T_Test().Wait();
+            //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
             //ConversionTest.TypeTest().Wait();
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
 
             //InjectionTest.InjectScopeTest();
+            RecordTest.Test1Async().Wait();
         }
 
         private async Task ValueTupleTest()
