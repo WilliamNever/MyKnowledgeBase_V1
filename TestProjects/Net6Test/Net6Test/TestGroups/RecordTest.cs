@@ -1,4 +1,6 @@
-﻿using StandardLibrary.Helpers;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using StandardLibrary.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,14 @@ namespace Net6Test.TestGroups
             var jsString = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             var de_Json = Newtonsoft.Json.JsonConvert.DeserializeObject<CObjct>(jsString);
             var isEqual = obj == de_Json;
+        }
+
+        public static async Task Test2Async()
+        {
+            var obj = new CObjct("fn", "ln", 20) { InfoMessage = "information" };
+            obj.InfoMessage = "xxx";
+            var str = JsonConvert.SerializeObject(default(string));
+            var jobj = JObject.Parse("{}");
         }
     }
 

@@ -32,7 +32,8 @@ namespace Net6Test.TestEntrances
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
 
             //InjectionTest.InjectScopeTest();
-            RecordTest.Test1Async().Wait();
+            //RecordTest.Test1Async().Wait();
+            RecordTest.Test2Async().Wait();
         }
 
         private async Task ValueTupleTest()
