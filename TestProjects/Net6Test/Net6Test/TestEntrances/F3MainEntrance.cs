@@ -33,7 +33,8 @@ namespace Net6Test.TestEntrances
 
             //InjectionTest.InjectScopeTest();
             //RecordTest.Test1Async().Wait();
-            RecordTest.Test2Async().Wait();
+            //RecordTest.Test2Async().Wait();
+            Type_Reflect_Tests.IsArrayTest();
         }
 
         private async Task ValueTupleTest()
