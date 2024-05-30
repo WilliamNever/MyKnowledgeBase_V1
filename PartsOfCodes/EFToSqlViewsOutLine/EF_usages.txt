@@ -1,0 +1,7 @@
+////////// - EF_EnumToString - //////////
+
+1 create converter for enum -
+var cvtr = new ValueConverter<EnumType, string>(v => v.ToString(), s => (EnumType)System.Enum.Parse(typeof(EnumType), s));
+
+2 add the converter to the Property in 'protected override void OnModelCreating(ModelBuilder modelBuilder)' -
+modelBuilder.Entity<AEntity>().Property(e => e.Status).HasConversion(cvtr);

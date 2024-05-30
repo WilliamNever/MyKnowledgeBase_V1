@@ -41,3 +41,68 @@ Add references to project -
             var certificate = collection.OfType<X509Certificate2>().Single();
             return new ClientCertificateCredential(tenantId, clientId, certificate);
         }
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+{
+  "AzureKeyVaultSetting": {
+    "KeyVaultName": "XXXXX",
+    "TenantId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "ClientId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", // 
+    "CertificateThumbprint": "1K5R9BWPUGVPJKWYMN505OCJYSC7GUXCNOA0I8ET"
+  }
+}
+
+How to find the IDs in Key vault -
+
+1. All services/Identity/Identity management/App registrations
+
+2. check 'All applications'
+
+3. enter 'external' to filter bar
+
+4. click the special item
+
+5. 
+'Application (client) ID' and 'Directory (tenant) ID' will be listed in Overview pannel.
+
+6.
+'Certificate Thumbprint' will be displayed in Certificates & secrets pannel.
+
+
+nuget pkg reference -
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
+
+
+Uages -
+
+ IConfigurationBuilder cfg = new ConfigurationManager();
+ cfg.SetBasePath(hostingContext.HostingEnvironment.ContentRootPath);
+ cfg.AddJsonFile("appsettings.json", false, true);
+ cfg.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
+
+     var configValues = cfg.Build();
+     var kv = configValues.GetSection(nameof(AzureKeyVaultSetting));
+     var vaultName = kv[nameof(AzureKeyVaultSetting.KeyVaultName)];
+     Uri vaultUri = new($"https://{vaultName}.vault.azure.net/");
+     var certificateCredential = GetCertificateCredential(
+         kv[nameof(AzureKeyVaultSetting.TenantId)],
+         kv[nameof(AzureKeyVaultSetting.ClientId)],
+         kv[nameof(AzureKeyVaultSetting.CertificateThumbprint)]);
+     cfg.AddAzureKeyVault(vaultUri, certificateCredential);
+
+var kvValue = configValues["key-string"];
+
+
+
+private static ClientCertificateCredential GetCertificateCredential(string tenantId, string clientId, string thumbprint, bool validOnly = false)
+{
+    using var certificateStore = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+    certificateStore.Open(OpenFlags.ReadOnly);
+    var collection = certificateStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
+    var certificate = collection.OfType<X509Certificate2>().Single();
+    return new ClientCertificateCredential(tenantId, clientId, certificate);
+}

@@ -6,6 +6,7 @@ namespace Net6WebSite.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        public string IdString { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
         {
@@ -17,6 +18,7 @@ namespace Net6WebSite.Pages
             TempData["ddd"] = "Hello ddd!";
             //TempData.Peek("ddd");
             //TempData.Keep();
+            //IdString = "xxxxx";
         }
     }
 }

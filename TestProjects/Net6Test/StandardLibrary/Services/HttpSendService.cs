@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StandardLibrary.Exceptions;
 using StandardLibrary.IServices;
 using System;
 using System.Collections.Generic;
@@ -10,27 +11,19 @@ namespace StandardLibrary.Services
 {
     public class HttpSendService : IHttpSendService
     {
-        //protected readonly ILogger<HttpSendService> _logger;
         public HttpSendService()
         {
-            
+
         }
         public async Task<HttpResponseMessage> SendAsync(Func<Task<HttpResponseMessage>> func)
         {
             HttpResponseMessage httpResponse;
-            try
+            httpResponse = await func.Invoke();
+            if (!httpResponse.IsSuccessStatusCode)
             {
-                httpResponse = await func.Invoke();
-                if (!httpResponse.IsSuccessStatusCode)
-                {
-                    throw new Exception(await httpResponse.Content.ReadAsStringAsync());
-                }
+                throw new HttpFailedException(httpResponse.StatusCode, await httpResponse.Content.ReadAsStringAsync());
             }
-            catch (Exception ex)
-            {
-                //_logger?.LogError(ex, ex.Message);
-                throw;
-            }
+
             return httpResponse;
         }
 

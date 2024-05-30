@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6Test", "Net6Test\Net6Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6WebSite", "Net6WebSite\Net6WebSite.csproj", "{8E3F7240-F342-4C91-B1E3-9DB1D36CC6CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardLibrary", "StandardLibrary\StandardLibrary.csproj", "{E9E16879-7341-4FD1-806E-2FE78988BD80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardLibrary", "StandardLibrary\StandardLibrary.csproj", "{E9E16879-7341-4FD1-806E-2FE78988BD80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApisTest", "ApisTest\ApisTest.csproj", "{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E9E16879-7341-4FD1-806E-2FE78988BD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9E16879-7341-4FD1-806E-2FE78988BD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9E16879-7341-4FD1-806E-2FE78988BD80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

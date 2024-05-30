@@ -1,0 +1,29 @@
+var cla = class {
+    static MM = 33;
+  #Infor;
+ constructor(vint, nm)
+ {
+  this.Vint = vint; this.NM=nm; this.#NXT();
+  this.#Infor=nm+vint;
+ }
+ #NXT(){
+  console.log('NXT Method');
+ } 
+ NNXT(){
+  console.log('in NNXT'); this.#NXT();
+  }
+  get ShowNNXT(){
+  console.log('in NNXT'); this.#NXT();
+  }
+  ReadInfor()
+  {
+    console.log(this.#Infor);
+  }
+  static Show()
+  {
+    console.log("static Show()");
+  }
+}
+
+
+var ss1 = new cla(22,'nameVle')
