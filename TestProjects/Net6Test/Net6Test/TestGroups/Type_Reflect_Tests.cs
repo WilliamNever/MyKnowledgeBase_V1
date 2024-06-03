@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Net6Test.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,19 @@ namespace Net6Test.TestGroups
 {
     public class Type_Reflect_Tests
     {
+        public static void RunTest()
+        {
+            //IsArrayTest();
+            TypeCompareTest<string>();
+        }
+
+        public static void TypeCompareTest<T>()
+        {
+            var tpy = typeof(T);
+            var strTpy = typeof(TKModel);
+            bool isEqual = tpy.Equals(strTpy);
+        }
+
         public static void IsArrayTest()
         {
             string[]? strArray = new string[] { "x" };

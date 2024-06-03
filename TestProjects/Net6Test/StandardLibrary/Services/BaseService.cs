@@ -55,11 +55,53 @@ namespace StandardLibrary.Services
                 throw exp;
             }
         }
+        protected virtual async Task<T> PostModelFromAPIAsync<T>(string url, IHttpSendService _httpSendService, HttpClient _client, HttpContent content)
+        {
+            try
+            {
+                var rsl = await PostModelAsync<T>(url, _httpSendService, _client, content);
+                return rsl;
+            }
+            catch (HttpFailedException exhf)
+            {
+                exhf.Data.Add("endpoint", url);
+                _logger.LogError(exhf, exhf.Message);
+                throw exhf;
+            }
+            catch (Exception exp)
+            {
+                exp.Data.Add("endpoint", url);
+                _logger.LogError(exp, exp.Message);
+                throw exp;
+            }
+        }
 
         protected static async Task<T> GetModelAsync<T>(string url, IHttpSendService _httpSendService, HttpClient _client)
         {
             var rsl = await _httpSendService.SendAndReadFromJsonAsync<T>(
                 async client => { return await client.GetAsync(url); }, _client);
+            return rsl;
+        }
+        protected static async Task<T> PostModelAsync<T>(string url, IHttpSendService _httpSendService, HttpClient _client, HttpContent content)
+        {
+            var rsl = await _httpSendService.SendAndReadFromJsonAsync<T>(
+                async client => { return await client.PostAsync(url, content); }, _client);
+            return rsl;
+        }
+        protected static async Task<T> SendModelAsync<T>(IHttpSendService _httpSendService,
+            HttpClient _client, HttpRequestMessage requestMessage
+            , HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
+        {
+            var rsl = await _httpSendService.SendAndReadFromJsonAsync<T>(
+                async client => { return await client.SendAsync(requestMessage, completionOption); }, _client);
+            return rsl;
+        }
+        protected static async Task<string> SendStringAsync(IHttpSendService _httpSendService,
+            HttpClient _client, HttpRequestMessage requestMessage
+            , HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
+        {
+            var rsl = await _httpSendService.SendAndReadAsStringAsync(
+                async client => { return await client.SendAsync(requestMessage, completionOption); }, _client);
             return rsl;
         }
         protected static async Task<string> GetStringAsync(string url, IHttpSendService _httpSendService, HttpClient _client)
