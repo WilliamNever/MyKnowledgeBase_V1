@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Utilities
@@ -40,6 +42,25 @@ namespace Utilities
                 Expression.Quote(orderByExpression));
 
             return source.Provider.CreateQuery<T>(resultExp);
+        }
+
+        /// <summary>
+        /// 未测试，untested
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IQueryable<T> Where<T>(IQueryable<T> source, string propertyName, object value)
+        {
+            ParameterExpression param = Expression.Parameter(typeof(T), "x");
+            MemberExpression member = Expression.PropertyOrField(param, propertyName);
+            ConstantExpression constant = Expression.Constant(value);
+            BinaryExpression binary = Expression.Equal(member, constant);
+            Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(binary, param);
+
+            return source.Where(lambda);
         }
     }
 }
