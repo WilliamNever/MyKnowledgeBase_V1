@@ -14,14 +14,17 @@ namespace StandardLibrary.SecurityCryptography
         public static string ToHashSha256(this string text)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(text);
-            byte[] array = System.Security.Cryptography.SHA256.Create().ComputeHash(bytes);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < array.Length; i++)
+            using (var hash = System.Security.Cryptography.SHA256.Create())
             {
-                stringBuilder.Append(array[i].ToString("X2"));
-            }
+                byte[] array = hash.ComputeHash(bytes);
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < array.Length; i++)
+                {
+                    stringBuilder.Append(array[i].ToString("X2"));
+                }
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            }
         }
     }
 }
