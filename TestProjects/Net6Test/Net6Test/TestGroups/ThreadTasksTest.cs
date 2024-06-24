@@ -51,5 +51,43 @@ namespace Net6Test.TestGroups
             var blst = bagList.ToList();
         }
 
+        public static async Task LockObj_Test()
+        {
+            object obj1 = new object();
+            object obj2 = new object();
+
+            Action act1 = () =>
+                        {
+                            Thread.Sleep(1000);
+                            lock (obj1)
+                            {
+                                Console.WriteLine("111 - in");
+                                lock (obj2)
+                                {
+                                    Console.WriteLine("222");
+                                }
+                                Console.WriteLine("111 - out");
+                            }
+                        };
+            Action act2 = () =>
+            {
+                lock (obj2)
+                {
+                    Thread.Sleep(3000);
+                    Console.WriteLine("Thread - in");
+                    lock (obj1)
+                    {
+                        act1();
+                        Console.WriteLine("Thread wait - delay");
+                        Thread.Sleep(2000);
+                    }
+                }
+            };
+            Task.Run(act2);
+            await Task.Run(act1);
+
+            //await Task.Run(() => { act2(); act1(); });
+            Console.WriteLine("Exit");
+        }
     }
 }

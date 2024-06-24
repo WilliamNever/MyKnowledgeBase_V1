@@ -38,7 +38,8 @@ namespace Net6Test.TestEntrances
             //DateTime_Tests.Test().Wait();
             //MemoryCache_Tests.Test();
 
-            SecurityCryptography_Tests.ToHashSha256_Test();
+            //SecurityCryptography_Tests.ToHashSha256_Test();
+            ThreadTasksTest.LockObj_Test().Wait();
         }
 
         private async Task ValueTupleTest()
