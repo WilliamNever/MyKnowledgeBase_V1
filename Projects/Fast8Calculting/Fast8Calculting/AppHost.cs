@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using F8C.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fast8Calculting
 {
@@ -45,14 +41,14 @@ namespace Fast8Calculting
                     {
                         config.AddEnvironmentVariables(environment);
                         config.SetBasePath(hostingContext.HostingEnvironment.ContentRootPath);
-                        config.AddJsonFile("appsettings.json", false, true);
-                        //config.AddJsonFile($"appsettings.{environment}.json", true, true);
+                        config.AddJsonFile("appsettings.json", true, true);
                     })
                     .ConfigureLogging((context, logging) =>
                     {
                     })
                     .ConfigureServices((hostContext, services) =>
                     {
+                        services.AddTransient<Base8MethodService, Simple_HH_MM_Service>();
                     })
                     .Build();
             return host;
