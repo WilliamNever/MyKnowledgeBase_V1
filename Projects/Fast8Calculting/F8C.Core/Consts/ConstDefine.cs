@@ -15,7 +15,8 @@ namespace F8C.Core.Consts
         public const int Full6Positive = 63;
         public static readonly int[] BitNums = new int[] { 32, 1, 2, 4, 8, 16 };
         public static readonly Dictionary<int, int> Dics
-            = new Dictionary<int, int> {
+            = new()
+            {
                 { 0, 0 } ,
                 { 1, 7 } ,
                 { 2, 3 } ,
@@ -25,6 +26,32 @@ namespace F8C.Core.Consts
                 { 5, 6 } ,
                 { 6, 2 } ,
                 { 7, 4 } ,
+            };
+        public static readonly Dictionary<int, string> DicName
+            = new()
+            {
+                { 0, "坤" } ,
+                { 7, "乾" } ,
+                { 3, "兑" } ,
+                { 5, "离" } ,
+
+                { 1, "震" } ,
+                { 6 , "巽"} ,
+                { 2 , "坎"} ,
+                { 4 , "艮"} ,
+            };
+        public static readonly Dictionary<int, string> DicSymbol
+            = new()
+            {
+                { 0, "地" } ,
+                { 7, "天" } ,
+                { 3, "泽" } ,
+                { 5, "火" } ,
+
+                { 1, "雷" } ,
+                { 6 , "风"} ,
+                { 2 , "水"} ,
+                { 4 , "山"} ,
             };
 
 
