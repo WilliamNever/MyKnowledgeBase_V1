@@ -8,6 +8,7 @@ namespace Fast8Calculting
         [STAThread]
         static void Main()
         {
+            AppHost.SetupHost();
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
