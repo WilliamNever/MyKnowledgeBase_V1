@@ -2,8 +2,9 @@
 {
     public class BaseMethodModel
     {
-        public int First { get; set; }
-        public int Second { get; set; }
+        public virtual int First { get; set; }
+        public virtual int Second { get; set; }
+        public virtual int RateNum { get; }
 
     }
 }

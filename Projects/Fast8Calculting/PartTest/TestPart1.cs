@@ -1,4 +1,5 @@
 ﻿using F8C.Core.Consts;
+using F8C.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,21 @@ namespace PartTest
             var c = ConstDefine.BitNums[(v1 + v2) % 6];
             var d = s ^ c;
             return (s,h,d);
+        }
+
+        public static void C_Test1()
+        {
+            Obj_Num_Model omd = new Obj_Num_Model();
+            omd.First = 1;
+            omd.TimeHH12 = 2;
+            try
+            {
+                var tm = new Simple_HH_MM_Model() { First = 4, Second = 5 };
+            }
+            catch(Exception e)
+            {
+
+            }
         }
     }
 }

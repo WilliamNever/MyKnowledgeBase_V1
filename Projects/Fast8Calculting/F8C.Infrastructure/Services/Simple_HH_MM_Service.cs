@@ -13,7 +13,7 @@ namespace F8C.Infrastructure.Services
         public Result8SymbolModel Get8Symbol(Simple_HH_MM_Model model)
         {
             int bgn = ConstDefine.BeginRsl(model.First, model.Second);
-            int chg = ConstDefine.ChangedRsl(bgn, model.First + model.Second);
+            int chg = ConstDefine.ChangedRsl(bgn, model.RateNum);
             return new Result8SymbolModel
             {
                 Begin = bgn,

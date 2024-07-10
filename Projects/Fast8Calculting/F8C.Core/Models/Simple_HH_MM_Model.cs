@@ -2,5 +2,6 @@
 {
     public class Simple_HH_MM_Model : BaseMethodModel
     {
+        public override int RateNum { get => First + Second; }
     }
 }
