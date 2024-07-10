@@ -21,31 +21,18 @@
                 { 6, 2 } ,
                 { 7, 4 } ,
             };
-        public static readonly Dictionary<int, string> DicName
+        public static readonly Dictionary<int, SingleSymbol> DicName
             = new()
             {
-                { 0, "坤" } ,
-                { 7, "乾" } ,
-                { 3, "兑" } ,
-                { 5, "离" } ,
+                { 0, new SingleSymbol(0,"坤","西南","地") } ,
+                { 7, new SingleSymbol(7,"乾","西北","天") } ,
+                { 3, new SingleSymbol(3,"兑","西","泽") } ,
+                { 5, new SingleSymbol(5,"离","南","火") } ,
 
-                { 1, "震" } ,
-                { 6 , "巽"} ,
-                { 2 , "坎"} ,
-                { 4 , "艮"} ,
-            };
-        public static readonly Dictionary<int, string> DicSymbol
-            = new()
-            {
-                { 0, "地" } ,
-                { 7, "天" } ,
-                { 3, "泽" } ,
-                { 5, "火" } ,
-
-                { 1, "雷" } ,
-                { 6 , "风"} ,
-                { 2 , "水"} ,
-                { 4 , "山"} ,
+                { 1, new SingleSymbol(1,"震","东","雷") } ,
+                { 6, new SingleSymbol(6,"巽","东南","风") } ,
+                { 2, new SingleSymbol(2,"坎","北","水") } ,
+                { 4, new SingleSymbol(4,"艮","东北","山") } ,
             };
 
 
@@ -65,5 +52,20 @@
             if (begin == 0 || begin == Full6Positive) src = change;
             return (src >> 2 & Full3Positive) << 3 | (src >> 1 & Full3Positive);
         }
+    }
+
+    public class SingleSymbol
+    {
+        public SingleSymbol(int symNum, string name, string direct, string sym)
+        {
+            SymbolNum = symNum;
+            Name = name;
+            Direct = direct;
+            Symbol = sym;
+        }
+        public int SymbolNum { get; protected set; }
+        public string Name { get; protected set; }
+        public string Direct { get; protected set; }
+        public string Symbol { get; protected set; }
     }
 }
