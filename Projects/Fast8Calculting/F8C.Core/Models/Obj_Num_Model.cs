@@ -12,6 +12,6 @@ namespace F8C.Core.Models
         public int TimeHH12 { get; set; }
         public override int First { get => ObjNum; set => ObjNum = value; }
         public override int Second { get => TimeHH12; set => TimeHH12 = value; }
-        public override int RateNum { get => First + Second; }
+        public override int RateNum { get => First + Second; set => throw new NotSupportedException(); }
     }
 }

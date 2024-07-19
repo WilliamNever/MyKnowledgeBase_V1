@@ -1,9 +1,14 @@
-﻿using F8C.Core.Models;
+﻿using F8C.Core.Enums;
+using F8C.Core.Models;
+using System.ComponentModel.Design;
 
 namespace F8C.Core.Interfaces
 {
-    public interface ICreate8Method<T> where T : BaseMethodModel
+    public interface ICreate8Method
     {
-        Result8SymbolModel Get8Symbol(T model);
+        Create8Method Identity { get; }
+        string Name { get; }
+
+        TService? GetService<TService>() where TService : class;
     }
 }

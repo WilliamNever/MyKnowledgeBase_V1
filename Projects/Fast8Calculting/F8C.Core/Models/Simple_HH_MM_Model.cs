@@ -2,6 +2,6 @@
 {
     public class Simple_HH_MM_Model : BaseMethodModel
     {
-        public override int RateNum { get => First + Second; }
+        public override int RateNum { get => First + Second; set => throw new NotSupportedException(); }
     }
 }

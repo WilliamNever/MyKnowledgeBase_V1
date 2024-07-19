@@ -1,4 +1,5 @@
-﻿using F8C.Infrastructure.Services;
+﻿using F8C.Core.Interfaces;
+using F8C.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,7 +49,9 @@ namespace Fast8Calculting
                     })
                     .ConfigureServices((hostContext, services) =>
                     {
-                        services.AddTransient<Base8MethodService, Simple_HH_MM_Service>();
+                        services.AddTransient<ICreate8Method, Simple_HH_MM_Service>();
+                        services.AddTransient<ICreate8Method, Date_Time_Service>();
+                        services.AddTransient<ICreate8Method, Obj_direct_Service>();
                     })
                     .Build();
             return host;

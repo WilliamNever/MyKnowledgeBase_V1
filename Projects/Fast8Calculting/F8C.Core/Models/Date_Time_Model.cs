@@ -15,6 +15,6 @@ namespace F8C.Core.Models
 
         public override int First { get => NgYear + NgMonth + NgDay; set => throw new NotSupportedException(); }
         public override int Second { get => NgYear + NgMonth + NgDay + TimeHH12; set => throw new NotSupportedException(); }
-        public override int RateNum { get => Second; }
+        public override int RateNum { get => Second; set => throw new NotSupportedException(); }
     }
 }

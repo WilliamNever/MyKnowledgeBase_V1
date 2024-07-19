@@ -13,6 +13,6 @@ namespace F8C.Core.Models
         public int TimeHH12 { get; set; }
         public override int First { get => ObjSymbol; set => ObjSymbol = value; }
         public override int Second { get => Direct; set => Direct = value; }
-        public override int RateNum => First + Second + TimeHH12;
-    }
+        public override int RateNum { get => First + Second + TimeHH12; set => throw new NotSupportedException(); }
+        }
 }
