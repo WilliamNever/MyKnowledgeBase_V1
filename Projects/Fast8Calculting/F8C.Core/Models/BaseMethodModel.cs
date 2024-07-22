@@ -2,9 +2,9 @@
 
 namespace F8C.Core.Models
 {
-    public class BaseMethodModel
+    public abstract class BaseMethodModel
     {
-        public Create8Method Identity { get; set; }
+        public abstract Create8Method Identity { get; }
         public virtual int First { get; set; }
         public virtual int Second { get; set; }
         public virtual int RateNum { get; set; }

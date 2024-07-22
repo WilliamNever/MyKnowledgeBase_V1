@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using F8C.Core.Enums;
 
 namespace F8C.Core.Models
 {
@@ -13,5 +9,7 @@ namespace F8C.Core.Models
         public override int First { get => ObjNum; set => ObjNum = value; }
         public override int Second { get => TimeHH12; set => TimeHH12 = value; }
         public override int RateNum { get => First + Second; set => throw new NotSupportedException(); }
+
+        public override Create8Method Identity => Create8Method.Obj_Num;
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace F8C.Core.Enums
+﻿namespace F8C.Core.Enums
 {
     [Flags]
     public enum Create8Method
