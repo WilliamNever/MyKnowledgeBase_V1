@@ -39,11 +39,25 @@
         public static int GetDT12(DateTime dateTime)
         {
             var HH = dateTime.Hour;
-            return (((HH & 1) > 0 ? (HH + 1) : HH) % 24 / 2) + 1;
+            return GetDT12(HH);
         }
+        /*
+         * 子时（23-01）
+         * 丑时（01-03）
+         * 寅时（03-05）
+         * 卯时（05-07）
+         * 辰时（07-09）
+         * 巳时（09-11）
+         * 午时（11-13）
+         * 未时（13-15）
+         * 申时（15-17）
+         * 酉时（17-19）
+         * 戌时（19-21）
+         * 亥时（21-23） 
+         * */
         public static int GetDT12(int HH) =>
             (((HH & 1) > 0 ? (HH + 1) : HH) % 24 / 2) + 1;
-
+        public static string DT12Description { get => "子时（23-01）// 丑时（01-03）// 寅时（03-05）// 卯时（05-07）// 辰时（07-09）// 巳时（09-11）// 午时（11-13）// 未时（13-15）// 申时（15-17）// 酉时（17-19）// 戌时（19-21）// 亥时（21-23）"; }
         public static int BeginRsl(int sh, int dn) => Dics[sh & Full3Positive] << 3 | Dics[dn & Full3Positive];
         public static int ChangedRsl(int begin, int rateNum) => begin ^ BitNums[rateNum % 6];
         public static int ExchangeRsl(int begin, int change)
