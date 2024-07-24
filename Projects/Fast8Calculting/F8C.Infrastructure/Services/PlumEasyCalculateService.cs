@@ -11,9 +11,9 @@ namespace F8C.Infrastructure.Services
             int chg = ConstDefine.ChangedRsl(bgn, model.RateNum);
             return new Result8SymbolModel(model.Identity)
             {
-                Begin = bgn,
-                Changed = chg,
-                Exchange = ConstDefine.ExchangeRsl(bgn, chg)
+                Begin = new(bgn),
+                Destination = new(chg),
+                Exchange = new(ConstDefine.ExchangeRsl(bgn, chg))
             };
         }
     }

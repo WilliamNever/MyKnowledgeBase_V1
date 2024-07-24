@@ -9,8 +9,8 @@ namespace F8C.Core.Models
             Identity = methodIdentity;
         }
         public Create8Method Identity { get; protected set; }
-        public int Begin { get; set; }
-        public int Changed { get; set; }
-        public int Exchange { get; set; }
+        public GuaModel Begin { get; set; }
+        public GuaModel Destination { get; set; }
+        public GuaModel Exchange { get; set; }
     }
 }

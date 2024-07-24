@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             pnlBackGround = new Panel();
+            grp8GuaName = new GroupBox();
             grpEasyTesting = new GroupBox();
             grpDTConverter = new GroupBox();
             pnlBackGround.SuspendLayout();
@@ -36,20 +37,31 @@
             // 
             // pnlBackGround
             // 
+            pnlBackGround.Controls.Add(grp8GuaName);
             pnlBackGround.Controls.Add(grpEasyTesting);
             pnlBackGround.Controls.Add(grpDTConverter);
             pnlBackGround.Dock = DockStyle.Fill;
             pnlBackGround.Location = new Point(0, 0);
             pnlBackGround.Name = "pnlBackGround";
-            pnlBackGround.Size = new Size(800, 450);
+            pnlBackGround.Size = new Size(814, 461);
             pnlBackGround.TabIndex = 0;
+            // 
+            // grp8GuaName
+            // 
+            grp8GuaName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            grp8GuaName.Location = new Point(488, 12);
+            grp8GuaName.Name = "grp8GuaName";
+            grp8GuaName.Size = new Size(314, 124);
+            grp8GuaName.TabIndex = 2;
+            grp8GuaName.TabStop = false;
+            grp8GuaName.Text = "8 Name";
             // 
             // grpEasyTesting
             // 
             grpEasyTesting.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            grpEasyTesting.Location = new Point(12, 132);
+            grpEasyTesting.Location = new Point(12, 142);
             grpEasyTesting.Name = "grpEasyTesting";
-            grpEasyTesting.Size = new Size(776, 306);
+            grpEasyTesting.Size = new Size(790, 307);
             grpEasyTesting.TabIndex = 1;
             grpEasyTesting.TabStop = false;
             grpEasyTesting.Text = "Easy Testing";
@@ -59,7 +71,7 @@
             grpDTConverter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpDTConverter.Location = new Point(12, 12);
             grpDTConverter.Name = "grpDTConverter";
-            grpDTConverter.Size = new Size(776, 100);
+            grpDTConverter.Size = new Size(470, 124);
             grpDTConverter.TabIndex = 0;
             grpDTConverter.TabStop = false;
             grpDTConverter.Text = "Date time converter";
@@ -68,8 +80,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(814, 461);
             Controls.Add(pnlBackGround);
+            MinimumSize = new Size(830, 500);
             Name = "EasyTestToolForm";
             Text = "Easy Test Tool Form";
             pnlBackGround.ResumeLayout(false);
@@ -81,5 +94,6 @@
         private Panel pnlBackGround;
         private GroupBox grpEasyTesting;
         private GroupBox grpDTConverter;
+        private GroupBox grp8GuaName;
     }
 }

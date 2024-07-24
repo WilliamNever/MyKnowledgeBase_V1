@@ -52,5 +52,12 @@ namespace PartTest
 
             }
         }
+
+        public static void GuaModel_Test1()
+        {
+            GuaModel gModel1 = new GuaModel(33);
+            GuaModel gModel2 = new GuaModel(4, 1);
+            var isEqual = gModel1 == gModel2;
+        }
     }
 }
