@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,27 @@ namespace Fast8Calculting.Forms
         private void EasyTestToolForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = false;
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtRslt.Text = "";
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog svf = new SaveFileDialog();
+            svf.Title = "Save the File";
+            svf.Filter = "Txt|*.txt|*.*|*.*";
+            svf.InitialDirectory = Environment.CurrentDirectory;
+            if (svf.ShowDialog() == DialogResult.OK)
+            {
+                var fp = svf.FileName;
+                using var fs = new FileStream(fp, FileMode.Create, FileAccess.Write);
+                using var sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.Write(txtRslt.Text);
+                sw.Flush();
+            }
         }
     }
 }

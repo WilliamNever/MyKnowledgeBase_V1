@@ -59,5 +59,15 @@ namespace PartTest
             GuaModel gModel2 = new GuaModel(4, 1);
             var isEqual = gModel1 == gModel2;
         }
+
+        public static void CreateChar()
+        {
+            //int chr = '\u0000';
+            //for (int i = 0; i < 175; i++)
+            //{
+            //    Console.Write($"{(char)(chr+i)}");
+            //}
+            Console.WriteLine("\u00ad");
+        }
     }
 }

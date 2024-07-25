@@ -9,8 +9,11 @@ using PartTest;
 //Console.WriteLine(Convert.ToString(h, 2).PadLeft(6, '0'));
 //Console.WriteLine(Convert.ToString(d, 2).PadLeft(6, '0'));
 
-TestPart1.GuaModel_Test1();
+//TestPart1.GuaModel_Test1();
+
+TestPart1.CreateChar();
 
 
+Console.WriteLine();
 Console.WriteLine("...............................");
 Console.ReadKey();

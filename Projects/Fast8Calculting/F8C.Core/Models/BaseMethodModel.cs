@@ -9,4 +9,9 @@ namespace F8C.Core.Models
         public virtual int Second { get; set; }
         public virtual int RateNum { get; set; }
     }
+
+    public class SimpleModel : BaseMethodModel
+    {
+        public override Create8Method Identity => Create8Method.None;
+    }
 }

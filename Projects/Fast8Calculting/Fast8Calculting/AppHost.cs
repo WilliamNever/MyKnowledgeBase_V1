@@ -14,9 +14,9 @@ namespace Fast8Calculting
             SetupAppProvider(host.Services);
         }
 
-        public static T? GetSerivce<T>()
+        public static T GetSerivce<T>()
         {
-            return Providers.GetService<T>();
+            return Providers.GetService<T>() ?? throw new KeyNotFoundException($"{nameof(T)} was not found.");
         }
         public static IEnumerable<T> GetSerivces<T>()
         {
