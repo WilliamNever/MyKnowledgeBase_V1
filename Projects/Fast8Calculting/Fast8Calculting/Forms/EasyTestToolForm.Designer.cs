@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             pnlBackGround = new Panel();
+            stbStatus = new StatusStrip();
+            stblMessage = new ToolStripStatusLabel();
             grp8GuaName = new GroupBox();
+            uscHHConverter = new UscHHhourConvert();
             grpEasyTesting = new GroupBox();
             btnClear = new Button();
             btnSave = new Button();
@@ -37,12 +40,11 @@
             grpDTConverter = new GroupBox();
             usrcBasicInput = new UscBasicEasyInput();
             menuMain = new MenuStrip();
-            stbStatus = new StatusStrip();
-            stblMessage = new ToolStripStatusLabel();
             pnlBackGround.SuspendLayout();
+            stbStatus.SuspendLayout();
+            grp8GuaName.SuspendLayout();
             grpEasyTesting.SuspendLayout();
             grpDTConverter.SuspendLayout();
-            stbStatus.SuspendLayout();
             SuspendLayout();
             // 
             // pnlBackGround
@@ -58,15 +60,37 @@
             pnlBackGround.Size = new Size(814, 531);
             pnlBackGround.TabIndex = 0;
             // 
+            // stbStatus
+            // 
+            stbStatus.Items.AddRange(new ToolStripItem[] { stblMessage });
+            stbStatus.Location = new Point(0, 509);
+            stbStatus.Name = "stbStatus";
+            stbStatus.Size = new Size(814, 22);
+            stbStatus.TabIndex = 4;
+            stbStatus.Text = "statusStrip1";
+            // 
+            // stblMessage
+            // 
+            stblMessage.Name = "stblMessage";
+            stblMessage.Size = new Size(0, 17);
+            // 
             // grp8GuaName
             // 
             grp8GuaName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            grp8GuaName.Controls.Add(uscHHConverter);
             grp8GuaName.Location = new Point(488, 32);
             grp8GuaName.Name = "grp8GuaName";
             grp8GuaName.Size = new Size(314, 156);
             grp8GuaName.TabIndex = 2;
             grp8GuaName.TabStop = false;
             grp8GuaName.Text = "8 Name";
+            // 
+            // uscHHConverter
+            // 
+            uscHHConverter.Location = new Point(6, 19);
+            uscHHConverter.Name = "uscHHConverter";
+            uscHHConverter.Size = new Size(225, 70);
+            uscHHConverter.TabIndex = 0;
             // 
             // grpEasyTesting
             // 
@@ -141,20 +165,6 @@
             menuMain.TabIndex = 3;
             menuMain.Text = "menuStrip1";
             // 
-            // stbStatus
-            // 
-            stbStatus.Items.AddRange(new ToolStripItem[] { stblMessage });
-            stbStatus.Location = new Point(0, 509);
-            stbStatus.Name = "stbStatus";
-            stbStatus.Size = new Size(814, 22);
-            stbStatus.TabIndex = 4;
-            stbStatus.Text = "statusStrip1";
-            // 
-            // stblMessage
-            // 
-            stblMessage.Name = "stblMessage";
-            stblMessage.Size = new Size(0, 17);
-            // 
             // EasyTestToolForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -168,11 +178,12 @@
             FormClosing += EasyTestToolForm_FormClosing;
             pnlBackGround.ResumeLayout(false);
             pnlBackGround.PerformLayout();
+            stbStatus.ResumeLayout(false);
+            stbStatus.PerformLayout();
+            grp8GuaName.ResumeLayout(false);
             grpEasyTesting.ResumeLayout(false);
             grpEasyTesting.PerformLayout();
             grpDTConverter.ResumeLayout(false);
-            stbStatus.ResumeLayout(false);
-            stbStatus.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -189,5 +200,6 @@
         private MenuStrip menuMain;
         private StatusStrip stbStatus;
         private ToolStripStatusLabel stblMessage;
+        private UscHHhourConvert uscHHConverter;
     }
 }

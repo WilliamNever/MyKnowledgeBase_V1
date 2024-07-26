@@ -16,7 +16,7 @@ namespace Fast8Calculting.Forms
 {
     public partial class UscBasicEasyInput : UserControl
     {
-        protected IRenderUIInterface render;
+        protected IRenderUIInterface? render;
         public void SetRender(IRenderUIInterface Render)
         {
             render = Render;
@@ -26,12 +26,12 @@ namespace Fast8Calculting.Forms
             InitializeComponent();
             ReSetCausesValidation(this, false);
 
-            #region test data
+#if debug
             txtUpper.Text = "14";
             txtLower.Text = "56";
             txtChgRate.Text = "70";
             txtDes.Text = "For testing in 2024-07-25 14:56:00";
-            #endregion
+#endif
         }
 
         private void btnCalc_Click(object sender, EventArgs e)
@@ -79,7 +79,7 @@ namespace Fast8Calculting.Forms
                 sb.Append($"{nLine}");
                 sb.Append($"{des.Num} {des.Name} {des.SymbolName}");
                 sb.Append($"{nLine}{nLine}");
-                render.RenderUI(sb.ToString());
+                render?.RenderUI(sb.ToString());
             }
         }
 
