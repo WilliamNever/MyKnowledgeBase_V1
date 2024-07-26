@@ -13,7 +13,8 @@ namespace F8C.Infrastructure.Services
             {
                 Begin = new(bgn),
                 Destination = new(chg),
-                Exchange = new(ConstDefine.ExchangeRsl(bgn, chg))
+                Exchange = new(ConstDefine.ExchangeRsl(bgn, chg)),
+                ChangedYao = ConstDefine.GetChangeYao(model.RateNum),
             };
         }
     }

@@ -64,7 +64,8 @@ namespace Fast8Calculting.Forms
                 sb.Append($"{nLine}");
                 for (int i = 5; i > -1; i--)
                 {
-                    sb.Append($"{GetYao(rsl.Begin, i)}\t");
+                    var chFlag = i == (rsl.ChangedYao - 1) ? " x " : "   ";
+                    sb.Append($"{GetYao(rsl.Begin, i)} {chFlag}\t");
                     sb.Append($"{GetYao(rsl.Exchange, i)}\t");
                     sb.Append($"{GetYao(rsl.Destination, i)}\t");
                     sb.Append($"{nLine}");

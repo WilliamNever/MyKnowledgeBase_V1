@@ -12,5 +12,9 @@ namespace F8C.Core.Models
         public GuaModel Begin { get; set; }
         public GuaModel Destination { get; set; }
         public GuaModel Exchange { get; set; }
+        /// <summary>
+        /// the first Yao is 0
+        /// </summary>
+        public int ChangedYao { get; set; }
     }
 }
