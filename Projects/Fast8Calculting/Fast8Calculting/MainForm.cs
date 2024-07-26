@@ -1,4 +1,5 @@
-﻿using Fast8Calculting.Forms;
+﻿using F8C.Core.Consts;
+using Fast8Calculting.Forms;
 
 namespace Fast8Calculting
 {
@@ -7,6 +8,11 @@ namespace Fast8Calculting
         public MainForm()
         {
             InitializeComponent();
+#if debug
+            var olst = ConstDefine.GuaName
+                .OrderByDescending(x => x.Value.Num)
+                .ToList();
+#endif
         }
 
         private void MenuDropDownItemsClicked(object sender, ToolStripItemClickedEventArgs e)
