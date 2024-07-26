@@ -29,7 +29,7 @@ namespace Fast8Calculting.Forms
         private void Init()
         {
             var items = new List<int>();
-            for(int i = 0; i < 24; i++) { items.Add(i); }
+            for (int i = 0; i < 24; i++) { items.Add(i); }
             drpListHH.Items.AddRange(
                 items.Select(x => new SimpleKeyValueItem(x.ToString(), x)).ToArray());
             drpListHH.DisplayMember = "key";

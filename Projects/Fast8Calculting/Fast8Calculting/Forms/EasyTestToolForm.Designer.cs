@@ -89,7 +89,7 @@
             // 
             uscHHConverter.Location = new Point(6, 19);
             uscHHConverter.Name = "uscHHConverter";
-            uscHHConverter.Size = new Size(225, 70);
+            uscHHConverter.Size = new Size(302, 36);
             uscHHConverter.TabIndex = 0;
             // 
             // grpEasyTesting
