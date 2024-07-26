@@ -32,6 +32,7 @@
             stbStatus = new StatusStrip();
             stblMessage = new ToolStripStatusLabel();
             grp8GuaName = new GroupBox();
+            uscGuaNameSearcher = new UscGuaNameSearch();
             uscHHConverter = new UscHHhourConvert();
             grpEasyTesting = new GroupBox();
             btnClear = new Button();
@@ -57,13 +58,13 @@
             pnlBackGround.Dock = DockStyle.Fill;
             pnlBackGround.Location = new Point(0, 0);
             pnlBackGround.Name = "pnlBackGround";
-            pnlBackGround.Size = new Size(814, 531);
+            pnlBackGround.Size = new Size(814, 541);
             pnlBackGround.TabIndex = 0;
             // 
             // stbStatus
             // 
             stbStatus.Items.AddRange(new ToolStripItem[] { stblMessage });
-            stbStatus.Location = new Point(0, 509);
+            stbStatus.Location = new Point(0, 519);
             stbStatus.Name = "stbStatus";
             stbStatus.Size = new Size(814, 22);
             stbStatus.TabIndex = 4;
@@ -77,13 +78,21 @@
             // grp8GuaName
             // 
             grp8GuaName.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            grp8GuaName.Controls.Add(uscGuaNameSearcher);
             grp8GuaName.Controls.Add(uscHHConverter);
             grp8GuaName.Location = new Point(488, 32);
             grp8GuaName.Name = "grp8GuaName";
-            grp8GuaName.Size = new Size(314, 156);
+            grp8GuaName.Size = new Size(314, 190);
             grp8GuaName.TabIndex = 2;
             grp8GuaName.TabStop = false;
             grp8GuaName.Text = "8 Name";
+            // 
+            // uscGuaNameSearcher
+            // 
+            uscGuaNameSearcher.Location = new Point(6, 66);
+            uscGuaNameSearcher.Name = "uscGuaNameSearcher";
+            uscGuaNameSearcher.Size = new Size(302, 113);
+            uscGuaNameSearcher.TabIndex = 1;
             // 
             // uscHHConverter
             // 
@@ -98,9 +107,9 @@
             grpEasyTesting.Controls.Add(btnClear);
             grpEasyTesting.Controls.Add(btnSave);
             grpEasyTesting.Controls.Add(txtRslt);
-            grpEasyTesting.Location = new Point(12, 194);
+            grpEasyTesting.Location = new Point(12, 228);
             grpEasyTesting.Name = "grpEasyTesting";
-            grpEasyTesting.Size = new Size(790, 312);
+            grpEasyTesting.Size = new Size(790, 288);
             grpEasyTesting.TabIndex = 1;
             grpEasyTesting.TabStop = false;
             grpEasyTesting.Text = "Easy Testing";
@@ -108,7 +117,7 @@
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClear.Location = new Point(619, 283);
+            btnClear.Location = new Point(619, 259);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(75, 23);
             btnClear.TabIndex = 2;
@@ -119,7 +128,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(712, 283);
+            btnSave.Location = new Point(712, 259);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 1;
@@ -134,7 +143,7 @@
             txtRslt.Multiline = true;
             txtRslt.Name = "txtRslt";
             txtRslt.ScrollBars = ScrollBars.Vertical;
-            txtRslt.Size = new Size(784, 257);
+            txtRslt.Size = new Size(784, 233);
             txtRslt.TabIndex = 0;
             // 
             // grpDTConverter
@@ -143,7 +152,7 @@
             grpDTConverter.Controls.Add(usrcBasicInput);
             grpDTConverter.Location = new Point(12, 32);
             grpDTConverter.Name = "grpDTConverter";
-            grpDTConverter.Size = new Size(470, 156);
+            grpDTConverter.Size = new Size(470, 190);
             grpDTConverter.TabIndex = 0;
             grpDTConverter.TabStop = false;
             grpDTConverter.Text = "Date time converter";
@@ -154,7 +163,7 @@
             usrcBasicInput.Dock = DockStyle.Fill;
             usrcBasicInput.Location = new Point(3, 19);
             usrcBasicInput.Name = "usrcBasicInput";
-            usrcBasicInput.Size = new Size(464, 134);
+            usrcBasicInput.Size = new Size(464, 168);
             usrcBasicInput.TabIndex = 0;
             // 
             // menuMain
@@ -169,10 +178,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(814, 531);
+            ClientSize = new Size(814, 541);
             Controls.Add(pnlBackGround);
             MainMenuStrip = menuMain;
-            MinimumSize = new Size(830, 570);
+            MinimumSize = new Size(830, 580);
             Name = "EasyTestToolForm";
             Text = "Easy Test Tool Form";
             FormClosing += EasyTestToolForm_FormClosing;
@@ -201,5 +210,6 @@
         private StatusStrip stbStatus;
         private ToolStripStatusLabel stblMessage;
         private UscHHhourConvert uscHHConverter;
+        private UscGuaNameSearch uscGuaNameSearcher;
     }
 }

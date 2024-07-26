@@ -19,6 +19,7 @@ namespace Fast8Calculting.Forms
             InitializeComponent();
             usrcBasicInput.SetRender(this);
             uscHHConverter.SetRender(this);
+            uscGuaNameSearcher.SetRender(this);
         }
 
         public void RenderUI(string str)
