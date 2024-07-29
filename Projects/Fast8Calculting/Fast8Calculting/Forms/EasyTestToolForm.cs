@@ -46,7 +46,7 @@ namespace Fast8Calculting.Forms
             svf.Title = "Save the File";
             svf.Filter = "Txt|*.txt|*.*|*.*";
             svf.InitialDirectory = Environment.CurrentDirectory;
-            svf.CheckFileExists = true;
+            //svf.CheckFileExists = true;
             svf.CheckPathExists = true;
             if (svf.ShowDialog() == DialogResult.OK)
             {
