@@ -43,7 +43,7 @@ namespace Fast8Calculting.Forms
                 , StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             var HH = ((SimpleKeyValueItem)drpListHH.SelectedItem).value;
             var HH12 = ConstDefine.GetDT12(HH);
-            render?.RenderUI($"{descs[HH12 - 1]} - {HH12}{Environment.NewLine}{Environment.NewLine}{ConstDefine.DT12Description}");
+            render?.RenderUI($"{descs[HH12 - 1]} - {HH12}{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, descs)}");
         }
     }
 }
