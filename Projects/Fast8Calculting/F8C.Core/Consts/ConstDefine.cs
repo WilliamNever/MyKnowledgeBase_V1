@@ -26,15 +26,15 @@ namespace F8C.Core.Consts
         public static readonly Dictionary<int, SingleSymbol> DicName
             = new()
             {
-                { 7, new SingleSymbol(1,"乾","西北","天") } ,
-                { 3, new SingleSymbol(2,"兑","西","泽") } ,
-                { 5, new SingleSymbol(3,"离","南","火") } ,
-                { 1, new SingleSymbol(4,"震","东","雷") } ,
+                { 7, new SingleSymbol(1,"乾","西北","天", "金") } ,
+                { 3, new SingleSymbol(2,"兑","西","泽", "金") } ,
+                { 5, new SingleSymbol(3,"离","南","火", "火") } ,
+                { 1, new SingleSymbol(4,"震","东","雷", "木") } ,
 
-                { 6, new SingleSymbol(5,"巽","东南","风") } ,
-                { 2, new SingleSymbol(6,"坎","北","水") } ,
-                { 4, new SingleSymbol(7,"艮","东北","山") } ,
-                { 0, new SingleSymbol(8,"坤","西南","地") } ,
+                { 6, new SingleSymbol(5,"巽","东南","风", "木") } ,
+                { 2, new SingleSymbol(6,"坎","北","水", "水") } ,
+                { 4, new SingleSymbol(7,"艮","东北","山", "土") } ,
+                { 0, new SingleSymbol(8,"坤","西南","地", "土") } ,
 
             };
 
@@ -154,16 +154,19 @@ namespace F8C.Core.Consts
 
     public class SingleSymbol
     {
-        public SingleSymbol(int symNum, string name, string direct, string sym)
+        public SingleSymbol(int symNum, string name, string direct, string sym, string wuXin)
         {
             SymbolNum = symNum;
             Name = name;
             Direct = direct;
             Symbol = sym;
+            WuXin = wuXin;
+
         }
         public int SymbolNum { get; protected set; }
         public string Name { get; protected set; }
         public string Direct { get; protected set; }
         public string Symbol { get; protected set; }
+        public string WuXin { get; protected set; }
     }
 }

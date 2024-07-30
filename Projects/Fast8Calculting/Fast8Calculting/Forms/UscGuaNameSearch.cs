@@ -24,7 +24,7 @@ namespace Fast8Calculting.Forms
             var array = ConstDefine.DicName.OrderBy(x => x.Value.SymbolNum)
                 .Select(x => new SimpleKeyValueItem(
                     $"{x.Value.Name}/SymbVal-{x.Value.SymbolNum}" +
-                    $"/{x.Value.Direct}/{x.Value.Symbol}/Val-{x.Key}",
+                    $"/{x.Value.Direct}/{x.Value.Symbol}/{x.Value.WuXin}/Val-{x.Key}",
                     x.Key)).ToArray();
 
             cmbUpper.Items.AddRange(array);
