@@ -9,12 +9,13 @@ namespace F8C.Infrastructure.Services
         {
             int bgn = ConstDefine.BeginRsl(model.First, model.Second);
             int chg = ConstDefine.ChangedRsl(bgn, model.RateNum);
+            int chYao = ConstDefine.GetChangeYao(model.RateNum);
             return new Result8SymbolModel(model.Identity)
             {
                 Begin = new(bgn),
                 Destination = new(chg),
                 Exchange = new(ConstDefine.ExchangeRsl(bgn, chg)),
-                ChangedYao = ConstDefine.GetChangeYao(model.RateNum),
+                ChangedYao = chYao == 0 ? 6 : chYao,
             };
         }
     }
