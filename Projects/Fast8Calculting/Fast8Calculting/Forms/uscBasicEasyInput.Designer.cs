@@ -95,7 +95,7 @@
             // btnCalc
             // 
             btnCalc.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCalc.Location = new Point(7, 120);
+            btnCalc.Location = new Point(7, 115);
             btnCalc.Name = "btnCalc";
             btnCalc.Size = new Size(75, 23);
             btnCalc.TabIndex = 6;
@@ -119,7 +119,7 @@
             txtDes.Multiline = true;
             txtDes.Name = "txtDes";
             txtDes.ScrollBars = ScrollBars.Vertical;
-            txtDes.Size = new Size(369, 72);
+            txtDes.Size = new Size(369, 110);
             txtDes.TabIndex = 8;
             // 
             // panel1
@@ -136,7 +136,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(612, 146);
+            panel1.Size = new Size(612, 145);
             panel1.TabIndex = 9;
             // 
             // UscBasicEasyInput

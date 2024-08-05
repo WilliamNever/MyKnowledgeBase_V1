@@ -33,6 +33,7 @@
             cmbLower = new ComboBox();
             label1 = new Label();
             label2 = new Label();
+            btnLoc = new Button();
             SuspendLayout();
             // 
             // btnSearch
@@ -83,10 +84,21 @@
             label2.TabIndex = 4;
             label2.Text = "Lower - ";
             // 
+            // btnLoc
+            // 
+            btnLoc.Location = new Point(3, 81);
+            btnLoc.Name = "btnLoc";
+            btnLoc.Size = new Size(75, 23);
+            btnLoc.TabIndex = 5;
+            btnLoc.Text = "Location12";
+            btnLoc.UseVisualStyleBackColor = true;
+            btnLoc.Click += btnLoc_Click;
+            // 
             // UscGuaNameSearch
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(btnLoc);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(cmbLower);
@@ -105,5 +117,6 @@
         private ComboBox cmbLower;
         private Label label1;
         private Label label2;
+        private Button btnLoc;
     }
 }
