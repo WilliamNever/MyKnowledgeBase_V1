@@ -82,14 +82,14 @@
             grp8GuaName.Controls.Add(uscHHConverter);
             grp8GuaName.Location = new Point(488, 32);
             grp8GuaName.Name = "grp8GuaName";
-            grp8GuaName.Size = new Size(314, 190);
+            grp8GuaName.Size = new Size(314, 197);
             grp8GuaName.TabIndex = 2;
             grp8GuaName.TabStop = false;
             grp8GuaName.Text = "8 Name";
             // 
             // uscGuaNameSearcher
             // 
-            uscGuaNameSearcher.Location = new Point(6, 66);
+            uscGuaNameSearcher.Location = new Point(6, 64);
             uscGuaNameSearcher.Name = "uscGuaNameSearcher";
             uscGuaNameSearcher.Size = new Size(302, 113);
             uscGuaNameSearcher.TabIndex = 1;
@@ -107,9 +107,9 @@
             grpEasyTesting.Controls.Add(btnClear);
             grpEasyTesting.Controls.Add(btnSave);
             grpEasyTesting.Controls.Add(txtRslt);
-            grpEasyTesting.Location = new Point(12, 228);
+            grpEasyTesting.Location = new Point(12, 235);
             grpEasyTesting.Name = "grpEasyTesting";
-            grpEasyTesting.Size = new Size(790, 288);
+            grpEasyTesting.Size = new Size(790, 281);
             grpEasyTesting.TabIndex = 1;
             grpEasyTesting.TabStop = false;
             grpEasyTesting.Text = "Easy Testing";
@@ -117,7 +117,7 @@
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnClear.Location = new Point(619, 259);
+            btnClear.Location = new Point(619, 252);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(75, 23);
             btnClear.TabIndex = 2;
@@ -128,7 +128,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(712, 259);
+            btnSave.Location = new Point(712, 252);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 1;
@@ -143,7 +143,7 @@
             txtRslt.Multiline = true;
             txtRslt.Name = "txtRslt";
             txtRslt.ScrollBars = ScrollBars.Vertical;
-            txtRslt.Size = new Size(784, 233);
+            txtRslt.Size = new Size(784, 226);
             txtRslt.TabIndex = 0;
             // 
             // grpDTConverter
@@ -152,7 +152,7 @@
             grpDTConverter.Controls.Add(usrcBasicInput);
             grpDTConverter.Location = new Point(12, 32);
             grpDTConverter.Name = "grpDTConverter";
-            grpDTConverter.Size = new Size(470, 190);
+            grpDTConverter.Size = new Size(470, 197);
             grpDTConverter.TabIndex = 0;
             grpDTConverter.TabStop = false;
             grpDTConverter.Text = "Date time converter";
@@ -163,7 +163,7 @@
             usrcBasicInput.Dock = DockStyle.Fill;
             usrcBasicInput.Location = new Point(3, 19);
             usrcBasicInput.Name = "usrcBasicInput";
-            usrcBasicInput.Size = new Size(464, 168);
+            usrcBasicInput.Size = new Size(464, 175);
             usrcBasicInput.TabIndex = 0;
             // 
             // menuMain

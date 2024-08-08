@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +18,8 @@ namespace Fast8Calculting.Forms
     public partial class UscBasicEasyInput : UserControl
     {
         protected IRenderUIInterface? render;
+        protected Control[] YaoValidGrp;
+        protected Control[] NumListValidGrp;
         public void SetRender(IRenderUIInterface Render)
         {
             render = Render;
@@ -24,8 +27,11 @@ namespace Fast8Calculting.Forms
         public UscBasicEasyInput()
         {
             InitializeComponent();
-            ReSetCausesValidation(this, false);
 
+            YaoValidGrp = new Control[] { txtUpper, txtLower, txtChgRate };
+            NumListValidGrp = new Control[] { txtInpuNums };
+            ReSetCausesValidation(YaoValidGrp, false);
+            ReSetCausesValidation(NumListValidGrp, false);
 #if debug
             txtUpper.Text = "14";
             txtLower.Text = "56";
@@ -36,9 +42,9 @@ namespace Fast8Calculting.Forms
 
         private void btnCalc_Click(object sender, EventArgs e)
         {
-            ReSetCausesValidation(this, true);
+            ReSetCausesValidation(YaoValidGrp, true);
             var isv = ValidateChildren(ValidationConstraints.Enabled);
-            ReSetCausesValidation(this, false);
+            ReSetCausesValidation(YaoValidGrp, false);
             if (isv)
             {
                 var service = AppHost.GetSerivce<PlumEasyCalculateService>();
@@ -105,16 +111,56 @@ namespace Fast8Calculting.Forms
                 }
             }
         }
-
-        private void ReSetCausesValidation(Control control, bool canCause)
+        private void IntListValidating(object sender, CancelEventArgs e)
         {
-            control.CausesValidation = canCause;
-            if (control.HasChildren)
+            var tb = sender as TextBox;
+            Regex reg = new Regex(@"^([ ]*[\d]*[ ]*" + Environment.NewLine + ")*$");
+            if (tb != null)
             {
-                foreach (Control c in control.Controls)
+                if (!reg.IsMatch(tb.Text + Environment.NewLine))
                 {
-                    ReSetCausesValidation(c, canCause);
+                    e.Cancel = true;
+                    tb.BackColor = Color.Red;
                 }
+                else
+                {
+                    tb.BackColor = Color.White;
+                }
+            }
+        }
+
+        private void ReSetCausesValidation(Control[] controls, bool canCause)
+        {
+            foreach (Control c in controls)
+            {
+                c.CausesValidation = canCause;
+                if (c.HasChildren)
+                {
+                    ReSetCausesValidation(c.Controls.OfType<Control>().ToArray(), canCause);
+                }
+            }
+        }
+
+        private void btnSum_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ReSetCausesValidation(NumListValidGrp, true);
+                var isv = ValidateChildren(ValidationConstraints.Enabled);
+                ReSetCausesValidation(NumListValidGrp, false);
+                if (isv && !string.IsNullOrEmpty(txtInpuNums.Text.Trim()))
+                {
+                    var Nums = txtInpuNums.Text.Split(Environment.NewLine,
+                        StringSplitOptions.RemoveEmptyEntries
+                        | StringSplitOptions.TrimEntries)
+                        .Select(i => int.Parse(i)).ToArray();
+
+                    txtChgRate.Text = ConstDefine.Sum(Nums).ToString();
+                }
+            }
+            catch (Exception ex) {
+                txtInpuNums.BackColor = Color.Red;
+                MessageBox.Show(this, ex.Message);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using F8C.Core.Models;
+using System.Linq.Expressions;
 
 namespace F8C.Core.Consts
 {
@@ -149,6 +150,19 @@ namespace F8C.Core.Consts
             int src = begin;
             if (begin == 0 || begin == Full6Positive) src = change;
             return (src >> 2 & Full3Positive) << 3 | (src >> 1 & Full3Positive);
+        }
+
+        public static T Sum<T>(params T[] list) where T : struct
+        {
+            Expression exp = Expression.Constant(list[0]);
+            foreach (var item in list.Skip(1))
+            {
+                exp = Expression.Add(exp, Expression.Constant(item));
+            }
+            Expression<Func<T>> lambda = Expression.Lambda<Func<T>>(
+                Expression.Convert(exp, typeof(T)));
+            Func<T> compiled = lambda.Compile();
+            return compiled();
         }
     }
 
