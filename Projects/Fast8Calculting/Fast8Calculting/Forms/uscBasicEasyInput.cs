@@ -114,7 +114,7 @@ namespace Fast8Calculting.Forms
         private void IntListValidating(object sender, CancelEventArgs e)
         {
             var tb = sender as TextBox;
-            Regex reg = new Regex(@"^([ ]*[\d]*[ ]*" + Environment.NewLine + ")*$");
+            Regex reg = new Regex(@"^([ ]*[-+]?[\d]*[ ]*" + Environment.NewLine + ")*$");
             if (tb != null)
             {
                 if (!reg.IsMatch(tb.Text + Environment.NewLine))
