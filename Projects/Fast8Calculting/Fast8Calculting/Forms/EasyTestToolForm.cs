@@ -22,11 +22,27 @@ namespace Fast8Calculting.Forms
             uscGuaNameSearcher.SetRender(this);
         }
 
-        public void RenderUI(string str)
+        public void RenderUI(string str, string? barMessage = null)
         {
             Invoke(() =>
             {
                 txtRslt.Text = str;
+                var barLabel = stbStatus.Items.Find(stblMessage.Name, false).FirstOrDefault();
+                if (barLabel != null)
+                {
+                    barLabel.Text = $"{DateTime.Now} - {barMessage ?? "Updated Content ..."}";
+                }
+            });
+        }
+        public void RenderUIStatusBar(string? barMessage = null)
+        {
+            Invoke(() =>
+            {
+                var barLabel = stbStatus.Items.Find(stblMessage.Name, false).FirstOrDefault();
+                if (barLabel != null)
+                {
+                    barLabel.Text = $"{DateTime.Now} - {barMessage ?? "Updated Content ..."}";
+                }
             });
         }
 
@@ -38,16 +54,19 @@ namespace Fast8Calculting.Forms
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtRslt.Text = "";
+            RenderUIStatusBar($"Cleared!");
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            var dt = DateTime.Now;
             SaveFileDialog svf = new SaveFileDialog();
             svf.Title = "Save the File";
             svf.Filter = "Txt|*.txt|*.*|*.*";
             svf.InitialDirectory = Environment.CurrentDirectory;
             //svf.CheckFileExists = true;
             svf.CheckPathExists = true;
+            svf.FileName = $"{dt.Year}-{dt.Month.ToString().PadLeft(2, '0')}-{dt.Day.ToString().PadLeft(2, '0')}_Ask_";
             if (svf.ShowDialog() == DialogResult.OK)
             {
                 var fp = svf.FileName;
@@ -55,6 +74,7 @@ namespace Fast8Calculting.Forms
                 using var sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.Write(txtRslt.Text);
                 sw.Flush();
+                RenderUIStatusBar($"Save to {Path.GetFileName(svf.FileName)}");
             }
         }
     }

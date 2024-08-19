@@ -85,7 +85,7 @@ namespace Fast8Calculting.Forms
                 sb.Append($"{nLine}");
                 sb.Append($"{des.Num} {des.Name} {des.SymbolName}");
                 sb.Append($"{nLine}{nLine}");
-                render?.RenderUI(sb.ToString());
+                render?.RenderUI(sb.ToString(), "Done!");
             }
         }
 
