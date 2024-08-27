@@ -30,20 +30,72 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            dgDataList = new DataGridView();
+            Id = new DataGridViewTextBoxColumn();
+            Title = new DataGridViewTextBoxColumn();
+            AlertDateTime = new DataGridViewTextBoxColumn();
+            IsAlerted = new DataGridViewTextBoxColumn();
             nfyTimer = new NotifyIcon(components);
             cmsIcon = new ContextMenuStrip(components);
             tmiOpenOrHiden = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             tmiExit = new ToolStripMenuItem();
             pnlBackGround = new Panel();
+            btnDelete = new Button();
+            btnAddAlert = new Button();
             sstInfor = new StatusStrip();
             tslStatus = new ToolStripStatusLabel();
+            mnuMain = new MenuStrip();
             btnStop = new Button();
             btnStart = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
             sstInfor.SuspendLayout();
             SuspendLayout();
+            // 
+            // dgDataList
+            // 
+            dgDataList.AllowUserToOrderColumns = true;
+            dgDataList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgDataList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgDataList.Columns.AddRange(new DataGridViewColumn[] { Id, Title, AlertDateTime, IsAlerted });
+            dgDataList.Location = new Point(12, 39);
+            dgDataList.Name = "dgDataList";
+            dgDataList.ReadOnly = true;
+            dgDataList.RowTemplate.Height = 25;
+            dgDataList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgDataList.Size = new Size(776, 335);
+            dgDataList.TabIndex = 4;
+            dgDataList.RowHeaderMouseDoubleClick += dgDataList_RowHeaderMouseDoubleClick;
+            // 
+            // Id
+            // 
+            Id.DataPropertyName = "Id";
+            Id.HeaderText = "Id";
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            // 
+            // Title
+            // 
+            Title.DataPropertyName = "Title";
+            Title.HeaderText = "Title";
+            Title.Name = "Title";
+            Title.ReadOnly = true;
+            // 
+            // AlertDateTime
+            // 
+            AlertDateTime.DataPropertyName = "AlertDateTime";
+            AlertDateTime.HeaderText = "Alert Date Time";
+            AlertDateTime.Name = "AlertDateTime";
+            AlertDateTime.ReadOnly = true;
+            // 
+            // IsAlerted
+            // 
+            IsAlerted.DataPropertyName = "IsAlerted";
+            IsAlerted.HeaderText = "Is Alerted";
+            IsAlerted.Name = "IsAlerted";
+            IsAlerted.ReadOnly = true;
             // 
             // nfyTimer
             // 
@@ -79,7 +131,11 @@
             // 
             // pnlBackGround
             // 
+            pnlBackGround.Controls.Add(btnDelete);
+            pnlBackGround.Controls.Add(btnAddAlert);
+            pnlBackGround.Controls.Add(dgDataList);
             pnlBackGround.Controls.Add(sstInfor);
+            pnlBackGround.Controls.Add(mnuMain);
             pnlBackGround.Controls.Add(btnStop);
             pnlBackGround.Controls.Add(btnStart);
             pnlBackGround.Dock = DockStyle.Fill;
@@ -87,6 +143,28 @@
             pnlBackGround.Name = "pnlBackGround";
             pnlBackGround.Size = new Size(800, 450);
             pnlBackGround.TabIndex = 1;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnDelete.Location = new Point(115, 380);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(97, 23);
+            btnDelete.TabIndex = 7;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
+            // 
+            // btnAddAlert
+            // 
+            btnAddAlert.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnAddAlert.Location = new Point(12, 380);
+            btnAddAlert.Name = "btnAddAlert";
+            btnAddAlert.Size = new Size(97, 23);
+            btnAddAlert.TabIndex = 6;
+            btnAddAlert.Text = "Add";
+            btnAddAlert.UseVisualStyleBackColor = true;
+            btnAddAlert.Click += btnAddAlert_Click;
             // 
             // sstInfor
             // 
@@ -103,9 +181,18 @@
             tslStatus.Size = new Size(42, 17);
             tslStatus.Text = "Ready!";
             // 
+            // mnuMain
+            // 
+            mnuMain.Location = new Point(0, 0);
+            mnuMain.Name = "mnuMain";
+            mnuMain.Size = new Size(800, 24);
+            mnuMain.TabIndex = 5;
+            mnuMain.Text = "menuStrip1";
+            // 
             // btnStop
             // 
-            btnStop.Location = new Point(671, 370);
+            btnStop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnStop.Location = new Point(691, 397);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(97, 23);
             btnStop.TabIndex = 2;
@@ -114,7 +201,8 @@
             // 
             // btnStart
             // 
-            btnStart.Location = new Point(548, 370);
+            btnStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnStart.Location = new Point(588, 397);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(97, 23);
             btnStart.TabIndex = 1;
@@ -128,9 +216,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(pnlBackGround);
+            MainMenuStrip = mnuMain;
             Name = "MainForm";
             Text = "Main";
             SizeChanged += MainForm_SizeChanged;
+            ((System.ComponentModel.ISupportInitialize)dgDataList).EndInit();
             cmsIcon.ResumeLayout(false);
             pnlBackGround.ResumeLayout(false);
             pnlBackGround.PerformLayout();
@@ -151,5 +241,13 @@
         private Button btnStop;
         private StatusStrip sstInfor;
         private ToolStripStatusLabel tslStatus;
+        private DataGridView dgDataList;
+        private DataGridViewTextBoxColumn Id;
+        private DataGridViewTextBoxColumn Title;
+        private DataGridViewTextBoxColumn AlertDateTime;
+        private DataGridViewTextBoxColumn IsAlerted;
+        private MenuStrip mnuMain;
+        private Button btnDelete;
+        private Button btnAddAlert;
     }
 }

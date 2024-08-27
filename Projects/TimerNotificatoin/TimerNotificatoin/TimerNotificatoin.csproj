@@ -9,6 +9,10 @@
     <ApplicationIcon>Icons\INFOML.ICO</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);Debug</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Icons\INFOML.ICO" />
   </ItemGroup>

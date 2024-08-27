@@ -12,6 +12,8 @@ namespace TimerNotificatoin
         public MainForm()
         {
             InitializeComponent();
+            dgDataList.AutoGenerateColumns = false;
+
             Initial();
             timerServices = new TimerServices(1000, true, this);
         }
@@ -19,6 +21,13 @@ namespace TimerNotificatoin
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
+
+#if Debug
+            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots", Title = "al Title" });
+            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots_1", Title = "al Title_1" });
+            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots_2", Title = "al Title_2" });
+#endif
+            dgDataList.DataSource = Notifications;
         }
 
         #region INotificatoinMessage members
@@ -77,6 +86,21 @@ namespace TimerNotificatoin
         private void btnStart_Click(object sender, EventArgs e)
         {
             nfyTimer.ShowBalloonTip(3000, "Test", "T Content", ToolTipIcon.Info);
+        }
+
+        private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //to do - edit a row
+        }
+
+        private void btnAddAlert_Click(object sender, EventArgs e)
+        {
+            //to do - add a row
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            //to do - delete selected rows
         }
     }
 }

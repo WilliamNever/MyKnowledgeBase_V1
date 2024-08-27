@@ -6,7 +6,7 @@ namespace TimerNotificatoin.Core.Services
     public class TimerServices
     {
         protected readonly System.Timers.Timer MainTimer;
-        public static object SynchronizingObject = new();
+        public object SynchronizingObject = new();
         protected readonly INotificatoinMessage notificatoin;
         protected List<NotificationModel> Notifications { get; set; } = new List<NotificationModel>();
         public TimerServices(double Interval, bool AutoReset, INotificatoinMessage Notificatoin)
