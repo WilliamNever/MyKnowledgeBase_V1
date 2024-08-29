@@ -46,12 +46,15 @@
             sstInfor = new StatusStrip();
             tslStatus = new ToolStripStatusLabel();
             mnuMain = new MenuStrip();
+            tmiHelp = new ToolStripMenuItem();
+            tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
             sstInfor.SuspendLayout();
+            mnuMain.SuspendLayout();
             SuspendLayout();
             // 
             // dgDataList
@@ -183,11 +186,27 @@
             // 
             // mnuMain
             // 
+            mnuMain.Items.AddRange(new ToolStripItem[] { tmiHelp });
             mnuMain.Location = new Point(0, 0);
             mnuMain.Name = "mnuMain";
             mnuMain.Size = new Size(800, 24);
             mnuMain.TabIndex = 5;
             mnuMain.Text = "menuStrip1";
+            // 
+            // tmiHelp
+            // 
+            tmiHelp.DropDownItems.AddRange(new ToolStripItem[] { tsdmHelperFile });
+            tmiHelp.Name = "tmiHelp";
+            tmiHelp.Size = new Size(44, 20);
+            tmiHelp.Text = "Help";
+            tmiHelp.DropDownItemClicked += DropDownItemClicked;
+            // 
+            // tsdmHelperFile
+            // 
+            tsdmHelperFile.AccessibleName = "HelperFile";
+            tsdmHelperFile.Name = "tsdmHelperFile";
+            tsdmHelperFile.Size = new Size(180, 22);
+            tsdmHelperFile.Text = "Helper File";
             // 
             // btnStop
             // 
@@ -226,6 +245,8 @@
             pnlBackGround.PerformLayout();
             sstInfor.ResumeLayout(false);
             sstInfor.PerformLayout();
+            mnuMain.ResumeLayout(false);
+            mnuMain.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -249,5 +270,7 @@
         private MenuStrip mnuMain;
         private Button btnDelete;
         private Button btnAddAlert;
+        private ToolStripMenuItem tmiHelp;
+        private ToolStripMenuItem tsdmHelperFile;
     }
 }

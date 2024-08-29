@@ -10,8 +10,8 @@ namespace ConsolePreTest.Tests
         public static void UTTest1()
         {
             Console.WriteLine(Environment.CurrentDirectory);
-            Console.WriteLine(ConstsParams.TemplatePath);
-            Console.WriteLine(ConstsParams.AlertPath);
+            Console.WriteLine(ConstsParams.TemplateFilePath);
+            Console.WriteLine(ConstsParams.AlertFilePath);
             try
             {
                 var endDt = DateTime.Parse("2024-02-29");

@@ -1,7 +1,9 @@
+using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
+using TimerNotificatoin.Forms;
 
 namespace TimerNotificatoin
 {
@@ -15,7 +17,7 @@ namespace TimerNotificatoin
             dgDataList.AutoGenerateColumns = false;
 
             Initial();
-            timerServices = new TimerServices(1000, true, this);
+            timerServices = APPHOST.GetTimerServices(this);
         }
 
         private void Initial()
@@ -101,6 +103,24 @@ namespace TimerNotificatoin
         private void btnDelete_Click(object sender, EventArgs e)
         {
             //to do - delete selected rows
+        }
+
+        private void DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            tslStatus.Text = "";
+            switch (e.ClickedItem.AccessibleName)
+            {
+                case "HelperFile":
+                    var helpfile = APPHOST.GetService<OutputHelperService>();
+                    var txt = helpfile?.ReadHelperFile();
+
+                    var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
+                    cf.ShowMessage(txt ?? "", EnMessageType.MessageShow);
+                    cf.Show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
