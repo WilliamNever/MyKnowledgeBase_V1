@@ -20,6 +20,7 @@ namespace TimerNotificatoin.Forms
         public void ShowMessage(string message, EnMessageType messageType)
         {
             txtContent.Text = message;
+            txtContent.Select(0, 0);
         }
 
         public void ShowMessage(NotificationModel message, EnMessageType messageType)
