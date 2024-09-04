@@ -25,6 +25,12 @@ namespace TimerNotificatoin.Forms
 
         public void ShowMessage(NotificationModel message, EnMessageType messageType)
         {
+            if (messageType == EnMessageType.NotificationShow) { 
+                TopMost = true;
+            }
+            Text = message.Title;
+            txtContent.Text = message.Description;
+            txtContent.Select(0, 0);
         }
     }
 }

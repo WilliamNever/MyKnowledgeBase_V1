@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System.Configuration;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Interfaces;
+using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
 
 namespace TimerNotificatoin
@@ -25,7 +28,8 @@ namespace TimerNotificatoin
         }
         public static TimerServices GetTimerServices(INotificatoinMessage fm)
         {
-            return new TimerServices(1000, true, fm);
+            var notifications = Provider.GetService<IOptions<List<NotificationModel>>>();
+            return new TimerServices(1000, true, fm, notifications.Value);
         }
 
         private static IHost ConfigHost()
@@ -41,13 +45,14 @@ namespace TimerNotificatoin
                     {
                         config.AddEnvironmentVariables(environment);
                         config.SetBasePath(ConstsParams.RootDirectory);
-                        config.AddJsonFile("appsettings.json", true, true);
+                        config.AddJsonFile("appsettings.json", false, true);
                     })
                     .ConfigureLogging((context, logging) =>
                     {
                     })
                     .ConfigureServices((hostContext, services) =>
                     {
+                        services.Configure<List<NotificationModel>>(hostContext.Configuration.GetSection("Notifications"));
                         services.AddTransient<OutputHelperService>();
                     })
                     .Build();

@@ -7,15 +7,15 @@ using TimerNotificatoin.Core.Attributes;
 
 namespace TimerNotificatoin.Core.Models
 {
-    [HelperOutput("class NotificationModel - alert config model")]
+    [HelperOutput($"class NotificationModel - alert config model")]
     public class NotificationModel
     {
         [HelperOutput("Guid Id - The identity of the alert")]
         public Guid Id { get; set; }
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
         public virtual DateTime AlertDateTime { get; set; }
-        [HelperOutput("long LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
-        public long LeftSeconds { get; set; }
+        [HelperOutput("double LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
+        public double LeftSeconds { get; set; }
         [HelperOutput("bool IsAlerted - Indicated if the notification is popped up")]
         public bool IsAlerted { get; set; } = false;
         [HelperOutput("string Title - Indicated the title of the notification")]

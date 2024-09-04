@@ -4,6 +4,8 @@ using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
 using TimerNotificatoin.Forms;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace TimerNotificatoin
 {
@@ -39,7 +41,13 @@ namespace TimerNotificatoin
         }
         public void ShowMessage(NotificationModel message, EnMessageType messageType)
         {
-            Invoke(() => { });
+            Invoke(() => {
+                nfyTimer.ShowBalloonTip(3000, message.Title, message.Description, ToolTipIcon.Info);
+
+                var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
+                cf.ShowMessage(message, EnMessageType.NotificationShow);
+                cf.Show();
+            });
         }
         #endregion
 
@@ -53,7 +61,7 @@ namespace TimerNotificatoin
                     break;
                 case nameof(tmiExit):
                     Close();
-                    Application.Exit();
+                    System.Windows.Forms.Application.Exit();
                     break;
                 default:
                     break;
@@ -87,7 +95,8 @@ namespace TimerNotificatoin
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            nfyTimer.ShowBalloonTip(3000, "Test", "T Content", ToolTipIcon.Info);
+            timerServices.Start();
+            nfyTimer.ShowBalloonTip(3000, "Star Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
         }
 
         private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
