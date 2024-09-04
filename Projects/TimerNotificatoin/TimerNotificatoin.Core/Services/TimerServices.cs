@@ -50,13 +50,13 @@ namespace TimerNotificatoin.Core.Services
             }
         }
         public List<NotificationModel> GetActiveNotification() =>
-             Notifications.Where(x => !x.IsAlerted).ToList();
-        
-        public void Start(List<NotificationModel>? notifications = null) {
-            if (notifications != null)
-            {
-                lock (SynchronizingObject) Notifications.AddRange(notifications);
-            }
+             Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).ToList();
+        public List<NotificationModel> GetTotalNotification() =>
+             Notifications.OrderBy(x => x.AlertDateTime).ToList();
+
+        public void Start()
+        {
+            if (MainTimer.Enabled) MainTimer.Stop();
             lock (SynchronizingObject)
             {
                 DateTime now = DateTime.Now;
@@ -65,8 +65,19 @@ namespace TimerNotificatoin.Core.Services
                     x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
                 });
             }
-            if (!MainTimer.Enabled)
-                MainTimer.Start();
+            if (!MainTimer.Enabled) MainTimer.Start();
+        }
+        public void ResetAlerts(List<NotificationModel> notifications)
+        {
+            Stop();
+            Notifications.Clear();
+            Notifications.AddRange(notifications);
+        }
+        public void AppendOrReplaceAlerts(List<NotificationModel> notifications)
+        {
+            Stop();
+            Notifications.RemoveAll(x => notifications.Any(y => y.Id == x.Id));
+            Notifications.AddRange(notifications);
         }
         public void Stop() => MainTimer.Stop();
         public bool TimerIsRunning => MainTimer.Enabled;

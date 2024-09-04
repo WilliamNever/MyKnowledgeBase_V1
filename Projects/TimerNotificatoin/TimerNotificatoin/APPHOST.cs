@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
@@ -31,7 +32,8 @@ namespace TimerNotificatoin
         }
         public static TimerServices GetTimerServices(INotificatoinMessage fm, IEnumerable<NotificationModel> notifications)
         {
-            return new TimerServices(5000, true, fm, notifications ?? new List<NotificationModel>());
+            var settings = Provider.GetRequiredService<IOptions<AppSettings>>().Value;
+            return new TimerServices(settings.Interval, true, fm, notifications ?? new List<NotificationModel>());
         }
 
         private static IHost ConfigHost()

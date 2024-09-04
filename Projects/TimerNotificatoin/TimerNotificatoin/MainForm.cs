@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using System.Windows.Forms;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -18,20 +19,25 @@ namespace TimerNotificatoin
         {
             InitializeComponent();
             dgDataList.AutoGenerateColumns = false;
+            timerServices = APPHOST.GetTimerServices(this, ReadConfigedAlerts() );
 
+            Initial();
+        }
+
+        private static List<NotificationModel> ReadConfigedAlerts()
+        {
             var settings = APPHOST.GetRequiredService<IOptions<AppSettings>>();
             var txt = File.ReadAllText(settings.Value.Notifications);
             var notifies = ConversionsHelper.NJ_DeserializeToJson<List<NotificationModel>>(txt);
-            timerServices = APPHOST.GetTimerServices(this, notifies ?? new List<NotificationModel>());
-
-            Initial();
+            return notifies ?? new List<NotificationModel>();
         }
 
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            Notifications.AddRange(timerServices.GetActiveNotification());
-            dgDataList.DataSource = Notifications;
+            Notifications.AddRange(timerServices.GetTotalNotification());
+            dgDataList.DataSource = Notifications.OrderBy(x => x.AlertDateTime).ToList();
+            dgDataList.Refresh();
         }
 
         #region INotificatoinMessage members
@@ -137,6 +143,7 @@ namespace TimerNotificatoin
             SwichWindowModel(tmiOpenOrHiden, WindowState);
             nfyTimer.ShowBalloonTip(3000, "Star Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
             tslStatus.Text = "Timer is in running...";
+            btnStart.Enabled = false;
         }
 
         private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -166,6 +173,7 @@ namespace TimerNotificatoin
                     var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
                     cf.ShowMessage(txt ?? "", EnMessageType.MessageShow);
                     cf.Show();
+                    ShowMessage("Done!", EnMessageType.StatusShow);
                     break;
                 default:
                     break;
@@ -197,7 +205,7 @@ namespace TimerNotificatoin
             var mntrip = sender as ContextMenuStrip;
             if (mntrip != null)
             {
-                foreach(var item in mntrip.Items.OfType<ToolStripItem>())
+                foreach (var item in mntrip.Items.OfType<ToolStripItem>())
                 {
                     switch (item.Name)
                     {
@@ -208,10 +216,23 @@ namespace TimerNotificatoin
                             var isMin = WindowState == FormWindowState.Minimized;
                             item.Text = isMin ? "Open" : "Hidden";
                             break;
-                        default:break;
+                        default: break;
                     }
                 }
             }
+        }
+
+        private void btnReloadAlerts_Click(object sender, EventArgs e)
+        {
+            btnStop_Click(sender, e);
+            var notis = ReadConfigedAlerts();
+            Notifications.RemoveAll(x => notis.Any(y => x.Id == y.Id));
+            Notifications.AddRange(notis);
+            timerServices.ResetAlerts(Notifications);
+
+            dgDataList.DataSource = timerServices.GetTotalNotification();
+            dgDataList.Refresh();
+            ShowMessage("Reload alerts successfully", EnMessageType.StatusShow);
         }
     }
 }

@@ -51,6 +51,7 @@
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
+            btnReloadAlerts = new Button();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -113,35 +114,36 @@
             // 
             cmsIcon.Items.AddRange(new ToolStripItem[] { tmiStartOrStop, tmiOpenOrHiden, toolStripSeparator1, tmiExit });
             cmsIcon.Name = "cmsIcon";
-            cmsIcon.Size = new Size(181, 98);
+            cmsIcon.Size = new Size(104, 76);
             cmsIcon.Opening += cmsIcon_Opening;
             cmsIcon.ItemClicked += cmsIcon_ItemClicked;
             // 
             // tmiStartOrStop
             // 
             tmiStartOrStop.Name = "tmiStartOrStop";
-            tmiStartOrStop.Size = new Size(180, 22);
+            tmiStartOrStop.Size = new Size(103, 22);
             tmiStartOrStop.Text = "Start";
             // 
             // tmiOpenOrHiden
             // 
             tmiOpenOrHiden.Name = "tmiOpenOrHiden";
-            tmiOpenOrHiden.Size = new Size(180, 22);
+            tmiOpenOrHiden.Size = new Size(103, 22);
             tmiOpenOrHiden.Text = "Open";
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(100, 6);
             // 
             // tmiExit
             // 
             tmiExit.Name = "tmiExit";
-            tmiExit.Size = new Size(180, 22);
+            tmiExit.Size = new Size(103, 22);
             tmiExit.Text = "Exit";
             // 
             // pnlBackGround
             // 
+            pnlBackGround.Controls.Add(btnReloadAlerts);
             pnlBackGround.Controls.Add(btnDelete);
             pnlBackGround.Controls.Add(btnAddAlert);
             pnlBackGround.Controls.Add(dgDataList);
@@ -238,6 +240,17 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
+            // btnReloadAlerts
+            // 
+            btnReloadAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnReloadAlerts.Location = new Point(249, 380);
+            btnReloadAlerts.Name = "btnReloadAlerts";
+            btnReloadAlerts.Size = new Size(97, 23);
+            btnReloadAlerts.TabIndex = 8;
+            btnReloadAlerts.Text = "Reload Alerts";
+            btnReloadAlerts.UseVisualStyleBackColor = true;
+            btnReloadAlerts.Click += btnReloadAlerts_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -283,5 +296,6 @@
         private ToolStripMenuItem tmiHelp;
         private ToolStripMenuItem tsdmHelperFile;
         private ToolStripMenuItem tmiStartOrStop;
+        private Button btnReloadAlerts;
     }
 }
