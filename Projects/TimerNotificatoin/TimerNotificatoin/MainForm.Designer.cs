@@ -37,6 +37,7 @@
             IsAlerted = new DataGridViewTextBoxColumn();
             nfyTimer = new NotifyIcon(components);
             cmsIcon = new ContextMenuStrip(components);
+            tmiStartOrStop = new ToolStripMenuItem();
             tmiOpenOrHiden = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             tmiExit = new ToolStripMenuItem();
@@ -110,26 +111,33 @@
             // 
             // cmsIcon
             // 
-            cmsIcon.Items.AddRange(new ToolStripItem[] { tmiOpenOrHiden, toolStripSeparator1, tmiExit });
+            cmsIcon.Items.AddRange(new ToolStripItem[] { tmiStartOrStop, tmiOpenOrHiden, toolStripSeparator1, tmiExit });
             cmsIcon.Name = "cmsIcon";
-            cmsIcon.Size = new Size(104, 54);
+            cmsIcon.Size = new Size(181, 98);
+            cmsIcon.Opening += cmsIcon_Opening;
             cmsIcon.ItemClicked += cmsIcon_ItemClicked;
+            // 
+            // tmiStartOrStop
+            // 
+            tmiStartOrStop.Name = "tmiStartOrStop";
+            tmiStartOrStop.Size = new Size(180, 22);
+            tmiStartOrStop.Text = "Start";
             // 
             // tmiOpenOrHiden
             // 
             tmiOpenOrHiden.Name = "tmiOpenOrHiden";
-            tmiOpenOrHiden.Size = new Size(103, 22);
+            tmiOpenOrHiden.Size = new Size(180, 22);
             tmiOpenOrHiden.Text = "Open";
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(100, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // tmiExit
             // 
             tmiExit.Name = "tmiExit";
-            tmiExit.Size = new Size(103, 22);
+            tmiExit.Size = new Size(180, 22);
             tmiExit.Text = "Exit";
             // 
             // pnlBackGround
@@ -205,7 +213,7 @@
             // 
             tsdmHelperFile.AccessibleName = "HelperFile";
             tsdmHelperFile.Name = "tsdmHelperFile";
-            tsdmHelperFile.Size = new Size(180, 22);
+            tsdmHelperFile.Size = new Size(130, 22);
             tsdmHelperFile.Text = "Helper File";
             // 
             // btnStop
@@ -217,6 +225,7 @@
             btnStop.TabIndex = 2;
             btnStop.Text = "Stop";
             btnStop.UseVisualStyleBackColor = true;
+            btnStop.Click += btnStop_Click;
             // 
             // btnStart
             // 
@@ -238,6 +247,7 @@
             MainMenuStrip = mnuMain;
             Name = "MainForm";
             Text = "Main";
+            FormClosing += MainForm_FormClosing;
             SizeChanged += MainForm_SizeChanged;
             ((System.ComponentModel.ISupportInitialize)dgDataList).EndInit();
             cmsIcon.ResumeLayout(false);
@@ -272,5 +282,6 @@
         private Button btnAddAlert;
         private ToolStripMenuItem tmiHelp;
         private ToolStripMenuItem tsdmHelperFile;
+        private ToolStripMenuItem tmiStartOrStop;
     }
 }

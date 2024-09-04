@@ -11,6 +11,6 @@ namespace TimerNotificatoin.Core.Interfaces
     public interface INotificatoinMessage
     {
         void ShowMessage(string message, EnMessageType messageType);
-        void ShowMessage(NotificationModel message, EnMessageType messageType);
+        void ShowMessage(IEnumerable<NotificationModel> message, EnMessageType messageType);
     }
 }

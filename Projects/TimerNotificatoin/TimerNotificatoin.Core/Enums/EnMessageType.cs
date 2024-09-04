@@ -14,5 +14,6 @@ namespace TimerNotificatoin.Core.Enums
         MessageShow = 1,
         StatusShow = 2,
         NotificationShow = 4,
+        Stopped = 8,
     }
 }

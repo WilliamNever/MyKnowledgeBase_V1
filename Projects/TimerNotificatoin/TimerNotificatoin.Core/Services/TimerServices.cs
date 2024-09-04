@@ -3,7 +3,7 @@ using TimerNotificatoin.Core.Models;
 
 namespace TimerNotificatoin.Core.Services
 {
-    public class TimerServices
+    public class TimerServices : IDisposable
     {
         protected readonly System.Timers.Timer MainTimer;
         public object SynchronizingObject = new();
@@ -27,17 +27,26 @@ namespace TimerNotificatoin.Core.Services
             var actNotifies = new List<NotificationModel>();
             lock (SynchronizingObject)
             {
-                Notifications.ForEach(x => {
+                Notifications.ForEach(x =>
+                {
                     x.LeftSeconds -= MainTimer.Interval;
                 });
                 actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted));
                 actNotifies.ForEach(x => x.IsAlerted = true);
+
+                if (Notifications.All(x => x.IsAlerted))
+                {
+                    Stop();
+                    notificatoin.ShowMessage("No active alert!", 
+                        Enums.EnMessageType.MessageShow 
+                        | Enums.EnMessageType.StatusShow
+                        | Enums.EnMessageType.Stopped);
+                }
             }
+
             if (actNotifies.Any())
             {
-                foreach (var noty in actNotifies) {
-                    notificatoin.ShowMessage(noty, Enums.EnMessageType.NotificationShow);
-                }
+                notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
             }
         }
         public List<NotificationModel> GetActiveNotification() =>
@@ -48,13 +57,25 @@ namespace TimerNotificatoin.Core.Services
             {
                 lock (SynchronizingObject) Notifications.AddRange(notifications);
             }
-
-            DateTime now = DateTime.Now;
-            Notifications.ForEach(x => {
-                x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
-            });
-            MainTimer.Start();
+            lock (SynchronizingObject)
+            {
+                DateTime now = DateTime.Now;
+                Notifications.ForEach(x =>
+                {
+                    x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
+                });
+            }
+            if (!MainTimer.Enabled)
+                MainTimer.Start();
         }
         public void Stop() => MainTimer.Stop();
+        public bool TimerIsRunning => MainTimer.Enabled;
+
+        public void Dispose()
+        {
+            if (MainTimer.Enabled) MainTimer.Stop();
+            MainTimer.Close();
+            MainTimer.Dispose();
+        }
     }
 }

@@ -1,11 +1,11 @@
-using TimerNotificatoin.Core.Consts;
+using Microsoft.Extensions.Options;
 using TimerNotificatoin.Core.Enums;
+using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
+using TimerNotificatoin.Core.Settings;
 using TimerNotificatoin.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace TimerNotificatoin
 {
@@ -13,40 +13,61 @@ namespace TimerNotificatoin
     {
         private List<NotificationModel> Notifications = new();
         private readonly TimerServices timerServices;
+        private bool Exiting = false;
         public MainForm()
         {
             InitializeComponent();
             dgDataList.AutoGenerateColumns = false;
 
+            var settings = APPHOST.GetRequiredService<IOptions<AppSettings>>();
+            var txt = File.ReadAllText(settings.Value.Notifications);
+            var notifies = ConversionsHelper.NJ_DeserializeToJson<List<NotificationModel>>(txt);
+            timerServices = APPHOST.GetTimerServices(this, notifies ?? new List<NotificationModel>());
+
             Initial();
-            timerServices = APPHOST.GetTimerServices(this);
         }
 
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-
-#if Debug
-            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots", Title = "al Title" });
-            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots_1", Title = "al Title_1" });
-            Notifications.Add(new NotificationModel { AlertDateTime = DateTime.Now, Description = "Lots_2", Title = "al Title_2" });
-#endif
+            Notifications.AddRange(timerServices.GetActiveNotification());
             dgDataList.DataSource = Notifications;
         }
 
         #region INotificatoinMessage members
         public void ShowMessage(string message, EnMessageType messageType)
         {
-            Invoke(() => { });
+            Invoke(() =>
+            {
+                if ((messageType & EnMessageType.MessageShow) > 0)
+                {
+                    nfyTimer.ShowBalloonTip(3000, message, message, ToolTipIcon.Info);
+                }
+                if ((messageType & EnMessageType.StatusShow) > 0)
+                {
+                    tslStatus.Text = message;
+                }
+                if ((messageType & EnMessageType.Stopped) > 0)
+                {
+                    btnStart.Enabled = true;
+                }
+            });
         }
-        public void ShowMessage(NotificationModel message, EnMessageType messageType)
+        public void ShowMessage(IEnumerable<NotificationModel> messages, EnMessageType messageType)
         {
-            Invoke(() => {
-                nfyTimer.ShowBalloonTip(3000, message.Title, message.Description, ToolTipIcon.Info);
+            Invoke(() =>
+            {
+                foreach (var message in messages)
+                {
+                    nfyTimer.ShowBalloonTip(3000, message.Title, message.Description, ToolTipIcon.Info);
 
-                var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
-                cf.ShowMessage(message, EnMessageType.NotificationShow);
-                cf.Show();
+                    var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
+                    cf.ShowMessage(message, EnMessageType.NotificationShow);
+                    cf.Show();
+                }
+                Notifications.Where(x => messages.Any(y => y.Id == x.Id)).ToList().ForEach(x => x.IsAlerted = true);
+                dgDataList.DataSource = Notifications;
+                dgDataList.Refresh();
             });
         }
         #endregion
@@ -60,8 +81,23 @@ namespace TimerNotificatoin
                     SwichWindowModel(e.ClickedItem, WindowState);
                     break;
                 case nameof(tmiExit):
+                    Exiting = true;
                     Close();
-                    System.Windows.Forms.Application.Exit();
+                    Application.Exit();
+                    break;
+                case nameof(tmiStartOrStop):
+                    if (timerServices.TimerIsRunning)
+                    {
+                        btnStop_Click(sender, e);
+                        tmiStartOrStop.Text = "Start";
+                    }
+                    else
+                    {
+                        timerServices.Start();
+                        nfyTimer.ShowBalloonTip(3000, "Star Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
+                        tslStatus.Text = "Timer is in running...";
+                        tmiStartOrStop.Text = "Stop";
+                    }
                     break;
                 default:
                     break;
@@ -69,6 +105,7 @@ namespace TimerNotificatoin
         }
         private void SwichWindowModel(ToolStripItem item, FormWindowState fwState)
         {
+            btnStart.Enabled = !timerServices.TimerIsRunning;
             var isMin = fwState == FormWindowState.Minimized;
             item.Text = isMin ? "Open" : "Hidden";
             ShowInTaskbar = !isMin;
@@ -96,7 +133,10 @@ namespace TimerNotificatoin
         private void btnStart_Click(object sender, EventArgs e)
         {
             timerServices.Start();
+            WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : FormWindowState.Minimized;
+            SwichWindowModel(tmiOpenOrHiden, WindowState);
             nfyTimer.ShowBalloonTip(3000, "Star Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
+            tslStatus.Text = "Timer is in running...";
         }
 
         private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -129,6 +169,48 @@ namespace TimerNotificatoin
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Exiting)
+            {
+                timerServices.Dispose();
+            }
+            else
+            {
+                e.Cancel = true;
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            timerServices.Stop();
+            tslStatus.Text = "Timer is stopped!";
+            btnStart.Enabled = true;
+        }
+
+        private void cmsIcon_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var mntrip = sender as ContextMenuStrip;
+            if (mntrip != null)
+            {
+                foreach(var item in mntrip.Items.OfType<ToolStripItem>())
+                {
+                    switch (item.Name)
+                    {
+                        case nameof(tmiStartOrStop):
+                            item.Text = timerServices.TimerIsRunning ? "Stop" : "Start";
+                            break;
+                        case nameof(tmiOpenOrHiden):
+                            var isMin = WindowState == FormWindowState.Minimized;
+                            item.Text = isMin ? "Open" : "Hidden";
+                            break;
+                        default:break;
+                    }
+                }
             }
         }
     }

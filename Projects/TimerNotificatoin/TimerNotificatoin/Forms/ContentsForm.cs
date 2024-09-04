@@ -32,5 +32,9 @@ namespace TimerNotificatoin.Forms
             txtContent.Text = message.Description;
             txtContent.Select(0, 0);
         }
+
+        public void ShowMessage(IEnumerable<NotificationModel> message, EnMessageType messageType)
+        {
+        }
     }
 }
