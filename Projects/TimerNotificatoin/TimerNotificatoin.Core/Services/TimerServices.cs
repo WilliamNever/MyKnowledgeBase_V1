@@ -52,7 +52,7 @@ namespace TimerNotificatoin.Core.Services
         public List<NotificationModel> GetActiveNotification() =>
              Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).ToList();
         public List<NotificationModel> GetTotalNotification() =>
-             Notifications.OrderBy(x => x.AlertDateTime).ToList();
+             Notifications.OrderBy(x => x.IsAlerted).ThenBy(x => x.AlertDateTime).ToList();
 
         public void Start()
         {

@@ -72,7 +72,7 @@ namespace TimerNotificatoin
                     cf.Show();
                 }
                 Notifications.Where(x => messages.Any(y => y.Id == x.Id)).ToList().ForEach(x => x.IsAlerted = true);
-                dgDataList.DataSource = Notifications;
+                dgDataList.DataSource = Notifications.OrderBy(x => x.IsAlerted).ThenBy(x => x.AlertDateTime).ToList();
                 dgDataList.Refresh();
             });
         }
