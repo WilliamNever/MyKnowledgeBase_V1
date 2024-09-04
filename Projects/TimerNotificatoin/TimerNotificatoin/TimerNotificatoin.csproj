@@ -45,10 +45,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ConfigAlerts\Alert.json">
+    <None Update="ConfigAlerts\Alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ConfigAlerts\Template.json">
+    <None Update="ConfigAlerts\Templates.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
