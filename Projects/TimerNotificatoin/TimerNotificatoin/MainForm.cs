@@ -15,19 +15,20 @@ namespace TimerNotificatoin
         private List<NotificationModel> Notifications = new();
         private readonly TimerServices timerServices;
         private bool Exiting = false;
+        private AppSettings settings;
         public MainForm()
         {
             InitializeComponent();
+            settings = APPHOST.GetRequiredService<IOptions<AppSettings>>().Value;
             dgDataList.AutoGenerateColumns = false;
-            timerServices = APPHOST.GetTimerServices(this, ReadConfigedAlerts() );
+            timerServices = APPHOST.GetTimerServices(this, ReadConfigedAlerts());
 
             Initial();
         }
 
-        private static List<NotificationModel> ReadConfigedAlerts()
+        private List<NotificationModel> ReadConfigedAlerts()
         {
-            var settings = APPHOST.GetRequiredService<IOptions<AppSettings>>();
-            var txt = File.ReadAllText(settings.Value.Notifications);
+            var txt = File.ReadAllText(settings.Notifications);
             var notifies = ConversionsHelper.NJ_DeserializeToJson<List<NotificationModel>>(txt);
             return notifies ?? new List<NotificationModel>();
         }
@@ -183,6 +184,11 @@ namespace TimerNotificatoin
         {
             if (Exiting)
             {
+                timerServices.Stop();
+                var alts = timerServices.GetActiveNotification();
+                File.WriteAllText(settings.Notifications, ConversionsHelper.SerializeToJson(alts
+                    , new System.Text.Json.JsonSerializerOptions { WriteIndented = true })
+                    , System.Text.Encoding.UTF8);
                 timerServices.Dispose();
             }
             else
