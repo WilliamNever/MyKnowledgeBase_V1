@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Options;
-using System.Windows.Forms;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -154,6 +153,12 @@ namespace TimerNotificatoin
         private void btnAddAlert_Click(object sender, EventArgs e)
         {
             //to do - add a row
+            var alpu = new AlertInput();
+            alpu.SetNotification(new NotificationModel() { AlertDateTime = DateTime.Now });
+            if (alpu.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -185,10 +190,7 @@ namespace TimerNotificatoin
             if (Exiting)
             {
                 timerServices.Stop();
-                var alts = timerServices.GetActiveNotification();
-                File.WriteAllText(settings.Notifications, ConversionsHelper.SerializeToJson(alts
-                    , new System.Text.Json.JsonSerializerOptions { WriteIndented = true })
-                    , System.Text.Encoding.UTF8);
+                SaveAlerts();
                 timerServices.Dispose();
             }
             else
@@ -196,6 +198,17 @@ namespace TimerNotificatoin
                 e.Cancel = true;
                 WindowState = FormWindowState.Minimized;
             }
+        }
+
+        private void SaveAlerts()
+        {
+            string txt = "";
+            lock (timerServices.SynchronizingObject)
+            {
+                var alts = timerServices.GetActiveNotification();
+                txt = ConversionsHelper.SerializeToJson(alts, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            }
+            File.WriteAllText(settings.Notifications, txt, System.Text.Encoding.UTF8);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -238,6 +251,11 @@ namespace TimerNotificatoin
             dgDataList.DataSource = timerServices.GetTotalNotification();
             dgDataList.Refresh();
             ShowMessage("Reload alerts successfully", EnMessageType.StatusShow);
+        }
+
+        private void btnSaveAlerts_Click(object sender, EventArgs e)
+        {
+            SaveAlerts();
         }
     }
 }

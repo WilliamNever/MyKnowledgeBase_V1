@@ -42,6 +42,7 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tmiExit = new ToolStripMenuItem();
             pnlBackGround = new Panel();
+            btnReloadAlerts = new Button();
             btnDelete = new Button();
             btnAddAlert = new Button();
             sstInfor = new StatusStrip();
@@ -51,7 +52,7 @@
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
-            btnReloadAlerts = new Button();
+            btnSaveAlerts = new Button();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // pnlBackGround
             // 
+            pnlBackGround.Controls.Add(btnSaveAlerts);
             pnlBackGround.Controls.Add(btnReloadAlerts);
             pnlBackGround.Controls.Add(btnDelete);
             pnlBackGround.Controls.Add(btnAddAlert);
@@ -156,6 +158,17 @@
             pnlBackGround.Name = "pnlBackGround";
             pnlBackGround.Size = new Size(800, 450);
             pnlBackGround.TabIndex = 1;
+            // 
+            // btnReloadAlerts
+            // 
+            btnReloadAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnReloadAlerts.Location = new Point(249, 380);
+            btnReloadAlerts.Name = "btnReloadAlerts";
+            btnReloadAlerts.Size = new Size(97, 23);
+            btnReloadAlerts.TabIndex = 8;
+            btnReloadAlerts.Text = "Reload Alerts";
+            btnReloadAlerts.UseVisualStyleBackColor = true;
+            btnReloadAlerts.Click += btnReloadAlerts_Click;
             // 
             // btnDelete
             // 
@@ -240,16 +253,16 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
-            // btnReloadAlerts
+            // btnSaveAlerts
             // 
-            btnReloadAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnReloadAlerts.Location = new Point(249, 380);
-            btnReloadAlerts.Name = "btnReloadAlerts";
-            btnReloadAlerts.Size = new Size(97, 23);
-            btnReloadAlerts.TabIndex = 8;
-            btnReloadAlerts.Text = "Reload Alerts";
-            btnReloadAlerts.UseVisualStyleBackColor = true;
-            btnReloadAlerts.Click += btnReloadAlerts_Click;
+            btnSaveAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSaveAlerts.Location = new Point(352, 380);
+            btnSaveAlerts.Name = "btnSaveAlerts";
+            btnSaveAlerts.Size = new Size(97, 23);
+            btnSaveAlerts.TabIndex = 9;
+            btnSaveAlerts.Text = "Save Alerts";
+            btnSaveAlerts.UseVisualStyleBackColor = true;
+            btnSaveAlerts.Click += btnSaveAlerts_Click;
             // 
             // MainForm
             // 
@@ -297,5 +310,6 @@
         private ToolStripMenuItem tsdmHelperFile;
         private ToolStripMenuItem tmiStartOrStop;
         private Button btnReloadAlerts;
+        private Button btnSaveAlerts;
     }
 }

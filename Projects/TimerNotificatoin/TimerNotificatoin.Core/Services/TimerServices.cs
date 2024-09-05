@@ -29,6 +29,7 @@ namespace TimerNotificatoin.Core.Services
 
         private void MainTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
+            bool isAllAlerted = false;
             var actNotifies = new List<NotificationModel>();
             lock (SynchronizingObject)
             {
@@ -39,22 +40,26 @@ namespace TimerNotificatoin.Core.Services
                 actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted));
                 actNotifies.ForEach(x => x.IsAlerted = true);
 
-                if (Notifications.All(x => x.IsAlerted))
+                isAllAlerted = Notifications.All(x => x.IsAlerted);
+                if (isAllAlerted) Stop();
+            }
+
+            if (isAllAlerted)
+            {
+                notificatoin.ShowMessage("No active alert!",
+                    Enums.EnMessageType.MessageShow
+                    | Enums.EnMessageType.StatusShow
+                    | Enums.EnMessageType.Stopped);
+            }
+            else
+            {
+                if (!MainTimer.AutoReset)
                 {
-                    Stop();
-                    notificatoin.ShowMessage("No active alert!",
-                        Enums.EnMessageType.MessageShow
-                        | Enums.EnMessageType.StatusShow
-                        | Enums.EnMessageType.Stopped);
-                }
-                else
-                {
-                    if (!MainTimer.AutoReset) { 
-                        ResetTimer();
-                        MainTimer.Start();
-                    }
+                    ResetTimer();
+                    MainTimer.Start();
                 }
             }
+
 
             if (actNotifies.Any())
             {
