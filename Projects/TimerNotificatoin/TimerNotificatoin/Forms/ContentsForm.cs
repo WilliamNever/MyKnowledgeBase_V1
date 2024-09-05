@@ -29,7 +29,9 @@ namespace TimerNotificatoin.Forms
                 TopMost = true;
             }
             Text = message.Title;
-            txtContent.Text = message.Description;
+            txtContent.Text = $"Date Time - {message.AlertDateTime}";
+            txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
+            txtContent.Text += message.Description;
             txtContent.Select(0, 0);
         }
 

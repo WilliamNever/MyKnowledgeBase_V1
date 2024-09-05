@@ -1,5 +1,8 @@
-﻿using TimerNotificatoin.Core.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using System.Runtime;
+using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
+using TimerNotificatoin.Core.Settings;
 
 namespace TimerNotificatoin.Core.Services
 {
@@ -8,14 +11,16 @@ namespace TimerNotificatoin.Core.Services
         protected readonly System.Timers.Timer MainTimer;
         public object SynchronizingObject = new();
         protected readonly INotificatoinMessage notificatoin;
+        protected readonly TimerSettings TmSettings;
         protected List<NotificationModel> Notifications { get; set; } = new List<NotificationModel>();
-        public TimerServices(double Interval, bool AutoReset
+        public TimerServices(IOptions<TimerSettings> TimerSettings
             , INotificatoinMessage Notificatoin
             , IEnumerable<NotificationModel> notifications)
         {
-            MainTimer = new(Interval)
+            TmSettings = TimerSettings.Value;
+            MainTimer = new(TmSettings.Interval)
             {
-                AutoReset = AutoReset,
+                AutoReset = TmSettings.AutoReset,
             };
             MainTimer.Elapsed += MainTimer_Elapsed;
             notificatoin = Notificatoin;
@@ -37,10 +42,17 @@ namespace TimerNotificatoin.Core.Services
                 if (Notifications.All(x => x.IsAlerted))
                 {
                     Stop();
-                    notificatoin.ShowMessage("No active alert!", 
-                        Enums.EnMessageType.MessageShow 
+                    notificatoin.ShowMessage("No active alert!",
+                        Enums.EnMessageType.MessageShow
                         | Enums.EnMessageType.StatusShow
                         | Enums.EnMessageType.Stopped);
+                }
+                else
+                {
+                    if (!MainTimer.AutoReset) { 
+                        ResetTimer();
+                        MainTimer.Start();
+                    }
                 }
             }
 
@@ -56,7 +68,7 @@ namespace TimerNotificatoin.Core.Services
 
         public void Start()
         {
-            if (MainTimer.Enabled) MainTimer.Stop();
+            Stop();
             lock (SynchronizingObject)
             {
                 DateTime now = DateTime.Now;
@@ -65,7 +77,23 @@ namespace TimerNotificatoin.Core.Services
                     x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
                 });
             }
-            if (!MainTimer.Enabled) MainTimer.Start();
+            if (!MainTimer.AutoReset) ResetTimer();
+            
+            MainTimer.Start();
+        }
+        private void ResetTimer()
+        {
+            var nnotice = GetNearestNotify();
+            if (nnotice != null)
+            {
+                var itv = nnotice.LeftSeconds < 1 ? TmSettings.Interval : nnotice.LeftSeconds;
+                itv = itv > int.MaxValue ? int.MaxValue : itv;
+                MainTimer.Interval = itv;
+            }
+        }
+        private NotificationModel? GetNearestNotify()
+        {
+            return Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).FirstOrDefault();
         }
         public void ResetAlerts(List<NotificationModel> notifications)
         {
