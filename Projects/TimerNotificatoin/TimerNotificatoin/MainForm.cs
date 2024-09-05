@@ -89,7 +89,6 @@ namespace TimerNotificatoin
                 case nameof(tmiExit):
                     Exiting = true;
                     Close();
-                    Application.Exit();
                     break;
                 case nameof(tmiStartOrStop):
                     if (timerServices.TimerIsRunning)
