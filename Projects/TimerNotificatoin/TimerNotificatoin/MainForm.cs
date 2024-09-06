@@ -11,14 +11,15 @@ namespace TimerNotificatoin
 {
     public partial class MainForm : Form, INotificatoinMessage
     {
-        private List<NotificationModel> Notifications = new();
         private readonly TimerServices timerServices;
         private bool Exiting = false;
         private AppSettings settings;
+        private AlertsAutoSaveService alertsAutoSaveService;
         public MainForm()
         {
             InitializeComponent();
             settings = APPHOST.GetRequiredService<IOptions<AppSettings>>().Value;
+            alertsAutoSaveService = APPHOST.GetRequiredService<AlertsAutoSaveService>();
             dgDataList.AutoGenerateColumns = false;
             timerServices = APPHOST.GetTimerServices(this, ReadConfigedAlerts());
 
@@ -35,8 +36,7 @@ namespace TimerNotificatoin
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            Notifications.AddRange(timerServices.GetTotalNotification());
-            dgDataList.DataSource = Notifications.OrderBy(x => x.AlertDateTime).ToList();
+            dgDataList.DataSource = timerServices.GetTotalNotification();
             dgDataList.Refresh();
         }
 
@@ -71,9 +71,9 @@ namespace TimerNotificatoin
                     cf.ShowMessage(message, EnMessageType.NotificationShow);
                     cf.Show();
                 }
-                Notifications.Where(x => messages.Any(y => y.Id == x.Id)).ToList().ForEach(x => x.IsAlerted = true);
-                dgDataList.DataSource = Notifications.OrderBy(x => x.IsAlerted).ThenBy(x => x.AlertDateTime).ToList();
+                dgDataList.DataSource = timerServices.GetTotalNotification();
                 dgDataList.Refresh();
+                SaveActiveAlerts(true);
             });
         }
         #endregion
@@ -152,12 +152,17 @@ namespace TimerNotificatoin
 
         private void btnAddAlert_Click(object sender, EventArgs e)
         {
-            //to do - add a row
             var alpu = new AlertInput();
             alpu.SetNotification(new NotificationModel() { AlertDateTime = DateTime.Now });
             if (alpu.ShowDialog() == DialogResult.OK)
             {
+                btnStop_Click(sender, e);
+                timerServices.AppendOrReplaceAlerts(new List<NotificationModel> { alpu.GetNotification() });
 
+                dgDataList.DataSource = timerServices.GetTotalNotification();
+                dgDataList.Refresh();
+                SaveActiveAlerts();
+                ShowMessage($"Added an alert - {alpu.GetNotification().Title}", EnMessageType.StatusShow);
             }
         }
 
@@ -190,7 +195,7 @@ namespace TimerNotificatoin
             if (Exiting)
             {
                 timerServices.Stop();
-                SaveAlerts();
+                SaveActiveAlerts();
                 timerServices.Dispose();
             }
             else
@@ -200,15 +205,22 @@ namespace TimerNotificatoin
             }
         }
 
-        private void SaveAlerts()
+        private void SaveActiveAlerts(bool delaySave = false)
         {
-            string txt = "";
             lock (timerServices.SynchronizingObject)
             {
                 var alts = timerServices.GetActiveNotification();
-                txt = ConversionsHelper.SerializeToJson(alts, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                var txt = ConversionsHelper.SerializeToJson(alts, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                if (delaySave)
+                {
+                    alertsAutoSaveService.Add(txt);
+                }
+                else
+                {
+                    alertsAutoSaveService.Stop(true);
+                    File.WriteAllText(settings.Notifications, txt, System.Text.Encoding.UTF8);
+                }
             }
-            File.WriteAllText(settings.Notifications, txt, System.Text.Encoding.UTF8);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -244,9 +256,7 @@ namespace TimerNotificatoin
         {
             btnStop_Click(sender, e);
             var notis = ReadConfigedAlerts();
-            Notifications.RemoveAll(x => notis.Any(y => x.Id == y.Id));
-            Notifications.AddRange(notis);
-            timerServices.ResetAlerts(Notifications);
+            timerServices.ResetAlerts(notis);
 
             dgDataList.DataSource = timerServices.GetTotalNotification();
             dgDataList.Refresh();
@@ -255,7 +265,7 @@ namespace TimerNotificatoin
 
         private void btnSaveAlerts_Click(object sender, EventArgs e)
         {
-            SaveAlerts();
+            SaveActiveAlerts();
         }
     }
 }

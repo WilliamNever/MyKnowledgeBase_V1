@@ -1,4 +1,6 @@
-﻿using TimerNotificatoin.Core.Attributes;
+﻿using System.Runtime;
+using System.Timers;
+using TimerNotificatoin.Core.Attributes;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Models;
@@ -87,6 +89,71 @@ namespace ConsolePreTest.Tests
                 Console.WriteLine();
                 Console.WriteLine();
             }
+        }
+
+        public static void UTStackTest()
+        {
+            Stack<string> stack = new Stack<string>();
+
+            // 入栈操作
+            stack.Push("First");
+            stack.Push("Second");
+            stack.Push("Third");
+
+            // 查看堆栈顶元素
+            if (stack.Count > 0)
+            {
+                Console.WriteLine("The top one: " + stack.Peek());
+            }
+
+            // 出栈操作
+            while (stack.Count > 0)
+            {
+                Console.WriteLine("Pop element: " + stack.Pop());
+            }
+
+            Console.WriteLine("------------------------------------->");
+
+            Queue<string> queue = new Queue<string>();
+
+            // 入栈操作
+            queue.Enqueue("First");
+            queue.Enqueue("Second");
+            queue.Enqueue("Third");
+
+            // 查看堆栈顶元素
+            if (queue.Count > 0)
+            {
+                Console.WriteLine("The top one: " + queue.Peek());
+            }
+
+            // 出栈操作
+            while (queue.Count > 0)
+            {
+                Console.WriteLine("Dequeue element: " + queue.Dequeue());
+            }
+
+        }
+
+        public static void UTTimerTest()
+        {
+            System.Timers.Timer MainTimer = new(5000)
+            {
+                AutoReset = false,
+            };
+            MainTimer.Elapsed += MainTimer_Elapsed;
+            Console.WriteLine(DateTime.Now);
+            MainTimer.Start();
+            MainTimer.Stop();
+            Console.WriteLine(DateTime.Now);
+            Thread.Sleep(10000);
+            Console.WriteLine(DateTime.Now);
+            MainTimer.Start();
+        }
+
+        private static void MainTimer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine(DateTime.Now);
         }
     }
 }

@@ -58,9 +58,11 @@ namespace TimerNotificatoin
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.Configure<AppSettings>(hostContext.Configuration.GetSection(nameof(AppSettings)));
+                        services.Configure<AtuoSaveSettings>(hostContext.Configuration.GetSection(nameof(AtuoSaveSettings)));
                         services.Configure<TimerSettings>(hostContext.Configuration.GetSection(nameof(TimerSettings)));
 
                         services.AddTransient<OutputHelperService>();
+                        services.AddTransient<AlertsAutoSaveService>();
                     })
                     .Build();
             return host;
