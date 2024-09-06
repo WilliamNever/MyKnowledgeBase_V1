@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Runtime;
 using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Settings;
@@ -91,6 +90,7 @@ namespace TimerNotificatoin.Core.Services
             if (!MainTimer.AutoReset) ResetTimer();
             
             MainTimer.Start();
+            notificatoin.ShowMessage("In progressing", Enums.EnMessageType.Started | Enums.EnMessageType.StatusShow);
         }
         private void ResetTimer()
         {
@@ -118,12 +118,16 @@ namespace TimerNotificatoin.Core.Services
             Notifications.RemoveAll(x => notifications.Any(y => y.Id == x.Id));
             Notifications.AddRange(notifications);
         }
-        public void Stop() => MainTimer.Stop();
+        public void Stop() { 
+            MainTimer.Stop();
+            notificatoin.ShowMessage("Stopped", Enums.EnMessageType.Stopped | Enums.EnMessageType.StatusShow);
+        }
         public bool TimerIsRunning => MainTimer.Enabled;
 
         public void Dispose()
         {
             if (MainTimer.Enabled) MainTimer.Stop();
+
             MainTimer.Close();
             MainTimer.Dispose();
         }

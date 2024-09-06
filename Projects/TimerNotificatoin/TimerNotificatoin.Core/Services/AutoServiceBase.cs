@@ -1,24 +1,17 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using TimerNotificatoin.Core.Settings;
 
 namespace TimerNotificatoin.Core.Services
 {
-    public abstract class AutoSaveService<T>
+    public abstract class AutoServiceBase<T> : IDisposable
     {
         protected readonly System.Timers.Timer MainTimer;
         public object SynchronizingObject = new();
         protected readonly AtuoSaveSettings _settings;
         protected Stack<T> _stack;
 
-        public AutoSaveService(IOptions<AtuoSaveSettings> settings)
+        public AutoServiceBase(IOptions<AtuoSaveSettings> settings)
         {
             _stack = new Stack<T>();
             _settings = settings.Value;
@@ -43,13 +36,19 @@ namespace TimerNotificatoin.Core.Services
         public virtual void Stop(bool clearStack = false)
         {
             MainTimer.Stop();
-            if(clearStack)
+            if (clearStack)
             {
                 lock (SynchronizingObject)
                 {
                     _stack.Clear();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            MainTimer.Stop();
+            MainTimer.Dispose();
         }
     }
 }

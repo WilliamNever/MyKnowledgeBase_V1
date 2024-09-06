@@ -5,7 +5,7 @@ using TimerNotificatoin.Core.Settings;
 
 namespace TimerNotificatoin.Core.Services
 {
-    public class AlertsAutoSaveService : AutoSaveService<string>
+    public class AlertsAutoSaveService : AutoServiceBase<string>
     {
         protected readonly AppSettings _appSettings;
         public AlertsAutoSaveService(IOptions<AtuoSaveSettings> settings, IOptions<AppSettings> appsettings) : base(settings)

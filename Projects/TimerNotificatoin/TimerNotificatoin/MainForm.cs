@@ -56,6 +56,12 @@ namespace TimerNotificatoin
                 if ((messageType & EnMessageType.Stopped) > 0)
                 {
                     btnStart.Enabled = true;
+                    nfyTimer.Text = $"Notification Timer - {message}";
+                }
+                if ((messageType & EnMessageType.Started) > 0)
+                {
+                    btnStart.Enabled = false;
+                    nfyTimer.Text = $"Notification Timer - {message}";
                 }
             });
         }
