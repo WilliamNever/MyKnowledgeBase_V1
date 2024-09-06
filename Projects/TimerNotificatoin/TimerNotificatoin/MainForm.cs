@@ -180,12 +180,16 @@ namespace TimerNotificatoin
         {
             if (dgDataList.SelectedRows.Count > 0)
             {
-                List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells[0].Value).ToList();
-                btnStop_Click(sender, e);
-                timerServices.RemoveAlerts(ids);
-                ReBoundDataGrid();
-                SaveActiveAlerts();
-                ShowMessage($"Remove alerts successfully!", EnMessageType.StatusShow);
+                if (MessageBox.Show(this, "Sure to Remove?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question
+                    , MessageBoxDefaultButton.Button2) == DialogResult.OK)
+                {
+                    List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells[0].Value).ToList();
+                    btnStop_Click(sender, e);
+                    timerServices.RemoveAlerts(ids);
+                    ReBoundDataGrid();
+                    SaveActiveAlerts();
+                    ShowMessage($"Remove alerts successfully!", EnMessageType.StatusShow);
+                }
             }
             else
             {
