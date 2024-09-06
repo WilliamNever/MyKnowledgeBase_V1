@@ -36,8 +36,7 @@ namespace TimerNotificatoin
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            dgDataList.DataSource = timerServices.GetTotalNotification();
-            dgDataList.Refresh();
+            ReBoundDataGrid();
         }
 
         #region INotificatoinMessage members
@@ -77,8 +76,7 @@ namespace TimerNotificatoin
                     cf.ShowMessage(message, EnMessageType.NotificationShow);
                     cf.Show();
                 }
-                dgDataList.DataSource = timerServices.GetTotalNotification();
-                dgDataList.Refresh();
+                ReBoundDataGrid();
                 SaveActiveAlerts(true);
             });
         }
@@ -153,28 +151,51 @@ namespace TimerNotificatoin
 
         private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            //to do - edit a row
+            var idx = e.RowIndex;
+            var guid = (Guid)dgDataList.Rows[idx].Cells[0].Value;
+            var nty = timerServices.GetTotalNotification().FirstOrDefault(x => x.Id == guid) ?? new NotificationModel();
+            CreateOrUpdateNotification(nty, sender, e);
         }
 
-        private void btnAddAlert_Click(object sender, EventArgs e)
+        private void CreateOrUpdateNotification(NotificationModel notification, object sender, EventArgs e)
         {
             var alpu = new AlertInput();
-            alpu.SetNotification(new NotificationModel() { AlertDateTime = DateTime.Now });
+            alpu.SetNotification(notification);
             if (alpu.ShowDialog() == DialogResult.OK)
             {
                 btnStop_Click(sender, e);
                 timerServices.AppendOrReplaceAlerts(new List<NotificationModel> { alpu.GetNotification() });
-
-                dgDataList.DataSource = timerServices.GetTotalNotification();
-                dgDataList.Refresh();
+                ReBoundDataGrid();
                 SaveActiveAlerts();
-                ShowMessage($"Added an alert - {alpu.GetNotification().Title}", EnMessageType.StatusShow);
+                ShowMessage($"Update alerts list successfully - {alpu.GetNotification().Title}", EnMessageType.StatusShow);
             }
+        }
+
+        private void btnAddAlert_Click(object sender, EventArgs e)
+        {
+            CreateOrUpdateNotification(new NotificationModel() { AlertDateTime = DateTime.Now }, sender, e);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            //to do - delete selected rows
+            if (dgDataList.SelectedRows.Count > 0)
+            {
+                List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells[0].Value).ToList();
+                btnStop_Click(sender, e);
+                timerServices.RemoveAlerts(ids);
+                ReBoundDataGrid();
+                SaveActiveAlerts();
+                ShowMessage($"Remove alerts successfully!", EnMessageType.StatusShow);
+            }
+            else
+            {
+                MessageBox.Show(this, "Please select rows to remove.", "No rows selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void ReBoundDataGrid()
+        {
+            dgDataList.DataSource = timerServices.GetTotalNotification();
+            dgDataList.Refresh();
         }
 
         private void DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -264,8 +285,7 @@ namespace TimerNotificatoin
             var notis = ReadConfigedAlerts();
             timerServices.ResetAlerts(notis);
 
-            dgDataList.DataSource = timerServices.GetTotalNotification();
-            dgDataList.Refresh();
+            ReBoundDataGrid();
             ShowMessage("Reload alerts successfully", EnMessageType.StatusShow);
         }
 

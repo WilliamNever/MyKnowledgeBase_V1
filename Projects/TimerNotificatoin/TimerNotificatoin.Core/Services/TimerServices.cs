@@ -45,7 +45,7 @@ namespace TimerNotificatoin.Core.Services
 
             if (isAllAlerted)
             {
-                notificatoin.ShowMessage("No active alert!",
+                notificatoin.ShowMessage("Stopped - No active alert!",
                     Enums.EnMessageType.MessageShow
                     | Enums.EnMessageType.StatusShow
                     | Enums.EnMessageType.Stopped);
@@ -117,6 +117,11 @@ namespace TimerNotificatoin.Core.Services
             Stop();
             Notifications.RemoveAll(x => notifications.Any(y => y.Id == x.Id));
             Notifications.AddRange(notifications);
+        }
+        public void RemoveAlerts(List<Guid> guids)
+        {
+            Stop();
+            Notifications.RemoveAll(x => guids.Any(y => y == x.Id));
         }
         public void Stop() { 
             MainTimer.Stop();
