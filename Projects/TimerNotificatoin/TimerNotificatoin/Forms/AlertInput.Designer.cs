@@ -148,7 +148,7 @@
             // 
             // dtPicker
             // 
-            dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            dtPicker.CustomFormat = "yyyy-MM-dd HH:mm";
             dtPicker.Format = DateTimePickerFormat.Custom;
             dtPicker.Location = new Point(117, 17);
             dtPicker.Name = "dtPicker";
