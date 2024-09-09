@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Windows.Forms;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -38,6 +39,7 @@ namespace TimerNotificatoin
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
             ReBoundDataGrid();
+            nfyTimer.Text = $"Notification Timer - Initial";
         }
 
         #region INotificatoinMessage members
