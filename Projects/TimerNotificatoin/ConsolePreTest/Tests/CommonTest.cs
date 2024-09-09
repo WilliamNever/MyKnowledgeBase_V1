@@ -1,4 +1,5 @@
-﻿using System.Runtime;
+﻿using Microsoft.VisualBasic;
+using System.Runtime;
 using System.Timers;
 using TimerNotificatoin.Core.Attributes;
 using TimerNotificatoin.Core.Consts;
@@ -137,6 +138,10 @@ namespace ConsolePreTest.Tests
 
         public static void UTTimerTest()
         {
+            var pth = @"D:\WQPersonal\PrvCustomerTools\ConfigAlerts\Alerts.json\";//
+            var fn = (Path.GetFileName(null) ?? "").ToArray();
+            var path = Path.GetFullPath(pth).TrimEnd(fn);
+
             System.Timers.Timer MainTimer = new(5000)
             {
                 AutoReset = false,

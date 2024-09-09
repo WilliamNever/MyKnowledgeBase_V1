@@ -50,13 +50,13 @@
             tslStatus = new ToolStripStatusLabel();
             mnuMain = new MenuStrip();
             tmiFiles = new ToolStripMenuItem();
+            tsmShowNotificationsFoler = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             tsdmExit = new ToolStripMenuItem();
             tmiHelp = new ToolStripMenuItem();
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
-            tsmNotAssigned = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -233,22 +233,29 @@
             // 
             // tmiFiles
             // 
-            tmiFiles.DropDownItems.AddRange(new ToolStripItem[] { tsmNotAssigned, toolStripSeparator2, tsdmExit });
+            tmiFiles.DropDownItems.AddRange(new ToolStripItem[] { tsmShowNotificationsFoler, toolStripSeparator2, tsdmExit });
             tmiFiles.Name = "tmiFiles";
             tmiFiles.Size = new Size(42, 20);
             tmiFiles.Text = "Files";
             tmiFiles.DropDownItemClicked += DropDownItemClicked;
             // 
+            // tsmShowNotificationsFoler
+            // 
+            tsmShowNotificationsFoler.AccessibleName = "ShowNotificationsFoler";
+            tsmShowNotificationsFoler.Name = "tsmShowNotificationsFoler";
+            tsmShowNotificationsFoler.Size = new Size(203, 22);
+            tsmShowNotificationsFoler.Text = "Show Notifications Foler";
+            // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(200, 6);
             // 
             // tsdmExit
             // 
             tsdmExit.AccessibleName = "Exit";
             tsdmExit.Name = "tsdmExit";
-            tsdmExit.Size = new Size(180, 22);
+            tsdmExit.Size = new Size(203, 22);
             tsdmExit.Text = "Exit";
             // 
             // tmiHelp
@@ -287,12 +294,6 @@
             btnStart.Text = "Start";
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
-            // 
-            // tsmNotAssigned
-            // 
-            tsmNotAssigned.Name = "tsmNotAssigned";
-            tsmNotAssigned.Size = new Size(180, 22);
-            tsmNotAssigned.Text = "Not Assigned";
             // 
             // MainForm
             // 
@@ -344,6 +345,6 @@
         private ToolStripMenuItem tmiFiles;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem tsdmExit;
-        private ToolStripMenuItem tsmNotAssigned;
+        private ToolStripMenuItem tsmShowNotificationsFoler;
     }
 }

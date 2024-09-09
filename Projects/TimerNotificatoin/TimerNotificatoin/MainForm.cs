@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -221,9 +222,22 @@ namespace TimerNotificatoin
                     Exiting = true;
                     Close();
                     break;
+                case "ShowNotificationsFoler":
+                    var path = Path.GetFullPath(settings.Notifications).TrimEnd((Path.GetFileName(settings.Notifications) ?? "").ToArray());
+                    OpenFolderSelectFiles(path);
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void OpenFolderSelectFiles(string pathFile)
+        {
+            var psi = new ProcessStartInfo("Explorer.exe")
+            {
+                Arguments = pathFile
+            };
+            Process.Start(psi);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
