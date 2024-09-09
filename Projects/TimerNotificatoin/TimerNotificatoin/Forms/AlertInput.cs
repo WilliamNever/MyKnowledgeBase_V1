@@ -9,6 +9,7 @@ namespace TimerNotificatoin.Forms
         {
             var dtn = DateTime.Now;
             InitializeComponent();
+            ReSetCausesValidation(pnlBackGrd.Controls.OfType<Control>().ToArray(), false);
             dtPicker.MinDate = dtn.AddYears(-20);
             dtPicker.MaxDate = dtn.AddYears(20);
         }
