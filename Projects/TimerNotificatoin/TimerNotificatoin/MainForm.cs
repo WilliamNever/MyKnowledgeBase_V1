@@ -216,6 +216,11 @@ namespace TimerNotificatoin
                     cf.Show();
                     ShowMessage("Done!", EnMessageType.StatusShow);
                     break;
+                case "Exit":
+                    e.ClickedItem.GetCurrentParent().Hide();
+                    Exiting = true;
+                    Close();
+                    break;
                 default:
                     break;
             }

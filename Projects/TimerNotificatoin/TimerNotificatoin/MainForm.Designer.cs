@@ -42,17 +42,21 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tmiExit = new ToolStripMenuItem();
             pnlBackGround = new Panel();
+            btnSaveAlerts = new Button();
             btnReloadAlerts = new Button();
             btnDelete = new Button();
             btnAddAlert = new Button();
             sstInfor = new StatusStrip();
             tslStatus = new ToolStripStatusLabel();
             mnuMain = new MenuStrip();
+            tmiFiles = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            tsdmExit = new ToolStripMenuItem();
             tmiHelp = new ToolStripMenuItem();
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
-            btnSaveAlerts = new Button();
+            tsmNotAssigned = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -159,6 +163,17 @@
             pnlBackGround.Size = new Size(800, 450);
             pnlBackGround.TabIndex = 1;
             // 
+            // btnSaveAlerts
+            // 
+            btnSaveAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSaveAlerts.Location = new Point(352, 380);
+            btnSaveAlerts.Name = "btnSaveAlerts";
+            btnSaveAlerts.Size = new Size(97, 23);
+            btnSaveAlerts.TabIndex = 9;
+            btnSaveAlerts.Text = "Save Alerts";
+            btnSaveAlerts.UseVisualStyleBackColor = true;
+            btnSaveAlerts.Click += btnSaveAlerts_Click;
+            // 
             // btnReloadAlerts
             // 
             btnReloadAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -209,12 +224,32 @@
             // 
             // mnuMain
             // 
-            mnuMain.Items.AddRange(new ToolStripItem[] { tmiHelp });
+            mnuMain.Items.AddRange(new ToolStripItem[] { tmiFiles, tmiHelp });
             mnuMain.Location = new Point(0, 0);
             mnuMain.Name = "mnuMain";
             mnuMain.Size = new Size(800, 24);
             mnuMain.TabIndex = 5;
             mnuMain.Text = "menuStrip1";
+            // 
+            // tmiFiles
+            // 
+            tmiFiles.DropDownItems.AddRange(new ToolStripItem[] { tsmNotAssigned, toolStripSeparator2, tsdmExit });
+            tmiFiles.Name = "tmiFiles";
+            tmiFiles.Size = new Size(42, 20);
+            tmiFiles.Text = "Files";
+            tmiFiles.DropDownItemClicked += DropDownItemClicked;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(177, 6);
+            // 
+            // tsdmExit
+            // 
+            tsdmExit.AccessibleName = "Exit";
+            tsdmExit.Name = "tsdmExit";
+            tsdmExit.Size = new Size(180, 22);
+            tsdmExit.Text = "Exit";
             // 
             // tmiHelp
             // 
@@ -253,16 +288,11 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
-            // btnSaveAlerts
+            // tsmNotAssigned
             // 
-            btnSaveAlerts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSaveAlerts.Location = new Point(352, 380);
-            btnSaveAlerts.Name = "btnSaveAlerts";
-            btnSaveAlerts.Size = new Size(97, 23);
-            btnSaveAlerts.TabIndex = 9;
-            btnSaveAlerts.Text = "Save Alerts";
-            btnSaveAlerts.UseVisualStyleBackColor = true;
-            btnSaveAlerts.Click += btnSaveAlerts_Click;
+            tsmNotAssigned.Name = "tsmNotAssigned";
+            tsmNotAssigned.Size = new Size(180, 22);
+            tsmNotAssigned.Text = "Not Assigned";
             // 
             // MainForm
             // 
@@ -311,5 +341,9 @@
         private ToolStripMenuItem tmiStartOrStop;
         private Button btnReloadAlerts;
         private Button btnSaveAlerts;
+        private ToolStripMenuItem tmiFiles;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem tsdmExit;
+        private ToolStripMenuItem tsmNotAssigned;
     }
 }
