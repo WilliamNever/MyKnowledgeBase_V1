@@ -176,7 +176,7 @@ namespace TimerNotificatoin
 
         private void btnAddAlert_Click(object sender, EventArgs e)
         {
-            CreateOrUpdateNotification(new NotificationModel() { AlertDateTime = DateTime.Now }, sender, e);
+            CreateOrUpdateNotification(new NotificationModel(), sender, e);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -317,6 +317,20 @@ namespace TimerNotificatoin
         private void btnSaveAlerts_Click(object sender, EventArgs e)
         {
             SaveActiveAlerts();
+        }
+
+        private void dgDataList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex > -1)
+            {
+                var id = (Guid)dgDataList.Rows[e.RowIndex].Cells[0].Value;
+                var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
+                cf.ShowMessage(
+                    timerServices.GetTotalNotification().FirstOrDefault(x => x.Id == id)
+                    ?? new NotificationModel { Title = "Not Found", Description = "Not Found" }
+                    , EnMessageType.NotificationShow);
+                cf.Show();
+            }
         }
     }
 }

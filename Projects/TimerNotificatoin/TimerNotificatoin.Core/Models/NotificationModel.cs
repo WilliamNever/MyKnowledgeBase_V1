@@ -26,6 +26,7 @@ namespace TimerNotificatoin.Core.Models
         public NotificationModel()
         {
             Id = Guid.NewGuid();
+            AlertDateTime = DateTime.Now.Date;
         }
     }
 }

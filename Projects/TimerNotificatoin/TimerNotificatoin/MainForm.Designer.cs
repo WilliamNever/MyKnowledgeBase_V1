@@ -77,6 +77,7 @@
             dgDataList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgDataList.Size = new Size(776, 335);
             dgDataList.TabIndex = 4;
+            dgDataList.CellDoubleClick += dgDataList_CellDoubleClick;
             dgDataList.RowHeaderMouseDoubleClick += dgDataList_RowHeaderMouseDoubleClick;
             // 
             // Id
