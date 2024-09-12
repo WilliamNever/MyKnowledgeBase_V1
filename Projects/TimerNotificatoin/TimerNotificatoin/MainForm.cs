@@ -321,7 +321,7 @@ namespace TimerNotificatoin
 
         private void dgDataList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex > -1)
+            if (e.ColumnIndex > -1 && e.RowIndex > -1)
             {
                 var id = (Guid)dgDataList.Rows[e.RowIndex].Cells[0].Value;
                 var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
