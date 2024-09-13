@@ -127,6 +127,7 @@ namespace TimerNotificatoin
             else
             {
                 Show();
+                ReBoundDataGrid();
             }
         }
 
