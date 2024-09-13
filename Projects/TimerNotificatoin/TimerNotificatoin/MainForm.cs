@@ -37,7 +37,7 @@ namespace TimerNotificatoin
         private void Initial()
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            ReBoundDataGrid();
+            ReBoundControlData();
             nfyTimer.Text = $"Notification Timer - Initial";
         }
 
@@ -78,7 +78,7 @@ namespace TimerNotificatoin
                     cf.ShowMessage(message, EnMessageType.NotificationShow);
                     cf.Show();
                 }
-                ReBoundDataGrid();
+                dgDataList.Invoke(ReBoundControlData);
                 SaveActiveAlerts(true);
             });
         }
@@ -127,13 +127,15 @@ namespace TimerNotificatoin
             else
             {
                 Show();
-                ReBoundDataGrid();
             }
         }
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
+            if(WindowState != FormWindowState.Minimized) {
+                Refresh();
+            }
         }
 
         private void nfyTimer_DoubleClick(object sender, EventArgs e)
@@ -168,7 +170,7 @@ namespace TimerNotificatoin
             {
                 btnStop_Click(sender, e);
                 timerServices.AppendOrReplaceAlerts(new List<NotificationModel> { alpu.GetNotification() });
-                ReBoundDataGrid();
+                ReBoundControlData();
                 SaveActiveAlerts();
                 ShowMessage($"Update alerts list successfully - {alpu.GetNotification().Title}", EnMessageType.StatusShow);
             }
@@ -189,7 +191,7 @@ namespace TimerNotificatoin
                     List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells["Id"].Value).ToList();
                     btnStop_Click(sender, e);
                     timerServices.RemoveAlerts(ids);
-                    ReBoundDataGrid();
+                    ReBoundControlData();
                     SaveActiveAlerts();
                     ShowMessage($"Remove alerts successfully!", EnMessageType.StatusShow);
                 }
@@ -199,11 +201,20 @@ namespace TimerNotificatoin
                 MessageBox.Show(this, "Please select rows to remove.", "No rows selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private void ReBoundDataGrid()
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            ReFreshControlStyles();
+        }
+        private void ReBoundControlData()
+        {
+            dgDataList.DataSource = timerServices.GetTotalNotification();
+            ReFreshControlStyles();
+            dgDataList.Refresh();
+        }
+        private void ReFreshControlStyles()
         {
             var ndt = DateTime.Now.Date;
-            dgDataList.DataSource = timerServices.GetTotalNotification();
             for (var i = 0; i < dgDataList.Rows.Count; i++)
             {
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
@@ -221,7 +232,6 @@ namespace TimerNotificatoin
                 }
             }
             dgDataList.ClearSelection();
-            dgDataList.Refresh();
         }
 
         private void DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -329,7 +339,7 @@ namespace TimerNotificatoin
             var notis = ReadConfigedAlerts();
             timerServices.ResetAlerts(notis);
 
-            ReBoundDataGrid();
+            ReBoundControlData();
             ShowMessage("Reload alerts successfully", EnMessageType.StatusShow);
         }
 
