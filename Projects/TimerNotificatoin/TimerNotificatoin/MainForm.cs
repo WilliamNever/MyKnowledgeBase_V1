@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using System.Windows.Forms;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -155,7 +154,7 @@ namespace TimerNotificatoin
         private void dgDataList_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             var idx = e.RowIndex;
-            var guid = (Guid)dgDataList.Rows[idx].Cells[0].Value;
+            var guid = (Guid)dgDataList.Rows[idx].Cells["Id"].Value;
             var nty = timerServices.GetTotalNotification().FirstOrDefault(x => x.Id == guid) ?? new NotificationModel();
             CreateOrUpdateNotification(nty, sender, e);
         }
@@ -186,7 +185,7 @@ namespace TimerNotificatoin
                 if (MessageBox.Show(this, "Sure to Remove?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question
                     , MessageBoxDefaultButton.Button2) == DialogResult.OK)
                 {
-                    List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells[0].Value).ToList();
+                    List<Guid> ids = dgDataList.SelectedRows.OfType<DataGridViewRow>().Select(x => (Guid)x.Cells["Id"].Value).ToList();
                     btnStop_Click(sender, e);
                     timerServices.RemoveAlerts(ids);
                     ReBoundDataGrid();
@@ -199,9 +198,28 @@ namespace TimerNotificatoin
                 MessageBox.Show(this, "Please select rows to remove.", "No rows selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
         private void ReBoundDataGrid()
         {
+            var ndt = DateTime.Now.Date;
             dgDataList.DataSource = timerServices.GetTotalNotification();
+            for (var i = 0; i < dgDataList.Rows.Count; i++)
+            {
+                dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
+                if (
+                    bool.TryParse(dgDataList.Rows[i].Cells["IsAlerted"].Value?.ToString(), out bool rsl) && !rsl
+                    && DateTime.TryParse(dgDataList.Rows[i].Cells["AlertDateTime"].Value?.ToString(), out DateTime dtRsl)
+                    && dtRsl.Date <= ndt
+                    )
+                {
+                    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.GreenYellow;
+                }
+                else if (rsl)
+                {
+                    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.Azure;
+                }
+            }
+            dgDataList.ClearSelection();
             dgDataList.Refresh();
         }
 
@@ -323,7 +341,7 @@ namespace TimerNotificatoin
         {
             if (e.ColumnIndex > -1 && e.RowIndex > -1)
             {
-                var id = (Guid)dgDataList.Rows[e.RowIndex].Cells[0].Value;
+                var id = (Guid)dgDataList.Rows[e.RowIndex].Cells["Id"].Value;
                 var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
                 cf.ShowMessage(
                     timerServices.GetTotalNotification().FirstOrDefault(x => x.Id == id)
