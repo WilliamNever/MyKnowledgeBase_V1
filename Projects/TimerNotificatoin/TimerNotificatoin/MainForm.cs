@@ -133,9 +133,10 @@ namespace TimerNotificatoin
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            if(WindowState != FormWindowState.Minimized) {
-                Refresh();
-            }
+            //if (WindowState != FormWindowState.Minimized)
+            //{
+            //    Refresh();
+            //}
         }
 
         private void nfyTimer_DoubleClick(object sender, EventArgs e)
@@ -201,11 +202,7 @@ namespace TimerNotificatoin
                 MessageBox.Show(this, "Please select rows to remove.", "No rows selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            ReFreshControlStyles();
-        }
+
         private void ReBoundControlData()
         {
             dgDataList.DataSource = timerServices.GetTotalNotification();
@@ -360,6 +357,11 @@ namespace TimerNotificatoin
                     , EnMessageType.NotificationShow);
                 cf.Show();
             }
+        }
+
+        private void MainForm_Paint(object sender, PaintEventArgs e)
+        {
+            ReFreshControlStyles();
         }
     }
 }
