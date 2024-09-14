@@ -4,14 +4,14 @@ using TimerNotificatoin.Core.Settings;
 
 namespace TimerNotificatoin.Core.Services
 {
-    public abstract class AutoServiceBase<T> : IDisposable
+    public abstract class AutoStackServiceBase<T> : IDisposable
     {
         protected readonly System.Timers.Timer MainTimer;
         public object SynchronizingObject = new();
         protected readonly AtuoSaveSettings _settings;
         protected Stack<T> _stack;
 
-        public AutoServiceBase(IOptions<AtuoSaveSettings> settings)
+        public AutoStackServiceBase(IOptions<AtuoSaveSettings> settings)
         {
             _stack = new Stack<T>();
             _settings = settings.Value;
@@ -47,7 +47,8 @@ namespace TimerNotificatoin.Core.Services
 
         public void Dispose()
         {
-            MainTimer.Stop();
+            Stop(true);
+            MainTimer.Close();
             MainTimer.Dispose();
         }
     }
