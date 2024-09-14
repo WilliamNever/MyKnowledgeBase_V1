@@ -14,7 +14,9 @@ namespace TimerNotificatoin.Core.Models
         public Guid Id { get; set; }
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
         public virtual DateTime AlertDateTime { get; set; }
-        [HelperOutput("double LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
+        //[HelperOutput("DateTime StartDateTime - Start Date Time")]
+        public virtual DateTime StartDateTime { get; set; }
+        //[HelperOutput("double LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
         public double LeftSeconds { get; set; }
         [HelperOutput("bool IsAlerted - Indicated if the notification is popped up")]
         public bool IsAlerted { get; set; } = false;

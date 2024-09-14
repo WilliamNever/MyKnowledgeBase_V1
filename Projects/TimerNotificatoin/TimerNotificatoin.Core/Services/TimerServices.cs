@@ -28,6 +28,7 @@ namespace TimerNotificatoin.Core.Services
 
         private void MainTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
+            var dt = DateTime.Now;
             bool isAllAlerted = false;
             var actNotifies = new List<NotificationModel>();
             lock (SynchronizingObject)
@@ -35,6 +36,7 @@ namespace TimerNotificatoin.Core.Services
                 Notifications.ForEach(x =>
                 {
                     x.LeftSeconds -= MainTimer.Interval;
+                    x.StartDateTime = dt;
                 });
                 actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted));
                 actNotifies.ForEach(x => x.IsAlerted = true);
@@ -84,6 +86,7 @@ namespace TimerNotificatoin.Core.Services
                 DateTime now = DateTime.Now;
                 Notifications.ForEach(x =>
                 {
+                    x.StartDateTime = now;
                     x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
                 });
             }
