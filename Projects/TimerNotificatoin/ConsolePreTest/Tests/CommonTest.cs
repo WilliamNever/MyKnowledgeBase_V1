@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualBasic;
 using System.Runtime;
+using System.Text.Encodings.Web;
 using System.Timers;
 using TimerNotificatoin.Core.Attributes;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
+using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Models;
 
 namespace ConsolePreTest.Tests
@@ -24,7 +26,7 @@ namespace ConsolePreTest.Tests
             DayOfWeek dt = DateTime.Now.DayOfWeek;
 
 
-            var tam = new TemplateAlertDateModel(2024, 11, 3, 
+            var tam = new TemplateAlertDateModel(2024, 11, 3,
                 new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday }
                 , EnSpecialDays.LastWeek | EnSpecialDays.FirstDay);
             var str = Newtonsoft.Json.JsonConvert.SerializeObject(tam);
@@ -76,7 +78,7 @@ namespace ConsolePreTest.Tests
                 .ToList();
             foreach (var en in objects)
             {
-                var cAttr = en.GetCustomAttributes(typeof(HelperOutputAttribute),true).First() as HelperOutputAttribute;
+                var cAttr = en.GetCustomAttributes(typeof(HelperOutputAttribute), true).First() as HelperOutputAttribute;
                 Console.WriteLine($"{cAttr.Description}");
                 var mems = en.GetMembers().Where(x => x.CustomAttributes.Any(y => y.AttributeType == typeof(HelperOutputAttribute)));
                 foreach (var mem in mems)
@@ -159,6 +161,15 @@ namespace ConsolePreTest.Tests
         private static void MainTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             Console.WriteLine(DateTime.Now);
+        }
+
+        public static void JSEncodingTest()
+        {
+            var str = ConversionsHelper.NJ_SerializeToJson("X一二", new Newtonsoft.Json.JsonSerializerSettings
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+            });
+            Console.WriteLine(str);
         }
     }
 }

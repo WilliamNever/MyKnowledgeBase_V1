@@ -288,7 +288,10 @@ namespace TimerNotificatoin
             lock (timerServices.SynchronizingObject)
             {
                 var alts = timerServices.GetActiveNotification();
-                var txt = ConversionsHelper.SerializeToJson(alts, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                var txt = ConversionsHelper.NJ_SerializeToJson(alts, new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                });
                 if (delaySave)
                 {
                     alertsAutoSaveService.Add(txt);
