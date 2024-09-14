@@ -100,8 +100,8 @@ namespace TimerNotificatoin.Core.Services
             var nnotice = GetNearestNotify();
             if (nnotice != null)
             {
-                var itv = nnotice.LeftSeconds < 1 ? TmSettings.Interval : nnotice.LeftSeconds;
-                itv = itv > int.MaxValue ? int.MaxValue : itv;
+                var itv = nnotice.LeftSeconds < 1 ? 1000 : nnotice.LeftSeconds;
+                itv = itv > TmSettings.Interval ? TmSettings.Interval : itv;
                 MainTimer.Interval = itv;
             }
         }
