@@ -13,13 +13,26 @@ namespace TimerNotificatoin.Core.Services
             _appSettings = appsettings.Value;
         }
 
+        public override void Add(string item)
+        {
+            lock (SynchronizingObject)
+            {
+                MainTimer.Stop();
+                _stack.Clear();
+                _stack.Push(item);
+                MainTimer.Start();
+            }
+        }
         protected override void MainTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             lock (SynchronizingObject)
             {
-                var txt = _stack.Peek();
-                File.WriteAllText(_appSettings.Notifications, txt, Encoding.UTF8);
-                _stack.Clear();
+                if (_stack.Count > 0)
+                {
+                    var txt = _stack.Peek();
+                    File.WriteAllText(_appSettings.Notifications, txt, Encoding.UTF8);
+                    _stack.Clear();
+                }
             }
         }
     }
