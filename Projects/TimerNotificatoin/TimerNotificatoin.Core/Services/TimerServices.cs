@@ -35,7 +35,7 @@ namespace TimerNotificatoin.Core.Services
             {
                 Notifications.ForEach(x =>
                 {
-                    x.LeftSeconds -= MainTimer.Interval;
+                    x.LeftSeconds = x.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
                     x.StartDateTime = dt;
                 });
                 actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted));
