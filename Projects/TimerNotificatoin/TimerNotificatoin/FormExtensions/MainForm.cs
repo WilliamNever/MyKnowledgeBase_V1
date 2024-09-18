@@ -32,6 +32,10 @@ namespace TimerNotificatoin
                     btnStart.Enabled = false;
                     nfyTimer.Text = $"Notification Timer - {message}";
                 }
+                if ((messageType & EnMessageType.CheckPoint) > 0)
+                {
+                    nfyTimer.Text = $"Notification Timer - {DateTime.Now}";
+                }
             });
         }
         public void ShowMessage(IEnumerable<NotificationModel> messages, EnMessageType messageType)

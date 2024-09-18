@@ -96,6 +96,8 @@ namespace ConsolePreTest.Tests
 
         public static void UTStackTest()
         {
+            var sdt = DateTime.Now.ToString();
+
             Stack<string> stack = new Stack<string>();
             //var st1 = stack.Peek();
             //var st2 = stack.Pop();

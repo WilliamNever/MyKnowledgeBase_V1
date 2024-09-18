@@ -66,6 +66,9 @@ namespace TimerNotificatoin.Core.Services
             {
                 notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
             }
+            else {
+                notificatoin.ShowMessage("Check Point", Enums.EnMessageType.CheckPoint);
+            }
         }
         public List<NotificationModel> GetActiveNotification()
         {

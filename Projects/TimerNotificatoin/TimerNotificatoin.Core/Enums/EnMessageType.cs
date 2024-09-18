@@ -16,5 +16,6 @@ namespace TimerNotificatoin.Core.Enums
         NotificationShow = 4,
         Stopped = 8,
         Started = 16,
+        CheckPoint = 32,
     }
 }
