@@ -175,5 +175,28 @@ namespace ConsolePreTest.Tests
             });
             Console.WriteLine(str);
         }
+
+        public static void ThreadTimerTest()
+        {
+            TimerCallback tcb = o => {
+                Console.WriteLine($"x - {Thread.CurrentThread.ManagedThreadId} - {DateTime.Now}");
+                var otmrs = (List<System.Threading.Timer>)o;
+                if (otmrs.Count == 1)
+                {
+                    otmrs[0].Change(0, 5000);
+                    otmrs.Clear();
+                }
+            };
+            Console.WriteLine($"b - {DateTime.Now}");
+
+            List<System.Threading.Timer> kvt = new();
+            System.Threading.Timer ntmr; 
+            ntmr = new System.Threading.Timer(tcb, kvt, 0, Timeout.Infinite);
+            kvt.Add(ntmr);
+
+            Console.WriteLine($"Active times - {System.Threading.Timer.ActiveCount}");
+            Console.WriteLine("Start ...");
+            Console.ReadKey();
+        }
     }
 }
