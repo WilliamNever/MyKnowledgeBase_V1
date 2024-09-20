@@ -8,7 +8,7 @@ using TimerNotificatoin.Core.Attributes;
 namespace TimerNotificatoin.Core.Enums
 {
     [Flags]
-    [HelperOutput("EnNotificationType - to show the classification of a notification")]
+    [HelperOutput("[Flags] enum EnNotificationType - to show the classification of a notification")]
     public enum EnNotificationType
     {
         [HelperOutput("Unclassified - not classified, Keep in untill manually removed")]

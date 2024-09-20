@@ -3,7 +3,7 @@ using TimerNotificatoin.Core.Enums;
 
 namespace TimerNotificatoin.Core.Models
 {
-    [HelperOutput("Classification Model - Indicated the classification of the notification")]
+    [HelperOutput("class Classification Model - Indicated the classification of the notification")]
     public class ClassificationModel
     {
         [HelperOutput("int ID - the identity of the classification, default is 1")]
