@@ -23,7 +23,7 @@ namespace TimerNotificatoin.Forms
             var vals = HOSTServices.GetClassifications();
             cbNType.Items.AddRange(vals.ToArray());
             cbNType.SelectedIndex = 0;
-            cbNType.DisplayMember = "Name";
+            cbNType.DisplayMember = "DisplayName";
             cbNType.ValueMember = "ID";
         }
 
