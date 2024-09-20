@@ -1,4 +1,5 @@
-﻿using TimerNotificatoin.Core.Enums;
+﻿using TimerNotificatoin.Core.Consts;
+using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Models;
 
 namespace TimerNotificatoin.Forms
@@ -19,11 +20,11 @@ namespace TimerNotificatoin.Forms
 
         private void InitControls()
         {
-            var vals = Enum.GetValues<EnNotificationType>();
-            cbNType.Items.AddRange(vals.Select(x => new ItemModel<EnNotificationType> { Name = x.ToString(), Value = x }).ToArray());
+            var vals = HOSTServices.GetClassifications();
+            cbNType.Items.AddRange(vals.ToArray());
             cbNType.SelectedIndex = 0;
             cbNType.DisplayMember = "Name";
-            cbNType.ValueMember = "Value";
+            cbNType.ValueMember = "ID";
         }
 
         public void SetNotification(NotificationModel notification)
@@ -36,8 +37,8 @@ namespace TimerNotificatoin.Forms
             cbAlert.Checked = !notification.IsAlerted;
             for (int i = 0; i < cbNType.Items.Count; i++)
             {
-                var itmVal = (cbNType.Items[i] as ItemModel<EnNotificationType>)?.Value;
-                if (itmVal.HasValue && itmVal == notification.NotificationType)
+                var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
+                if (itmVal.ID == notification.ClassificationID)
                 {
                     cbNType.SelectedIndex = i;
                     break;
@@ -50,7 +51,7 @@ namespace TimerNotificatoin.Forms
             notificate.Description = txtDescription.Text;
             notificate.AlertDateTime = dtPicker.Value;
             notificate.IsAlerted = !cbAlert.Checked;
-            notificate.NotificationType = (cbNType.SelectedItem as ItemModel<EnNotificationType>)?.Value ?? EnNotificationType.Unclassified;
+            notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
             return notificate;
         }
 

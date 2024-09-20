@@ -55,7 +55,9 @@
             btnStart = new Button();
             OrderIndex = new DataGridViewTextBoxColumn();
             Id = new DataGridViewTextBoxColumn();
+            ClassificationID = new DataGridViewTextBoxColumn();
             NotificationType = new DataGridViewTextBoxColumn();
+            ClassificationName = new DataGridViewTextBoxColumn();
             Title = new DataGridViewTextBoxColumn();
             AlertDateTime = new DataGridViewTextBoxColumn();
             IsAlerted = new DataGridViewTextBoxColumn();
@@ -71,7 +73,7 @@
             dgDataList.AllowUserToOrderColumns = true;
             dgDataList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgDataList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, NotificationType, Title, AlertDateTime, IsAlerted });
+            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, ClassificationID, NotificationType, ClassificationName, Title, AlertDateTime, IsAlerted });
             dgDataList.Location = new Point(12, 39);
             dgDataList.Name = "dgDataList";
             dgDataList.ReadOnly = true;
@@ -285,12 +287,27 @@
             Id.ReadOnly = true;
             Id.Visible = false;
             // 
+            // ClassificationID
+            // 
+            ClassificationID.DataPropertyName = "ClassificationID";
+            ClassificationID.HeaderText = "ClassificationID";
+            ClassificationID.Name = "ClassificationID";
+            ClassificationID.ReadOnly = true;
+            ClassificationID.Visible = false;
+            // 
             // NotificationType
             // 
             NotificationType.DataPropertyName = "NotificationType";
             NotificationType.HeaderText = "Notification Type";
             NotificationType.Name = "NotificationType";
             NotificationType.ReadOnly = true;
+            // 
+            // ClassificationName
+            // 
+            ClassificationName.DataPropertyName = "ClassificationName";
+            ClassificationName.HeaderText = "Classification";
+            ClassificationName.Name = "ClassificationName";
+            ClassificationName.ReadOnly = true;
             // 
             // Title
             // 
@@ -363,7 +380,9 @@
         private ToolStripMenuItem tsmShowNotificationsFoler;
         private DataGridViewTextBoxColumn OrderIndex;
         private DataGridViewTextBoxColumn Id;
+        private DataGridViewTextBoxColumn ClassificationID;
         private DataGridViewTextBoxColumn NotificationType;
+        private DataGridViewTextBoxColumn ClassificationName;
         private DataGridViewTextBoxColumn Title;
         private DataGridViewTextBoxColumn AlertDateTime;
         private DataGridViewTextBoxColumn IsAlerted;

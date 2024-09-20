@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Runtime;
 using TimerNotificatoin.Core.Consts;
-using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
 using TimerNotificatoin.Core.Settings;
@@ -13,28 +10,9 @@ namespace TimerNotificatoin
 {
     public static class APPHOST
     {
-        private static IServiceProvider Provider;
-        static APPHOST()
+        public static void Register()
         {
-            Provider = ConfigHost().Services;
-        }
-
-        public static TS? GetService<TS>()
-        {
-            return Provider.GetService<TS>();
-        }
-        public static TS GetRequiredService<TS>() where TS : notnull
-        {
-            return Provider.GetRequiredService<TS>();
-        }
-        public static IEnumerable<TS> GetServices<TS>()
-        {
-            return Provider.GetServices<TS>();
-        }
-        public static TimerServices GetTimerServices(INotificatoinMessage fm, IEnumerable<NotificationModel> notifications)
-        {
-            var TmSettings = Provider.GetRequiredService<IOptions<TimerSettings>>();
-            return new TimerServices(TmSettings, fm, notifications ?? new List<NotificationModel>());
+            HOSTServices.InitHostServices(ConfigHost().Services);
         }
 
         private static IHost ConfigHost()
@@ -60,6 +38,7 @@ namespace TimerNotificatoin
                         services.Configure<AppSettings>(hostContext.Configuration.GetSection(nameof(AppSettings)));
                         services.Configure<AtuoSaveSettings>(hostContext.Configuration.GetSection(nameof(AtuoSaveSettings)));
                         services.Configure<TimerSettings>(hostContext.Configuration.GetSection(nameof(TimerSettings)));
+                        services.Configure<List<ClassificationModel>>(hostContext.Configuration.GetSection("Classifications"));
 
                         services.AddTransient<OutputHelperService>();
                         services.AddTransient<AlertsAutoSaveService>();

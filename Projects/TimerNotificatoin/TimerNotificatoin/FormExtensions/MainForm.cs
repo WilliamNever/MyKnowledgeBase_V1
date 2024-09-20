@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
@@ -89,13 +90,19 @@ namespace TimerNotificatoin
         private void ReFreshControlStyles()
         {
             var ndt = DateTime.Now.Date;
+            var nfts = HOSTServices.GetClassifications();
             for (var i = 0; i < dgDataList.Rows.Count; i++)
             {
-                if (!Enum.TryParse<EnNotificationType>(
-                    dgDataList.Rows[i].Cells["NotificationType"].Value.ToString(), out var rtype))
-                {
-                    rtype = EnNotificationType.Unclassified;
-                }
+                var ntfid = (int)dgDataList.Rows[i].Cells["ClassificationID"].Value;
+                var ntf = nfts.FirstOrDefault(x => x.ID == ntfid) ?? new ClassificationModel();
+
+                //if (!Enum.TryParse<EnNotificationType>(
+                //    dgDataList.Rows[i].Cells["NotificationType"].Value.ToString(), out var rtype))
+                //{
+                //    rtype = EnNotificationType.Unclassified;
+                //}
+
+                var rtype = ntf.NotificationType;
 
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
@@ -108,15 +115,16 @@ namespace TimerNotificatoin
                 }
                 else if (rsl)
                 {
-                    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.Azure;
-                    if(rtype == EnNotificationType.Remain)
-                    {
-                        dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.PowderBlue;
-                    }
-                    if(rtype == EnNotificationType.Unclassified)
-                    {
-                        dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(0xff, 0xff, 0xde, 0xad);
-                    }
+                    //dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.Azure;
+                    //if(rtype == EnNotificationType.Remain)
+                    //{
+                    //    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.PowderBlue;
+                    //}
+                    //if(rtype == EnNotificationType.Unclassified)
+                    //{
+                    //    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(0xff, 0xff, 0xde, 0xad);
+                    //}
+                    dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(ntf.Alpha, ntf.Red, ntf.Green, ntf.Blue);
                 }
             }
             dgDataList.ClearSelection();

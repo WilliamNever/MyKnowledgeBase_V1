@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
@@ -16,10 +17,10 @@ namespace TimerNotificatoin
         public MainForm()
         {
             InitializeComponent();
-            settings = APPHOST.GetRequiredService<IOptions<AppSettings>>().Value;
-            alertsAutoSaveService = APPHOST.GetRequiredService<AlertsAutoSaveService>();
+            settings = HOSTServices.GetRequiredService<IOptions<AppSettings>>().Value;
+            alertsAutoSaveService = HOSTServices.GetRequiredService<AlertsAutoSaveService>();
             dgDataList.AutoGenerateColumns = false;
-            timerServices = APPHOST.GetTimerServices(this, ReadConfigedAlerts());
+            timerServices = HOSTServices.GetTimerServices(this, ReadConfigedAlerts());
 
             Initial();
         }
@@ -125,7 +126,7 @@ namespace TimerNotificatoin
             switch (e.ClickedItem.AccessibleName)
             {
                 case "HelperFile":
-                    var helpfile = APPHOST.GetService<OutputHelperService>();
+                    var helpfile = HOSTServices.GetService<OutputHelperService>();
                     var txt = helpfile?.ReadHelperFile();
 
                     var cf = ContentsForm.CreateForm("Helper", new Font(new FontFamily("Times New Roman"), 14f));
