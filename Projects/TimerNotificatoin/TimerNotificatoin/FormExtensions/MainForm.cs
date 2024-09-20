@@ -94,7 +94,7 @@ namespace TimerNotificatoin
                 if (!Enum.TryParse<EnNotificationType>(
                     dgDataList.Rows[i].Cells["NotificationType"].Value.ToString(), out var rtype))
                 {
-                    rtype = EnNotificationType.UnKnown;
+                    rtype = EnNotificationType.Unclassified;
                 }
 
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
@@ -113,7 +113,7 @@ namespace TimerNotificatoin
                     {
                         dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.PowderBlue;
                     }
-                    if(rtype == EnNotificationType.UnKnown)
+                    if(rtype == EnNotificationType.Unclassified)
                     {
                         dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(0xff, 0xff, 0xde, 0xad);
                     }

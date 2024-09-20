@@ -50,7 +50,7 @@ namespace TimerNotificatoin.Forms
             notificate.Description = txtDescription.Text;
             notificate.AlertDateTime = dtPicker.Value;
             notificate.IsAlerted = !cbAlert.Checked;
-            notificate.NotificationType = (cbNType.SelectedItem as ItemModel<EnNotificationType>)?.Value ?? EnNotificationType.UnKnown;
+            notificate.NotificationType = (cbNType.SelectedItem as ItemModel<EnNotificationType>)?.Value ?? EnNotificationType.Unclassified;
             return notificate;
         }
 

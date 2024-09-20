@@ -81,7 +81,7 @@ namespace TimerNotificatoin.Core.Services
             lock (SynchronizingObject)
                 return Notifications.Where(x => !x.IsAlerted 
                 || x.NotificationType == Enums.EnNotificationType.Remain
-                || x.NotificationType == Enums.EnNotificationType.UnKnown
+                || x.NotificationType == Enums.EnNotificationType.Unclassified
                 ).OrderBy(x => x.AlertDateTime).ToList();
         }
         public List<NotificationModel> GetTotalNotification()
