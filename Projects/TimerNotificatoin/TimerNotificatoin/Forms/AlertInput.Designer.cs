@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             pnlBackGrd = new Panel();
+            cbNType = new ComboBox();
+            label5 = new Label();
             btnSave = new Button();
             btnCancel = new Button();
             txtDescription = new TextBox();
@@ -44,6 +46,8 @@
             // 
             // pnlBackGrd
             // 
+            pnlBackGrd.Controls.Add(cbNType);
+            pnlBackGrd.Controls.Add(label5);
             pnlBackGrd.Controls.Add(btnSave);
             pnlBackGrd.Controls.Add(btnCancel);
             pnlBackGrd.Controls.Add(txtDescription);
@@ -59,6 +63,24 @@
             pnlBackGrd.Name = "pnlBackGrd";
             pnlBackGrd.Size = new Size(536, 384);
             pnlBackGrd.TabIndex = 0;
+            // 
+            // cbNType
+            // 
+            cbNType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbNType.FormattingEnabled = true;
+            cbNType.Location = new Point(117, 11);
+            cbNType.Name = "cbNType";
+            cbNType.Size = new Size(200, 23);
+            cbNType.TabIndex = 11;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(15, 15);
+            label5.Name = "label5";
+            label5.Size = new Size(67, 15);
+            label5.TabIndex = 10;
+            label5.Text = "Alert Type -";
             // 
             // btnSave
             // 
@@ -83,18 +105,18 @@
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(118, 154);
+            txtDescription.Location = new Point(117, 151);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
             txtDescription.ScrollBars = ScrollBars.Vertical;
-            txtDescription.Size = new Size(396, 168);
+            txtDescription.Size = new Size(396, 178);
             txtDescription.TabIndex = 7;
             txtDescription.Validating += txtRequired_Validating;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 154);
+            label4.Location = new Point(15, 151);
             label4.Name = "label4";
             label4.Size = new Size(75, 15);
             label4.TabIndex = 6;
@@ -102,7 +124,7 @@
             // 
             // txtTitle
             // 
-            txtTitle.Location = new Point(119, 97);
+            txtTitle.Location = new Point(117, 113);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(200, 23);
             txtTitle.TabIndex = 5;
@@ -111,7 +133,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 101);
+            label3.Location = new Point(15, 117);
             label3.Name = "label3";
             label3.Size = new Size(37, 15);
             label3.TabIndex = 4;
@@ -122,7 +144,7 @@
             cbAlert.AutoSize = true;
             cbAlert.Checked = true;
             cbAlert.CheckState = CheckState.Checked;
-            cbAlert.Location = new Point(117, 62);
+            cbAlert.Location = new Point(117, 83);
             cbAlert.Name = "cbAlert";
             cbAlert.Size = new Size(15, 14);
             cbAlert.TabIndex = 3;
@@ -131,7 +153,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(15, 62);
+            label2.Location = new Point(15, 83);
             label2.Name = "label2";
             label2.Size = new Size(40, 15);
             label2.TabIndex = 2;
@@ -140,7 +162,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(15, 21);
+            label1.Location = new Point(15, 49);
             label1.Name = "label1";
             label1.Size = new Size(96, 15);
             label1.TabIndex = 1;
@@ -150,7 +172,7 @@
             // 
             dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             dtPicker.Format = DateTimePickerFormat.Custom;
-            dtPicker.Location = new Point(117, 17);
+            dtPicker.Location = new Point(117, 45);
             dtPicker.Name = "dtPicker";
             dtPicker.Size = new Size(200, 23);
             dtPicker.TabIndex = 0;
@@ -185,5 +207,7 @@
         private TextBox txtDescription;
         private Button btnSave;
         private Button btnCancel;
+        private ComboBox cbNType;
+        private Label label5;
     }
 }

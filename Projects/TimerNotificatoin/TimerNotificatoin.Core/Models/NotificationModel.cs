@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimerNotificatoin.Core.Attributes;
+using TimerNotificatoin.Core.Enums;
 
 namespace TimerNotificatoin.Core.Models
 {
@@ -24,6 +25,9 @@ namespace TimerNotificatoin.Core.Models
         public string Title { get; set; }
         [HelperOutput("string Description - Indicated the Description of the notification")]
         public string Description { get; set; }
+
+        [HelperOutput("EnNotificationType NotificationType - Indicated if the notification can be remained after alerted")]
+        public EnNotificationType NotificationType { get; set; } = EnNotificationType.Common;
 
         public NotificationModel()
         {

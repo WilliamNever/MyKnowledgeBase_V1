@@ -31,11 +31,6 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             dgDataList = new DataGridView();
-            OrderIndex = new DataGridViewTextBoxColumn();
-            Id = new DataGridViewTextBoxColumn();
-            Title = new DataGridViewTextBoxColumn();
-            AlertDateTime = new DataGridViewTextBoxColumn();
-            IsAlerted = new DataGridViewTextBoxColumn();
             nfyTimer = new NotifyIcon(components);
             cmsIcon = new ContextMenuStrip(components);
             tmiStartOrStop = new ToolStripMenuItem();
@@ -58,6 +53,12 @@
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
+            OrderIndex = new DataGridViewTextBoxColumn();
+            Id = new DataGridViewTextBoxColumn();
+            NotificationType = new DataGridViewTextBoxColumn();
+            Title = new DataGridViewTextBoxColumn();
+            AlertDateTime = new DataGridViewTextBoxColumn();
+            IsAlerted = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -70,7 +71,7 @@
             dgDataList.AllowUserToOrderColumns = true;
             dgDataList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgDataList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, Title, AlertDateTime, IsAlerted });
+            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, NotificationType, Title, AlertDateTime, IsAlerted });
             dgDataList.Location = new Point(12, 39);
             dgDataList.Name = "dgDataList";
             dgDataList.ReadOnly = true;
@@ -80,42 +81,6 @@
             dgDataList.TabIndex = 4;
             dgDataList.CellDoubleClick += dgDataList_CellDoubleClick;
             dgDataList.RowHeaderMouseDoubleClick += dgDataList_RowHeaderMouseDoubleClick;
-            // 
-            // OrderIndex
-            // 
-            OrderIndex.Frozen = true;
-            OrderIndex.HeaderText = "Index";
-            OrderIndex.Name = "OrderIndex";
-            OrderIndex.ReadOnly = true;
-            // 
-            // Id
-            // 
-            Id.DataPropertyName = "Id";
-            Id.HeaderText = "Id";
-            Id.Name = "Id";
-            Id.ReadOnly = true;
-            Id.Visible = false;
-            // 
-            // Title
-            // 
-            Title.DataPropertyName = "Title";
-            Title.HeaderText = "Title";
-            Title.Name = "Title";
-            Title.ReadOnly = true;
-            // 
-            // AlertDateTime
-            // 
-            AlertDateTime.DataPropertyName = "AlertDateTime";
-            AlertDateTime.HeaderText = "Alert Date Time";
-            AlertDateTime.Name = "AlertDateTime";
-            AlertDateTime.ReadOnly = true;
-            // 
-            // IsAlerted
-            // 
-            IsAlerted.DataPropertyName = "IsAlerted";
-            IsAlerted.HeaderText = "Is Alerted";
-            IsAlerted.Name = "IsAlerted";
-            IsAlerted.ReadOnly = true;
             // 
             // nfyTimer
             // 
@@ -305,6 +270,49 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
+            // OrderIndex
+            // 
+            OrderIndex.Frozen = true;
+            OrderIndex.HeaderText = "Index";
+            OrderIndex.Name = "OrderIndex";
+            OrderIndex.ReadOnly = true;
+            // 
+            // Id
+            // 
+            Id.DataPropertyName = "Id";
+            Id.HeaderText = "Id";
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            Id.Visible = false;
+            // 
+            // NotificationType
+            // 
+            NotificationType.DataPropertyName = "NotificationType";
+            NotificationType.HeaderText = "Notification Type";
+            NotificationType.Name = "NotificationType";
+            NotificationType.ReadOnly = true;
+            // 
+            // Title
+            // 
+            Title.DataPropertyName = "Title";
+            Title.HeaderText = "Title";
+            Title.Name = "Title";
+            Title.ReadOnly = true;
+            // 
+            // AlertDateTime
+            // 
+            AlertDateTime.DataPropertyName = "AlertDateTime";
+            AlertDateTime.HeaderText = "Alert Date Time";
+            AlertDateTime.Name = "AlertDateTime";
+            AlertDateTime.ReadOnly = true;
+            // 
+            // IsAlerted
+            // 
+            IsAlerted.DataPropertyName = "IsAlerted";
+            IsAlerted.HeaderText = "Is Alerted";
+            IsAlerted.Name = "IsAlerted";
+            IsAlerted.ReadOnly = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -355,6 +363,7 @@
         private ToolStripMenuItem tsmShowNotificationsFoler;
         private DataGridViewTextBoxColumn OrderIndex;
         private DataGridViewTextBoxColumn Id;
+        private DataGridViewTextBoxColumn NotificationType;
         private DataGridViewTextBoxColumn Title;
         private DataGridViewTextBoxColumn AlertDateTime;
         private DataGridViewTextBoxColumn IsAlerted;

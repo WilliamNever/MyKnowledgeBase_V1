@@ -3,12 +3,14 @@
     "Id": "192a460f-4e3a-479f-9513-7b535c823f4e",
     "AlertDateTime": "2024-09-30T10:00:00",
     "Title": "Enter ETT",
-    "Description": "Input ETT work time!"
+    "Description": "Input ETT work time!",
+    "NotificationType": 1
   },
   {
     "Id": "1f21c94d-9f75-477b-bb74-bcb6eb334efa",
     "AlertDateTime": "2024-09-13T10:08:00",
     "Title": "Testing",
-    "Description": "Show Temp Alerting!"
+    "Description": "Show Temp Alerting!",
+    "NotificationType": 2
   }
 ]

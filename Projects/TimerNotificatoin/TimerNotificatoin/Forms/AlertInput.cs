@@ -1,4 +1,5 @@
-﻿using TimerNotificatoin.Core.Models;
+﻿using TimerNotificatoin.Core.Enums;
+using TimerNotificatoin.Core.Models;
 
 namespace TimerNotificatoin.Forms
 {
@@ -12,6 +13,17 @@ namespace TimerNotificatoin.Forms
             ReSetCausesValidation(pnlBackGrd.Controls.OfType<Control>().ToArray(), false);
             dtPicker.MinDate = dtn.AddYears(-20);
             dtPicker.MaxDate = dtn.AddYears(20);
+
+            InitControls();
+        }
+
+        private void InitControls()
+        {
+            var vals = Enum.GetValues<EnNotificationType>();
+            cbNType.Items.AddRange(vals.Select(x => new ItemModel<EnNotificationType> { Name = x.ToString(), Value = x }).ToArray());
+            cbNType.SelectedIndex = 0;
+            cbNType.DisplayMember = "Name";
+            cbNType.ValueMember = "Value";
         }
 
         public void SetNotification(NotificationModel notification)
@@ -22,6 +34,15 @@ namespace TimerNotificatoin.Forms
             txtDescription.Text = notification.Description;
             dtPicker.Value = notification.AlertDateTime;
             cbAlert.Checked = !notification.IsAlerted;
+            for (int i = 0; i < cbNType.Items.Count; i++)
+            {
+                var itmVal = (cbNType.Items[i] as ItemModel<EnNotificationType>)?.Value;
+                if (itmVal.HasValue && itmVal == notification.NotificationType)
+                {
+                    cbNType.SelectedIndex = i;
+                    break;
+                }
+            }
         }
         public NotificationModel GetNotification()
         {
@@ -29,6 +50,7 @@ namespace TimerNotificatoin.Forms
             notificate.Description = txtDescription.Text;
             notificate.AlertDateTime = dtPicker.Value;
             notificate.IsAlerted = !cbAlert.Checked;
+            notificate.NotificationType = (cbNType.SelectedItem as ItemModel<EnNotificationType>)?.Value ?? EnNotificationType.UnKnown;
             return notificate;
         }
 

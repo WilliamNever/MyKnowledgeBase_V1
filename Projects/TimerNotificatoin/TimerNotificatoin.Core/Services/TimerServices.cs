@@ -66,14 +66,23 @@ namespace TimerNotificatoin.Core.Services
             {
                 notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
             }
-            else {
+            else
+            {
                 notificatoin.ShowMessage("Check Point", Enums.EnMessageType.CheckPoint);
             }
         }
         public List<NotificationModel> GetActiveNotification()
         {
-            lock (SynchronizingObject) 
+            lock (SynchronizingObject)
                 return Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).ToList();
+        }
+        public List<NotificationModel> GetSavedNotification()
+        {
+            lock (SynchronizingObject)
+                return Notifications.Where(x => !x.IsAlerted 
+                || x.NotificationType == Enums.EnNotificationType.Remain
+                || x.NotificationType == Enums.EnNotificationType.UnKnown
+                ).OrderBy(x => x.AlertDateTime).ToList();
         }
         public List<NotificationModel> GetTotalNotification()
         {
@@ -94,7 +103,7 @@ namespace TimerNotificatoin.Core.Services
                 });
             }
             if (!MainTimer.AutoReset) ResetTimer();
-            
+
             MainTimer.Start();
             notificatoin.ShowMessage("In progressing", Enums.EnMessageType.Started | Enums.EnMessageType.StatusShow);
         }
@@ -129,7 +138,8 @@ namespace TimerNotificatoin.Core.Services
             Stop();
             Notifications.RemoveAll(x => guids.Any(y => y == x.Id));
         }
-        public void Stop() { 
+        public void Stop()
+        {
             MainTimer.Stop();
             notificatoin.ShowMessage("Stopped", Enums.EnMessageType.Stopped | Enums.EnMessageType.StatusShow);
         }

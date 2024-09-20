@@ -60,7 +60,7 @@ namespace TimerNotificatoin
         {
             lock (timerServices.SynchronizingObject)
             {
-                var alts = timerServices.GetActiveNotification();
+                var alts = timerServices.GetSavedNotification();
                 var txt = ConversionsHelper.NJ_SerializeToJson(alts, new Newtonsoft.Json.JsonSerializerSettings
                 {
                     Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -91,6 +91,12 @@ namespace TimerNotificatoin
             var ndt = DateTime.Now.Date;
             for (var i = 0; i < dgDataList.Rows.Count; i++)
             {
+                if (!Enum.TryParse<EnNotificationType>(
+                    dgDataList.Rows[i].Cells["NotificationType"].Value.ToString(), out var rtype))
+                {
+                    rtype = EnNotificationType.UnKnown;
+                }
+
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
                     bool.TryParse(dgDataList.Rows[i].Cells["IsAlerted"].Value?.ToString(), out bool rsl) && !rsl
@@ -103,6 +109,14 @@ namespace TimerNotificatoin
                 else if (rsl)
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.Azure;
+                    if(rtype == EnNotificationType.Remain)
+                    {
+                        dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.PowderBlue;
+                    }
+                    if(rtype == EnNotificationType.UnKnown)
+                    {
+                        dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(0xff, 0xff, 0xde, 0xad);
+                    }
                 }
             }
             dgDataList.ClearSelection();
