@@ -15,7 +15,8 @@ namespace TimerNotificatoin.Core.Consts
         public static void InitHostServices(IServiceProvider provider)
         {
             Provider = provider;
-            Classifications = GetRequiredService<IOptions<List<ClassificationModel>>>().Value;
+            Classifications = GetRequiredService<IOptions<List<ClassificationModel>>>().Value
+                .OrderBy(x => x.NotificationType).ThenBy(x => x.Name).ToList();
         }
 
         public static List<ClassificationModel> GetClassifications()
