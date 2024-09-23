@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TimerNotificatoin.Core.Attributes;
+﻿using TimerNotificatoin.Core.Attributes;
 
 namespace TimerNotificatoin.Core.Enums
 {
@@ -23,5 +18,7 @@ namespace TimerNotificatoin.Core.Enums
         LastWeek = 8,
         [HelperOutput("EveryWeek - Every Week (16)")] 
         EveryWeek = 16,
+        [HelperOutput("NonSatSun - Not Saturday and Sunday (16)")] 
+        NonSatSun = 32,
     }
 }
