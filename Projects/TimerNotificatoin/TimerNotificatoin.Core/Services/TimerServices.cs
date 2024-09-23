@@ -38,7 +38,7 @@ namespace TimerNotificatoin.Core.Services
                     x.LeftSeconds = x.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
                     x.StartDateTime = dt;
                 });
-                actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted));
+                actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted).ToList());
                 actNotifies.ForEach(x => x.IsAlerted = true);
 
                 isAllAlerted = Notifications.All(x => x.IsAlerted);
@@ -66,7 +66,8 @@ namespace TimerNotificatoin.Core.Services
             {
                 notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
             }
-            else
+            
+            if (!isAllAlerted)
             {
                 notificatoin.ShowMessage("Check Point", Enums.EnMessageType.CheckPoint);
             }

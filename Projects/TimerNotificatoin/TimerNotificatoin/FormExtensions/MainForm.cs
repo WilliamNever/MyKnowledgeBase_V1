@@ -26,7 +26,7 @@ namespace TimerNotificatoin
                 if ((messageType & EnMessageType.Stopped) > 0)
                 {
                     btnStart.Enabled = true;
-                    nfyTimer.Text = $"Notification Timer - {message}";
+                    nfyTimer.Text = $"Notification Timer - {message} - {DateTime.Now}";
                 }
                 if ((messageType & EnMessageType.Started) > 0)
                 {
@@ -51,7 +51,7 @@ namespace TimerNotificatoin
                     cf.ShowMessage(message, EnMessageType.NotificationShow);
                     cf.Show();
                 }
-                dgDataList.Invoke(ReBoundControlData);
+                ReBoundControlData();
                 SaveActiveAlerts(true);
             });
         }
