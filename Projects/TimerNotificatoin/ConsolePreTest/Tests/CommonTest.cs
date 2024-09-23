@@ -26,11 +26,11 @@ namespace ConsolePreTest.Tests
             DayOfWeek dt = DateTime.Now.DayOfWeek;
 
 
-            var tam = new TemplateAlertDateModel(2024, 11, 3,
-                new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday }
-                , EnSpecialDays.LastWeek | EnSpecialDays.FirstDay);
-            var str = Newtonsoft.Json.JsonConvert.SerializeObject(tam);
-            var des = Newtonsoft.Json.JsonConvert.DeserializeObject<TemplateAlertDateModel>(str);
+            //var tam = new TemplateAlertDateModel(2024, 11, 3,
+            //    new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday }
+            //    , EnSpecialDays.LastWeek | EnSpecialDays.FirstDay);
+            //var str = Newtonsoft.Json.JsonConvert.SerializeObject(tam);
+            //var des = Newtonsoft.Json.JsonConvert.DeserializeObject<TemplateAlertDateModel>(str);
         }
 
         public static void UTTest2()
