@@ -106,7 +106,7 @@ namespace TimerNotificatoin
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.GreenYellow;
                 }
-                else if (rsl || rtype != EnNotificationType.Common)
+                else if (rsl || ((rtype & EnNotificationType.Common) == 0))
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(ntf.Alpha, ntf.Red, ntf.Green, ntf.Blue);
                 }

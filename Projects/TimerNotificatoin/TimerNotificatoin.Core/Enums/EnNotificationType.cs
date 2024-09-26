@@ -11,11 +11,11 @@ namespace TimerNotificatoin.Core.Enums
     [HelperOutput("[Flags] enum EnNotificationType - to show the classification of a notification")]
     public enum EnNotificationType
     {
-        [HelperOutput("Unclassified - not classified, Keep in untill manually removed")]
+        [HelperOutput("Unclassified(0) - not classified, Keep in untill manually removed")]
         Unclassified = 0,
-        [HelperOutput("Common - popped up then removed")]
+        [HelperOutput("Common(1) - popped up then removed")]
         Common = 1,
-        [HelperOutput("Remain - Keep in untill manually removed")]
+        [HelperOutput("Remain(2) - Keep in untill manually removed")]
         Remain = 2,
     }
 }
