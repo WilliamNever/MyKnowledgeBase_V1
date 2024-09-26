@@ -12,8 +12,14 @@ namespace TimerNotificatoin.Core.Models
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
         public virtual DateTime AlertDateTime { get; set; }
         //[HelperOutput("DateTime StartDateTime - Start Date Time")]
+#if !Debug
+        [Newtonsoft.Json.JsonIgnore]
+#endif
         public virtual DateTime StartDateTime { get; set; }
         //[HelperOutput("double LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
+#if !Debug
+        [Newtonsoft.Json.JsonIgnore]
+#endif
         public double LeftSeconds { get; set; }
         [HelperOutput("bool IsAlerted - Indicated if the notification is popped up")]
         public bool IsAlerted { get; set; } = false;
@@ -26,12 +32,18 @@ namespace TimerNotificatoin.Core.Models
         //public EnNotificationType NotificationType { get; set; } = EnNotificationType.Common;
         [HelperOutput("int ClassificationID - Indicated which Classification is applied")]
         public int ClassificationID { get; set; }
+#if !Debug
+        [Newtonsoft.Json.JsonIgnore]
+#endif
         public EnNotificationType NotificationType
         {
             get =>
                 HOSTServices.GetClassifications().FirstOrDefault(x => x.ID == ClassificationID)?.NotificationType 
                 ?? new ClassificationModel().NotificationType;
         }
+#if !Debug
+        [Newtonsoft.Json.JsonIgnore]
+#endif
         public string ClassificationName
         {
             get =>
