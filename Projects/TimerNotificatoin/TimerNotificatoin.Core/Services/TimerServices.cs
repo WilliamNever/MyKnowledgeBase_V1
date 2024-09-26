@@ -33,12 +33,13 @@ namespace TimerNotificatoin.Core.Services
             var actNotifies = new List<NotificationModel>();
             lock (SynchronizingObject)
             {
-                Notifications.ForEach(x =>
+                var activeAlerts = Notifications.Where(x => !x.IsAlerted).ToList();
+                activeAlerts.ForEach(x =>
                 {
                     x.LeftSeconds = x.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
                     x.StartDateTime = dt;
                 });
-                actNotifies.AddRange(Notifications.Where(x => !(x.LeftSeconds > 0) && !x.IsAlerted).ToList());
+                actNotifies.AddRange(activeAlerts.Where(x => !(x.LeftSeconds > 0)).ToList());
                 actNotifies.ForEach(x => x.IsAlerted = true);
 
                 isAllAlerted = Notifications.All(x => x.IsAlerted);
@@ -97,7 +98,7 @@ namespace TimerNotificatoin.Core.Services
             lock (SynchronizingObject)
             {
                 DateTime now = DateTime.Now;
-                Notifications.ForEach(x =>
+                Notifications.Where(x => !x.IsAlerted).ToList().ForEach(x =>
                 {
                     x.StartDateTime = now;
                     x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
@@ -113,7 +114,7 @@ namespace TimerNotificatoin.Core.Services
             var nnotice = GetNearestNotify();
             if (nnotice != null)
             {
-                var itv = nnotice.LeftSeconds < 1 ? 1000 : nnotice.LeftSeconds;
+                var itv = 1000 + (nnotice.LeftSeconds < 1 ? 0 : nnotice.LeftSeconds);
                 itv = itv > TmSettings.Interval ? TmSettings.Interval : itv;
                 MainTimer.Interval = itv;
             }
