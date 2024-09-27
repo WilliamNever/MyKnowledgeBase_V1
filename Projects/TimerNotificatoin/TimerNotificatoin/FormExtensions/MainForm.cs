@@ -141,6 +141,8 @@ namespace TimerNotificatoin
             else
             {
                 Show();
+                ReFreshControlStyles();
+                dgDataList.Refresh();
             }
         }
 

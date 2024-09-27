@@ -27,8 +27,9 @@ namespace TimerNotificatoin
 
         private void Initial()
         {
-            SwichWindowModel(tmiOpenOrHiden, WindowState);
             ReBoundControlData();
+            SwichWindowModel(tmiOpenOrHiden, WindowState);
+            
             nfyTimer.Text = $"Notification Timer - Initial";
         }
 
