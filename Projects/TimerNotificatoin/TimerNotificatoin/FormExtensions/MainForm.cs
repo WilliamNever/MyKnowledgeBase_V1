@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
@@ -56,7 +57,7 @@ namespace TimerNotificatoin
             });
         }
         #endregion
-        
+
         private void SaveActiveAlerts(bool delaySave = false)
         {
             lock (timerServices.SynchronizingObject)
@@ -146,9 +147,18 @@ namespace TimerNotificatoin
             }
         }
 
-        private void ReBoundControlData()
+        private void ReBoundControlData(SortInfoModel? sortInfo = null)
         {
-            dgDataList.DataSource = timerServices.GetTotalNotification();
+            sortInfo ??= _SortInfo;
+            var list = timerServices.GetTotalNotification();
+            if (!string.IsNullOrEmpty(sortInfo?.DataPropertyName))
+            {
+                if (sortInfo.OrderBy == EnOrderBy.asc)
+                    list = list.OrderBy(x => x.GetType().GetProperty(sortInfo.DataPropertyName)?.GetValue(x)).ToList();
+                else
+                    list = list.OrderByDescending(x => x.GetType().GetProperty(sortInfo.DataPropertyName)?.GetValue(x)).ToList();
+            }
+            dgDataList.DataSource = list;
             ReFreshControlStyles();
             dgDataList.Refresh();
         }

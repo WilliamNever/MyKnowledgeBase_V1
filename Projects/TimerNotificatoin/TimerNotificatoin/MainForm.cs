@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Options;
+using System.Linq.Expressions;
+using System.Reflection;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Models;
@@ -29,7 +31,7 @@ namespace TimerNotificatoin
         {
             ReBoundControlData();
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            
+
             nfyTimer.Text = $"Notification Timer - Initial";
         }
 
@@ -144,6 +146,10 @@ namespace TimerNotificatoin
                     var path = Path.GetFullPath(settings.Notifications).TrimEnd((Path.GetFileName(settings.Notifications) ?? "").ToArray());
                     OpenFolderSelectFiles(path);
                     break;
+                case "DefaultSort":
+                    _SortInfo = new("", EnOrderBy.asc);
+                    ReBoundControlData(_SortInfo);
+                    break;
                 default:
                     break;
             }
@@ -228,5 +234,25 @@ namespace TimerNotificatoin
         }
 
         #endregion
+
+        private void dgDataList_ColumnHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var dpCol = dgDataList.Columns[e.ColumnIndex];
+            if (
+                (dpCol.SortMode != DataGridViewColumnSortMode.NotSortable)
+                && !string.IsNullOrEmpty(dpCol.DataPropertyName))
+            {
+                if (_SortInfo.DataPropertyName == dpCol.DataPropertyName)
+                {
+                    _SortInfo.ReverOrderBy();
+                }
+                else
+                {
+                    _SortInfo = new(dpCol.DataPropertyName, EnOrderBy.asc);
+                }
+                ReBoundControlData(_SortInfo);
+            }
+        }
+        private SortInfoModel _SortInfo = new("", EnOrderBy.asc);
     }
 }

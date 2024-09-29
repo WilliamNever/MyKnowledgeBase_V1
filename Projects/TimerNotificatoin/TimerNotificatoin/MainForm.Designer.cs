@@ -61,6 +61,8 @@
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
+            tmiEdit = new ToolStripMenuItem();
+            tsmDefaultSort = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -81,6 +83,7 @@
             dgDataList.Size = new Size(776, 335);
             dgDataList.TabIndex = 4;
             dgDataList.CellDoubleClick += dgDataList_CellDoubleClick;
+            dgDataList.ColumnHeaderMouseDoubleClick += dgDataList_ColumnHeaderMouseDoubleClick;
             dgDataList.RowHeaderMouseDoubleClick += dgDataList_RowHeaderMouseDoubleClick;
             // 
             // OrderIndex
@@ -89,6 +92,7 @@
             OrderIndex.HeaderText = "Index";
             OrderIndex.Name = "OrderIndex";
             OrderIndex.ReadOnly = true;
+            OrderIndex.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // Id
             // 
@@ -96,6 +100,7 @@
             Id.HeaderText = "Id";
             Id.Name = "Id";
             Id.ReadOnly = true;
+            Id.SortMode = DataGridViewColumnSortMode.Programmatic;
             Id.Visible = false;
             // 
             // ClassificationID
@@ -112,6 +117,7 @@
             NotificationType.HeaderText = "Notification Type";
             NotificationType.Name = "NotificationType";
             NotificationType.ReadOnly = true;
+            NotificationType.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // ClassificationName
             // 
@@ -119,6 +125,7 @@
             ClassificationName.HeaderText = "Classification";
             ClassificationName.Name = "ClassificationName";
             ClassificationName.ReadOnly = true;
+            ClassificationName.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // Title
             // 
@@ -126,6 +133,7 @@
             Title.HeaderText = "Title";
             Title.Name = "Title";
             Title.ReadOnly = true;
+            Title.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // AlertDateTime
             // 
@@ -133,6 +141,7 @@
             AlertDateTime.HeaderText = "Alert Date Time";
             AlertDateTime.Name = "AlertDateTime";
             AlertDateTime.ReadOnly = true;
+            AlertDateTime.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // IsAlerted
             // 
@@ -140,6 +149,7 @@
             IsAlerted.HeaderText = "Is Alerted";
             IsAlerted.Name = "IsAlerted";
             IsAlerted.ReadOnly = true;
+            IsAlerted.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // nfyTimer
             // 
@@ -258,7 +268,7 @@
             // 
             // mnuMain
             // 
-            mnuMain.Items.AddRange(new ToolStripItem[] { tmiFiles, tmiHelp });
+            mnuMain.Items.AddRange(new ToolStripItem[] { tmiFiles, tmiEdit, tmiHelp });
             mnuMain.Location = new Point(0, 0);
             mnuMain.Name = "mnuMain";
             mnuMain.Size = new Size(800, 24);
@@ -329,6 +339,21 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
+            // tmiEdit
+            // 
+            tmiEdit.DropDownItems.AddRange(new ToolStripItem[] { tsmDefaultSort });
+            tmiEdit.Name = "tmiEdit";
+            tmiEdit.Size = new Size(39, 20);
+            tmiEdit.Text = "Edit";
+            tmiEdit.DropDownItemClicked += DropDownItemClicked;
+            // 
+            // tsmDefaultSort
+            // 
+            tsmDefaultSort.AccessibleName = "DefaultSort";
+            tsmDefaultSort.Name = "tsmDefaultSort";
+            tsmDefaultSort.Size = new Size(180, 22);
+            tsmDefaultSort.Text = "Default Sort";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -385,5 +410,7 @@
         private DataGridViewTextBoxColumn Title;
         private DataGridViewTextBoxColumn AlertDateTime;
         private DataGridViewTextBoxColumn IsAlerted;
+        private ToolStripMenuItem tmiEdit;
+        private ToolStripMenuItem tsmDefaultSort;
     }
 }
