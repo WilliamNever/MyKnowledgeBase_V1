@@ -11,8 +11,9 @@ using PartTest;
 
 //TestPart1.GuaModel_Test1();
 
-TestPart1.CreateChar();
+//TestPart1.CreateChar();
 
+await ExpressionTest.Test1Async();
 
 Console.WriteLine();
 Console.WriteLine("...............................");

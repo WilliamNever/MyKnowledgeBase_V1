@@ -38,6 +38,9 @@
             label4 = new Label();
             txtDes = new TextBox();
             panel1 = new Panel();
+            btnSum = new Button();
+            label5 = new Label();
+            txtInpuNums = new TextBox();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -95,7 +98,7 @@
             // btnCalc
             // 
             btnCalc.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCalc.Location = new Point(7, 115);
+            btnCalc.Location = new Point(7, 159);
             btnCalc.Name = "btnCalc";
             btnCalc.Size = new Size(75, 23);
             btnCalc.TabIndex = 6;
@@ -119,11 +122,14 @@
             txtDes.Multiline = true;
             txtDes.Name = "txtDes";
             txtDes.ScrollBars = ScrollBars.Vertical;
-            txtDes.Size = new Size(369, 110);
+            txtDes.Size = new Size(369, 79);
             txtDes.TabIndex = 8;
             // 
             // panel1
             // 
+            panel1.Controls.Add(btnSum);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(txtInpuNums);
             panel1.Controls.Add(btnCalc);
             panel1.Controls.Add(txtChgRate);
             panel1.Controls.Add(txtDes);
@@ -136,8 +142,40 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(612, 145);
+            panel1.Size = new Size(612, 189);
             panel1.TabIndex = 9;
+            // 
+            // btnSum
+            // 
+            btnSum.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSum.Location = new Point(151, 159);
+            btnSum.Name = "btnSum";
+            btnSum.Size = new Size(75, 23);
+            btnSum.TabIndex = 11;
+            btnSum.Text = "Sum  Chg";
+            btnSum.UseVisualStyleBackColor = true;
+            btnSum.Click += btnSum_Click;
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label5.AutoSize = true;
+            label5.Location = new Point(92, 119);
+            label5.Name = "label5";
+            label5.Size = new Size(134, 15);
+            label5.TabIndex = 10;
+            label5.Text = "Sum List (Word Wrap) - ";
+            // 
+            // txtInpuNums
+            // 
+            txtInpuNums.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtInpuNums.Location = new Point(232, 116);
+            txtInpuNums.Multiline = true;
+            txtInpuNums.Name = "txtInpuNums";
+            txtInpuNums.ScrollBars = ScrollBars.Vertical;
+            txtInpuNums.Size = new Size(369, 66);
+            txtInpuNums.TabIndex = 9;
+            txtInpuNums.Validating += IntListValidating;
             // 
             // UscBasicEasyInput
             // 
@@ -145,7 +183,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
             Name = "UscBasicEasyInput";
-            Size = new Size(612, 146);
+            Size = new Size(612, 189);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -163,5 +201,8 @@
         private Label label4;
         private TextBox txtDes;
         private Panel panel1;
+        private Label label5;
+        private TextBox txtInpuNums;
+        private Button btnSum;
     }
 }

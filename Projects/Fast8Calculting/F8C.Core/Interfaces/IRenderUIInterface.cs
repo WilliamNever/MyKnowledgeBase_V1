@@ -8,6 +8,7 @@ namespace F8C.Core.Interfaces
 {
     public interface IRenderUIInterface
     {
-        void RenderUI(string str);
+        void RenderUI(string str, string? barMessage = null);
+        void RenderUIStatusBar(string? barMessage = null);
     }
 }
