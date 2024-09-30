@@ -31,6 +31,10 @@ File name - AppendNugetTest.nuspec
     <releaseNotes>Initial Release.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Test nuget package</tags>
+	<dependencies>
+      		<dependency id="pckageName1" version="1.0.0" />
+		<dependency id="pckageName2" version="1.0.0" />
+	</dependencies>
   </metadata>
     <files>
         <file src="bin\Debug\XXXXXXX.dll" target="lib\XXXXXX.dll"/>
