@@ -100,14 +100,14 @@ namespace TimerNotificatoin
 
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
-                    bool.TryParse(dgDataList.Rows[i].Cells["ToAlert"].Value?.ToString(), out bool rsl) && !rsl
+                    bool.TryParse(dgDataList.Rows[i].Cells["ToAlert"].Value?.ToString(), out bool rsl) && rsl
                     && DateTime.TryParse(dgDataList.Rows[i].Cells["AlertDateTime"].Value?.ToString(), out DateTime dtRsl)
                     && dtRsl.Date <= ndt
                     )
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.GreenYellow;
                 }
-                else if (rsl || ((rtype & EnNotificationType.Common) == 0))
+                else if (!rsl || ((rtype & EnNotificationType.Common) == 0))
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(ntf.Alpha, ntf.Red, ntf.Green, ntf.Blue);
                 }
