@@ -89,7 +89,7 @@ namespace TimerNotificatoin.Core.Services
         public List<NotificationModel> GetTotalNotification()
         {
             lock (SynchronizingObject)
-                return Notifications.OrderBy(x => x.ToAlert).ThenBy(x => x.AlertDateTime).ToList();
+                return Notifications.OrderByDescending(x => x.ToAlert).ThenBy(x => x.AlertDateTime).ToList();
         }
 
         public void Start()
