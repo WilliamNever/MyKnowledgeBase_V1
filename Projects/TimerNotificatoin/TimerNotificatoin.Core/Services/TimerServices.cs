@@ -33,16 +33,16 @@ namespace TimerNotificatoin.Core.Services
             var actNotifies = new List<NotificationModel>();
             lock (SynchronizingObject)
             {
-                var activeAlerts = Notifications.Where(x => !x.IsAlerted).ToList();
+                var activeAlerts = Notifications.Where(x => x.ToAlert).ToList();
                 activeAlerts.ForEach(x =>
                 {
                     x.LeftSeconds = x.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
                     x.StartDateTime = dt;
                 });
                 actNotifies.AddRange(activeAlerts.Where(x => !(x.LeftSeconds > 0)).ToList());
-                actNotifies.ForEach(x => x.IsAlerted = true);
+                actNotifies.ForEach(x => x.ToAlert = false);
 
-                isAllAlerted = Notifications.All(x => x.IsAlerted);
+                isAllAlerted = Notifications.All(x => !x.ToAlert);
                 if (isAllAlerted) Stop();
             }
 
@@ -76,12 +76,12 @@ namespace TimerNotificatoin.Core.Services
         public List<NotificationModel> GetActiveNotification()
         {
             lock (SynchronizingObject)
-                return Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).ToList();
+                return Notifications.Where(x => x.ToAlert).OrderBy(x => x.AlertDateTime).ToList();
         }
         public List<NotificationModel> GetSavedNotification()
         {
             lock (SynchronizingObject)
-                return Notifications.Where(x => !x.IsAlerted
+                return Notifications.Where(x => x.ToAlert
                 || ((x.NotificationType & Enums.EnNotificationType.Remain) > 0)
                 || x.NotificationType == Enums.EnNotificationType.Unclassified
                 ).OrderBy(x => x.AlertDateTime).ToList();
@@ -89,7 +89,7 @@ namespace TimerNotificatoin.Core.Services
         public List<NotificationModel> GetTotalNotification()
         {
             lock (SynchronizingObject)
-                return Notifications.OrderBy(x => x.IsAlerted).ThenBy(x => x.AlertDateTime).ToList();
+                return Notifications.OrderBy(x => x.ToAlert).ThenBy(x => x.AlertDateTime).ToList();
         }
 
         public void Start()
@@ -98,7 +98,7 @@ namespace TimerNotificatoin.Core.Services
             lock (SynchronizingObject)
             {
                 DateTime now = DateTime.Now;
-                Notifications.Where(x => !x.IsAlerted).ToList().ForEach(x =>
+                Notifications.Where(x => x.ToAlert).ToList().ForEach(x =>
                 {
                     x.StartDateTime = now;
                     x.LeftSeconds = x.AlertDateTime.Subtract(now).TotalSeconds * 1000;
@@ -121,7 +121,7 @@ namespace TimerNotificatoin.Core.Services
         }
         private NotificationModel? GetNearestNotify()
         {
-            return Notifications.Where(x => !x.IsAlerted).OrderBy(x => x.AlertDateTime).FirstOrDefault();
+            return Notifications.Where(x => x.ToAlert).OrderBy(x => x.AlertDateTime).FirstOrDefault();
         }
         public void ResetAlerts(List<NotificationModel> notifications)
         {

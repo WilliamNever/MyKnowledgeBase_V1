@@ -100,7 +100,7 @@ namespace TimerNotificatoin
 
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
-                    bool.TryParse(dgDataList.Rows[i].Cells["IsAlerted"].Value?.ToString(), out bool rsl) && !rsl
+                    bool.TryParse(dgDataList.Rows[i].Cells["ToAlert"].Value?.ToString(), out bool rsl) && !rsl
                     && DateTime.TryParse(dgDataList.Rows[i].Cells["AlertDateTime"].Value?.ToString(), out DateTime dtRsl)
                     && dtRsl.Date <= ndt
                     )

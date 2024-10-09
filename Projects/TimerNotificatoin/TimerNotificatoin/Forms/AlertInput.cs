@@ -34,7 +34,7 @@ namespace TimerNotificatoin.Forms
             txtTitle.Text = notification.Title;
             txtDescription.Text = notification.Description;
             dtPicker.Value = notification.AlertDateTime;
-            cbAlert.Checked = !notification.IsAlerted;
+            cbAlert.Checked = notification.ToAlert;
             for (int i = 0; i < cbNType.Items.Count; i++)
             {
                 var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
@@ -50,7 +50,7 @@ namespace TimerNotificatoin.Forms
             notificate.Title = txtTitle.Text;
             notificate.Description = txtDescription.Text;
             notificate.AlertDateTime = dtPicker.Value;
-            notificate.IsAlerted = !cbAlert.Checked;
+            notificate.ToAlert = cbAlert.Checked;
             notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
             return notificate;
         }

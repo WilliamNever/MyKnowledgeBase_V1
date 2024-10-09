@@ -21,8 +21,8 @@ namespace TimerNotificatoin.Core.Models
         [Newtonsoft.Json.JsonIgnore]
 #endif
         public double LeftSeconds { get; set; }
-        [HelperOutput("bool IsAlerted - Indicated if the notification is popped up")]
-        public bool IsAlerted { get; set; } = false;
+        [HelperOutput("bool ToAlert - Indicated if the notification will pop up")]
+        public bool ToAlert { get; set; } = true;
         [HelperOutput("string Title - Indicated the title of the notification")]
         public string Title { get; set; }
         [HelperOutput("string Description - Indicated the Description of the notification")]
