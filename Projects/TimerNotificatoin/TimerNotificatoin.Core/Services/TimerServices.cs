@@ -7,6 +7,7 @@ namespace TimerNotificatoin.Core.Services
 {
     public class TimerServices : IDisposable
     {
+        protected DateTime StartDate { get; set; }
         protected readonly System.Timers.Timer MainTimer;
         public object SynchronizingObject = new();
         protected readonly INotificatoinMessage notificatoin;
@@ -70,7 +71,14 @@ namespace TimerNotificatoin.Core.Services
             
             if (!isAllAlerted)
             {
-                notificatoin.ShowMessage("Check Point", Enums.EnMessageType.CheckPoint);
+                var refreshGrid = StartDate != dt.Date;
+                if (refreshGrid)
+                {
+                    StartDate = dt.Date;
+                }
+
+                notificatoin.ShowMessage("Check Point",
+                    refreshGrid ? Enums.EnMessageType.CheckPoint | Enums.EnMessageType.RefreshData : Enums.EnMessageType.CheckPoint);
             }
         }
         public List<NotificationModel> GetActiveNotification()
@@ -106,6 +114,7 @@ namespace TimerNotificatoin.Core.Services
             }
             if (!MainTimer.AutoReset) ResetTimer();
 
+            StartDate = DateTime.Now.Date;
             MainTimer.Start();
             notificatoin.ShowMessage("In progressing", Enums.EnMessageType.Started | Enums.EnMessageType.StatusShow);
         }

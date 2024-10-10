@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Xml.Linq;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
@@ -37,6 +36,10 @@ namespace TimerNotificatoin
                 if ((messageType & EnMessageType.CheckPoint) > 0)
                 {
                     nfyTimer.Text = $"Notification Timer - {DateTime.Now}";
+                }
+                if ((messageType & EnMessageType.RefreshData) > 0)
+                {
+                    ReBoundControlData();
                 }
             });
         }
