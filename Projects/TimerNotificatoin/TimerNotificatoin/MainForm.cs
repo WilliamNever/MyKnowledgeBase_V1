@@ -63,6 +63,10 @@ namespace TimerNotificatoin
                         tmiStartOrStop.Text = "Stop";
                     }
                     break;
+                case nameof(tmiNotifyConfigFolder):
+                    var path = Path.GetFullPath(settings.Notifications).TrimEnd((Path.GetFileName(settings.Notifications) ?? "").ToArray());
+                    OpenFolderSelectFiles(path);
+                    break;
                 default:
                     break;
             }
