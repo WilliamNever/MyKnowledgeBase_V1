@@ -11,22 +11,26 @@ namespace ConsolePreTest.Tests
     {
         private static void OpenFolderSelectFiles(string pathFile)
         {
-            var psi = new ProcessStartInfo()// (pathFile);// ("Explorer.exe")
+            var psi = new ProcessStartInfo("Explorer.exe")
             {
-                //Arguments = pathFile
+                Arguments = pathFile
                 //WorkingDirectory =
             };
-            psi.FileName = pathFile;
+            //psi.FileName = pathFile;
             psi.WorkingDirectory = Path.GetDirectoryName(pathFile);
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Maximized;
-            
-            Process.Start(psi);
+            //psi.CreateNoWindow = true;
+            //psi.WindowStyle = ProcessWindowStyle.Maximized;
+
+            using (var proc = Process.Start(psi))
+            {
+                proc.WaitForExit();
+            }
         }
 
         public static void OpenTest1()
         {
-            OpenFolderSelectFiles("D:\\WQPersonal\\PrvCustomerTools\\TimerNotificatoin\\WQ-TimerNotificatoin.exe");
+            //OpenFolderSelectFiles("D:\\WQPersonal\\PrvCustomerTools\\TimerNotificatoin\\WQ-TimerNotificatoin.exe");
+            OpenFolderSelectFiles("D:\\WQPersonal\\PrvCustomerTools\\TimerNotificatoin.lnk");
         }
     }
 }
