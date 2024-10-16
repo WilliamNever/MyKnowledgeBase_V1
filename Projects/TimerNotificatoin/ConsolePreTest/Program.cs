@@ -10,7 +10,9 @@ Console.WriteLine($"{dtDes}");
 //CommonTest.UTStackTest();
 //CommonTest.UTTimerTest();
 //CommonTest.JSEncodingTest();
-CommonTest.ThreadTimerTest();
+//CommonTest.ThreadTimerTest();
+
+SecTest.OpenTest1();
 
 
 
