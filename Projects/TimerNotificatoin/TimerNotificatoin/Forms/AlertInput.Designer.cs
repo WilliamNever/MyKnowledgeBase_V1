@@ -170,6 +170,7 @@
             // 
             // dtPicker
             // 
+            dtPicker.CalendarFont = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             dtPicker.Format = DateTimePickerFormat.Custom;
             dtPicker.Location = new Point(117, 45);

@@ -12,7 +12,8 @@ Console.WriteLine($"{dtDes}");
 //CommonTest.JSEncodingTest();
 //CommonTest.ThreadTimerTest();
 
-SecTest.OpenTest1();
+//SecTest.OpenTest1();
+SecTest.DateTimeUtcConverTest();
 
 
 

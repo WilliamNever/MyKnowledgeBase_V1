@@ -32,5 +32,14 @@ namespace ConsolePreTest.Tests
             //OpenFolderSelectFiles("D:\\WQPersonal\\PrvCustomerTools\\TimerNotificatoin\\WQ-TimerNotificatoin.exe");
             OpenFolderSelectFiles("D:\\WQPersonal\\PrvCustomerTools\\TimerNotificatoin.lnk");
         }
+
+        public static void DateTimeUtcConverTest()
+        {
+            var dt = DateTime.UtcNow;
+            var dtToUtc = dt.ToUniversalTime();
+            var kindDT = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+            var toLcDt = dt.ToLocalTime();
+            var kLcDt = kindDT.ToLocalTime();
+        }
     }
 }
