@@ -187,7 +187,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(536, 384);
             Controls.Add(pnlBackGrd);
-            MaximizeBox = false;
             MinimizeBox = false;
             Name = "AlertInput";
             Text = "Notification input";
