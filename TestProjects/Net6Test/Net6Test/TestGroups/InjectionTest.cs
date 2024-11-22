@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net6Test.TestGroups
 {
@@ -12,6 +7,17 @@ namespace Net6Test.TestGroups
         public static void InjectScopeTest()
         {
             InjectDomainTest().Wait();
+        }
+
+        public static async Task HttpClient_Test(IServiceProvider provider)
+        {
+            var scp = provider.CreateScope().ServiceProvider;
+            var hct = scp.GetRequiredService<IHttpClientFactory>().CreateClient();
+            var strContent = new StringContent(@"
+{
+  ""id"": 0,
+}", System.Text.Encoding.UTF8, "application/json-patch+json");
+            var rsp = await hct.PostAsync("https://localhost:44388/Notifications/CreateEvent", strContent);
         }
 
         private static async Task InjectDomainTest()

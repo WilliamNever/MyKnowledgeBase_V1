@@ -1,13 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Net6Test.ConfigurationsClasses;
 using Net6Test.Models;
 using Net6Test.StaticUtilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net6Test
 {
@@ -31,6 +25,7 @@ namespace Net6Test
             services.AddAutoMapper(typeof(MappingProfile1));
             services.AddMemoryCache(x => { });
             services.AddTransient<Func<string, string, string>>(_ => (x, y) => ExtensionsClass.GetName(x, y));
+            services.AddHttpClient("PostClientXy");
         }
 
         public abstract void MainRun();

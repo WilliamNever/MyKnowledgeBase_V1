@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
-using Net6Test.Interfaces;
 using Net6Test.Models;
 using Net6Test.TestGroups;
 using Newtonsoft.Json;
 using StandardLibrary.Helpers;
-using System.Reflection;
 using System.Text.Json;
 
 namespace Net6Test.TestEntrances
@@ -39,7 +36,10 @@ namespace Net6Test.TestEntrances
             //MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
-            ThreadTasksTest.LockObj_Test().Wait();
+            //ThreadTasksTest.LockObj_Test().Wait();
+            //InjectionTest.HttpClient_Test(provider).Wait();
+
+            StronglyTypedEnumTests.Test1();
         }
 
         private async Task ValueTupleTest()
