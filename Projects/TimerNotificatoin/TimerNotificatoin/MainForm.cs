@@ -242,17 +242,16 @@ namespace TimerNotificatoin
         private void dgDataList_ColumnHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             var dpCol = dgDataList.Columns[e.ColumnIndex];
-            if (
-                (dpCol.SortMode != DataGridViewColumnSortMode.NotSortable)
-                && !string.IsNullOrEmpty(dpCol.DataPropertyName))
+            if (dpCol.SortMode != DataGridViewColumnSortMode.NotSortable)
             {
-                if (_SortInfo.DataPropertyName == dpCol.DataPropertyName)
+                var sortColumn = string.IsNullOrEmpty(dpCol.DataPropertyName) ? dpCol.Name : dpCol.DataPropertyName;
+                if (_SortInfo.DataPropertyName == sortColumn)
                 {
                     _SortInfo.ReverOrderBy();
                 }
                 else
                 {
-                    _SortInfo = new(dpCol.DataPropertyName, EnOrderBy.asc);
+                    _SortInfo = new(sortColumn, EnOrderBy.asc);
                 }
                 ReBoundControlData(_SortInfo);
             }
