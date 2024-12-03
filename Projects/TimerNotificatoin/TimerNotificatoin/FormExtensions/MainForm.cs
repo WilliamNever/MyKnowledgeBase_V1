@@ -101,11 +101,17 @@ namespace TimerNotificatoin
                 var ntf = nfts.FirstOrDefault(x => x.ID == ntfid) ?? new ClassificationModel();
                 var rtype = ntf.NotificationType;
 
+                var dataObj = dgDataList.Rows[i].DataBoundItem as NotificationModel;
+                if (dataObj != null)
+                {
+                    dgDataList.Rows[i].Cells["AlertDateTime"].Value
+                        = $"{dataObj.AlertDateTime:yyyy-MM-dd HH:mm:ss} {dataObj.AlertDateTime.DayOfWeek}";
+                }
+
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
                     bool.TryParse(dgDataList.Rows[i].Cells["ToAlert"].Value?.ToString(), out bool rsl) && rsl
-                    && DateTime.TryParse(dgDataList.Rows[i].Cells["AlertDateTime"].Value?.ToString(), out DateTime dtRsl)
-                    && dtRsl.Date <= ndt
+                    && (dataObj == null ? false : (dataObj!.AlertDateTime.Date <= ndt))
                     )
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.GreenYellow;

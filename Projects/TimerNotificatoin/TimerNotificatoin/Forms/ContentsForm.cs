@@ -28,8 +28,8 @@ namespace TimerNotificatoin.Forms
             if (messageType == EnMessageType.NotificationShow) { 
                 TopMost = true;
             }
-            Text = message.Title;
-            txtContent.Text = $"Date Time - {message.AlertDateTime}";
+            Text = $"{message.Title} - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
+            txtContent.Text = $"Date Time - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
             txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
             txtContent.Text += message.Description;
             txtContent.Select(0, 0);
