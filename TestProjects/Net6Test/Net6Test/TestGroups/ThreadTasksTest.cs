@@ -28,7 +28,7 @@ namespace Net6Test.TestGroups
             try
             {
                 Task.WaitAll(
-                    tsk1.ContinueWith(rsl =>
+                    await tsk1.ContinueWith( async rsl =>
                     {
                         Console.WriteLine($"{rsl.Status} - In task 3.");
                     }
