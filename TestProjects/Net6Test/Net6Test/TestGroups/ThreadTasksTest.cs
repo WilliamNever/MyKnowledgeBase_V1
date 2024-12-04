@@ -27,10 +27,11 @@ namespace Net6Test.TestGroups
             cans.Cancel();
             try
             {
-                Task.WaitAll(
+                var xx = await Task.WhenAll(
                     await tsk1.ContinueWith( async rsl =>
                     {
                         Console.WriteLine($"{rsl.Status} - In task 3.");
+                        return new KeyValuePair<string, int>("key", 12);
                     }
                     , TaskContinuationOptions.OnlyOnRanToCompletion
                     ));
