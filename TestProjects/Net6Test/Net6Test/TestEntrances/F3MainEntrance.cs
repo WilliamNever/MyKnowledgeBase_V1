@@ -39,7 +39,8 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.LockObj_Test().Wait();
             //InjectionTest.HttpClient_Test(provider).Wait();
 
-            StronglyTypedEnumTests.Test1();
+            //StronglyTypedEnumTests.Test1();
+            ThreadTasksTest.ContinumeWithAsync_Test().Wait();
         }
 
         private async Task ValueTupleTest()
