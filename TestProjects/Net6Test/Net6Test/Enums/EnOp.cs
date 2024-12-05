@@ -14,5 +14,6 @@ namespace Net6Test.Enums
         B = 2,
         A_B = 3,
         C = 4,
+        D = 8
     }
 }

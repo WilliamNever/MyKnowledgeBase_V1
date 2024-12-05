@@ -1,6 +1,7 @@
 ﻿using ConsolePreTest.Tests;
 
-
+var dtDes = DateTime.Now.AddDays(34);
+Console.WriteLine($"{dtDes}");
 
 
 //CommonTest.UTTest1();
@@ -9,7 +10,10 @@
 //CommonTest.UTStackTest();
 //CommonTest.UTTimerTest();
 //CommonTest.JSEncodingTest();
-CommonTest.ThreadTimerTest();
+//CommonTest.ThreadTimerTest();
+
+//SecTest.OpenTest1();
+SecTest.DateTimeUtcConverTest();
 
 
 

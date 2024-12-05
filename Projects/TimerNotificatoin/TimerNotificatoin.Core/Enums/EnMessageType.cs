@@ -17,5 +17,6 @@ namespace TimerNotificatoin.Core.Enums
         Stopped = 8,
         Started = 16,
         CheckPoint = 32,
+        RefreshData = 64,
     }
 }

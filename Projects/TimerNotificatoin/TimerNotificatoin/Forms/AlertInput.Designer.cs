@@ -84,6 +84,7 @@
             // 
             // btnSave
             // 
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSave.DialogResult = DialogResult.OK;
             btnSave.Location = new Point(439, 346);
             btnSave.Name = "btnSave";
@@ -95,6 +96,7 @@
             // 
             // btnCancel
             // 
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.Location = new Point(15, 346);
             btnCancel.Name = "btnCancel";
@@ -105,6 +107,7 @@
             // 
             // txtDescription
             // 
+            txtDescription.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtDescription.Location = new Point(117, 151);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
@@ -170,6 +173,7 @@
             // 
             // dtPicker
             // 
+            dtPicker.CalendarFont = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             dtPicker.Format = DateTimePickerFormat.Custom;
             dtPicker.Location = new Point(117, 45);
@@ -183,8 +187,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(536, 384);
             Controls.Add(pnlBackGrd);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
             MinimizeBox = false;
             Name = "AlertInput";
             Text = "Notification input";

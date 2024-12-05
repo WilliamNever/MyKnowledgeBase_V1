@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Xml.Linq;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
@@ -37,6 +36,10 @@ namespace TimerNotificatoin
                 if ((messageType & EnMessageType.CheckPoint) > 0)
                 {
                     nfyTimer.Text = $"Notification Timer - {DateTime.Now}";
+                }
+                if ((messageType & EnMessageType.RefreshData) > 0)
+                {
+                    ReBoundControlData();
                 }
             });
         }
@@ -98,16 +101,22 @@ namespace TimerNotificatoin
                 var ntf = nfts.FirstOrDefault(x => x.ID == ntfid) ?? new ClassificationModel();
                 var rtype = ntf.NotificationType;
 
+                var dataObj = dgDataList.Rows[i].DataBoundItem as NotificationModel;
+                if (dataObj != null)
+                {
+                    dgDataList.Rows[i].Cells["AlertDateTime"].Value
+                        = $"{dataObj.AlertDateTime:yyyy-MM-dd HH:mm:ss} {dataObj.AlertDateTime.DayOfWeek}";
+                }
+
                 dgDataList.Rows[i].Cells["OrderIndex"].Value = $"{i + 1}";
                 if (
-                    bool.TryParse(dgDataList.Rows[i].Cells["IsAlerted"].Value?.ToString(), out bool rsl) && !rsl
-                    && DateTime.TryParse(dgDataList.Rows[i].Cells["AlertDateTime"].Value?.ToString(), out DateTime dtRsl)
-                    && dtRsl.Date <= ndt
+                    bool.TryParse(dgDataList.Rows[i].Cells["ToAlert"].Value?.ToString(), out bool rsl) && rsl
+                    && (dataObj == null ? false : (dataObj!.AlertDateTime.Date <= ndt))
                     )
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.GreenYellow;
                 }
-                else if (rsl || ((rtype & EnNotificationType.Common) == 0))
+                else if (!rsl || ((rtype & EnNotificationType.Common) == 0))
                 {
                     dgDataList.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(ntf.Alpha, ntf.Red, ntf.Green, ntf.Blue);
                 }

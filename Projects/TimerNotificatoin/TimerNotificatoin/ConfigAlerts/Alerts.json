@@ -5,7 +5,7 @@
     "Title": "Enter ETT",
     "Description": "Input ETT work time!",
     "ClassificationID": 2,
-    "IsAlerted": true
+    "ToAlert": true
   },
   {
     "Id": "1f21c94d-9f75-477b-bb74-bcb6eb334efa",
@@ -13,6 +13,6 @@
     "Title": "Testing",
     "Description": "Show Temp Alerting!",
     "ClassificationID": 3,
-    "IsAlerted": true
+    "ToAlert": true
   }
 ]

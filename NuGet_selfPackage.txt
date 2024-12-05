@@ -40,3 +40,13 @@ File name - AppendNugetTest.nuspec
         <file src="bin\Debug\XXXXXXX.dll" target="lib\XXXXXX.dll"/>
     </files>
 </package>
+
+
+for vs .csproj
+
+<ItemGroup>
+  <Content Include="readme.txt">
+    <Pack>true</Pack>
+    <PackagePath>\</PackagePath>
+  </Content>
+</ItemGroup>

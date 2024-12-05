@@ -1,16 +1,49 @@
-﻿using Net6Test.Models;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task ContinumeWithAsync_Test()
+        {
+            var cans = new CancellationTokenSource();
+            var tsk1 = Task.Run(async () =>
+            {
+                await Console.Out.WriteLineAsync("In task 1.");
+                //throw new Exception("output -->>>>>>");
+                Thread.Sleep(3000);
+                try
+                {
+                    cans.Token.ThrowIfCancellationRequested();
+                }
+                catch (Exception ex)
+                {
+                    await Console.Out.WriteLineAsync($"{ex.Message} - In task 1.");
+                }
+                await Console.Out.WriteLineAsync($"ending - In task 1.");
+            }, cans.Token);
+            //var tsk2 = Task.Run(async () => { await Console.Out.WriteLineAsync("In task 2."); });
+            Thread.Sleep(1500);
+            cans.Cancel();
+            try
+            {
+                var xx = await Task.WhenAll(
+                    await tsk1.ContinueWith( async rsl =>
+                    {
+                        Console.WriteLine($"{rsl.Status} - In task 3.");
+                        return new KeyValuePair<string, int>("key", 12);
+                    }
+                    , TaskContinuationOptions.OnlyOnRanToCompletion
+                    ));
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync($"Outter Main - {ex.Message}");
+            }
+            //Thread.Sleep(5000);
+            await Console.Out.WriteLineAsync("Over! -> :><:");
+        }
+
         public async static Task ConcurrentBag_T_Test()
         {
             var bag = new ConcurrentBag<int>();

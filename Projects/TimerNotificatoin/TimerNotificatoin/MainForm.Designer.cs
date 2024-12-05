@@ -31,18 +31,11 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             dgDataList = new DataGridView();
-            OrderIndex = new DataGridViewTextBoxColumn();
-            Id = new DataGridViewTextBoxColumn();
-            ClassificationID = new DataGridViewTextBoxColumn();
-            NotificationType = new DataGridViewTextBoxColumn();
-            ClassificationName = new DataGridViewTextBoxColumn();
-            Title = new DataGridViewTextBoxColumn();
-            AlertDateTime = new DataGridViewTextBoxColumn();
-            IsAlerted = new DataGridViewTextBoxColumn();
             nfyTimer = new NotifyIcon(components);
             cmsIcon = new ContextMenuStrip(components);
             tmiStartOrStop = new ToolStripMenuItem();
             tmiOpenOrHiden = new ToolStripMenuItem();
+            tmiNotifyConfigFolder = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             tmiExit = new ToolStripMenuItem();
             pnlBackGround = new Panel();
@@ -57,12 +50,20 @@
             tsmShowNotificationsFoler = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             tsdmExit = new ToolStripMenuItem();
+            tmiEdit = new ToolStripMenuItem();
+            tsmDefaultSort = new ToolStripMenuItem();
             tmiHelp = new ToolStripMenuItem();
             tsdmHelperFile = new ToolStripMenuItem();
             btnStop = new Button();
             btnStart = new Button();
-            tmiEdit = new ToolStripMenuItem();
-            tsmDefaultSort = new ToolStripMenuItem();
+            OrderIndex = new DataGridViewTextBoxColumn();
+            Id = new DataGridViewTextBoxColumn();
+            ClassificationID = new DataGridViewTextBoxColumn();
+            NotificationType = new DataGridViewTextBoxColumn();
+            ClassificationName = new DataGridViewTextBoxColumn();
+            Title = new DataGridViewTextBoxColumn();
+            AlertDateTime = new DataGridViewTextBoxColumn();
+            ToAlert = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgDataList).BeginInit();
             cmsIcon.SuspendLayout();
             pnlBackGround.SuspendLayout();
@@ -75,7 +76,7 @@
             dgDataList.AllowUserToOrderColumns = true;
             dgDataList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgDataList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, ClassificationID, NotificationType, ClassificationName, Title, AlertDateTime, IsAlerted });
+            dgDataList.Columns.AddRange(new DataGridViewColumn[] { OrderIndex, Id, ClassificationID, NotificationType, ClassificationName, Title, AlertDateTime, ToAlert });
             dgDataList.Location = new Point(12, 39);
             dgDataList.Name = "dgDataList";
             dgDataList.ReadOnly = true;
@@ -85,71 +86,6 @@
             dgDataList.CellDoubleClick += dgDataList_CellDoubleClick;
             dgDataList.ColumnHeaderMouseDoubleClick += dgDataList_ColumnHeaderMouseDoubleClick;
             dgDataList.RowHeaderMouseDoubleClick += dgDataList_RowHeaderMouseDoubleClick;
-            // 
-            // OrderIndex
-            // 
-            OrderIndex.Frozen = true;
-            OrderIndex.HeaderText = "Index";
-            OrderIndex.Name = "OrderIndex";
-            OrderIndex.ReadOnly = true;
-            OrderIndex.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Id
-            // 
-            Id.DataPropertyName = "Id";
-            Id.HeaderText = "Id";
-            Id.Name = "Id";
-            Id.ReadOnly = true;
-            Id.SortMode = DataGridViewColumnSortMode.Programmatic;
-            Id.Visible = false;
-            // 
-            // ClassificationID
-            // 
-            ClassificationID.DataPropertyName = "ClassificationID";
-            ClassificationID.HeaderText = "ClassificationID";
-            ClassificationID.Name = "ClassificationID";
-            ClassificationID.ReadOnly = true;
-            ClassificationID.Visible = false;
-            // 
-            // NotificationType
-            // 
-            NotificationType.DataPropertyName = "NotificationType";
-            NotificationType.HeaderText = "Notification Type";
-            NotificationType.Name = "NotificationType";
-            NotificationType.ReadOnly = true;
-            NotificationType.SortMode = DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ClassificationName
-            // 
-            ClassificationName.DataPropertyName = "ClassificationName";
-            ClassificationName.HeaderText = "Classification";
-            ClassificationName.Name = "ClassificationName";
-            ClassificationName.ReadOnly = true;
-            ClassificationName.SortMode = DataGridViewColumnSortMode.Programmatic;
-            // 
-            // Title
-            // 
-            Title.DataPropertyName = "Title";
-            Title.HeaderText = "Title";
-            Title.Name = "Title";
-            Title.ReadOnly = true;
-            Title.SortMode = DataGridViewColumnSortMode.Programmatic;
-            // 
-            // AlertDateTime
-            // 
-            AlertDateTime.DataPropertyName = "AlertDateTime";
-            AlertDateTime.HeaderText = "Alert Date Time";
-            AlertDateTime.Name = "AlertDateTime";
-            AlertDateTime.ReadOnly = true;
-            AlertDateTime.SortMode = DataGridViewColumnSortMode.Programmatic;
-            // 
-            // IsAlerted
-            // 
-            IsAlerted.DataPropertyName = "IsAlerted";
-            IsAlerted.HeaderText = "Is Alerted";
-            IsAlerted.Name = "IsAlerted";
-            IsAlerted.ReadOnly = true;
-            IsAlerted.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // nfyTimer
             // 
@@ -161,33 +97,39 @@
             // 
             // cmsIcon
             // 
-            cmsIcon.Items.AddRange(new ToolStripItem[] { tmiStartOrStop, tmiOpenOrHiden, toolStripSeparator1, tmiExit });
+            cmsIcon.Items.AddRange(new ToolStripItem[] { tmiStartOrStop, tmiOpenOrHiden, tmiNotifyConfigFolder, toolStripSeparator1, tmiExit });
             cmsIcon.Name = "cmsIcon";
-            cmsIcon.Size = new Size(104, 76);
+            cmsIcon.Size = new Size(174, 98);
             cmsIcon.Opening += cmsIcon_Opening;
             cmsIcon.ItemClicked += cmsIcon_ItemClicked;
             // 
             // tmiStartOrStop
             // 
             tmiStartOrStop.Name = "tmiStartOrStop";
-            tmiStartOrStop.Size = new Size(103, 22);
+            tmiStartOrStop.Size = new Size(173, 22);
             tmiStartOrStop.Text = "Start";
             // 
             // tmiOpenOrHiden
             // 
             tmiOpenOrHiden.Name = "tmiOpenOrHiden";
-            tmiOpenOrHiden.Size = new Size(103, 22);
+            tmiOpenOrHiden.Size = new Size(173, 22);
             tmiOpenOrHiden.Text = "Open";
+            // 
+            // tmiNotifyConfigFolder
+            // 
+            tmiNotifyConfigFolder.Name = "tmiNotifyConfigFolder";
+            tmiNotifyConfigFolder.Size = new Size(173, 22);
+            tmiNotifyConfigFolder.Text = "Notification Folder";
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(100, 6);
+            toolStripSeparator1.Size = new Size(170, 6);
             // 
             // tmiExit
             // 
             tmiExit.Name = "tmiExit";
-            tmiExit.Size = new Size(103, 22);
+            tmiExit.Size = new Size(173, 22);
             tmiExit.Text = "Exit";
             // 
             // pnlBackGround
@@ -302,6 +244,21 @@
             tsdmExit.Size = new Size(203, 22);
             tsdmExit.Text = "Exit";
             // 
+            // tmiEdit
+            // 
+            tmiEdit.DropDownItems.AddRange(new ToolStripItem[] { tsmDefaultSort });
+            tmiEdit.Name = "tmiEdit";
+            tmiEdit.Size = new Size(39, 20);
+            tmiEdit.Text = "Edit";
+            tmiEdit.DropDownItemClicked += DropDownItemClicked;
+            // 
+            // tsmDefaultSort
+            // 
+            tsmDefaultSort.AccessibleName = "DefaultSort";
+            tsmDefaultSort.Name = "tsmDefaultSort";
+            tsmDefaultSort.Size = new Size(136, 22);
+            tsmDefaultSort.Text = "Default Sort";
+            // 
             // tmiHelp
             // 
             tmiHelp.DropDownItems.AddRange(new ToolStripItem[] { tsdmHelperFile });
@@ -339,20 +296,69 @@
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
             // 
-            // tmiEdit
+            // OrderIndex
             // 
-            tmiEdit.DropDownItems.AddRange(new ToolStripItem[] { tsmDefaultSort });
-            tmiEdit.Name = "tmiEdit";
-            tmiEdit.Size = new Size(39, 20);
-            tmiEdit.Text = "Edit";
-            tmiEdit.DropDownItemClicked += DropDownItemClicked;
+            OrderIndex.Frozen = true;
+            OrderIndex.HeaderText = "Index";
+            OrderIndex.Name = "OrderIndex";
+            OrderIndex.ReadOnly = true;
+            OrderIndex.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
-            // tsmDefaultSort
+            // Id
             // 
-            tsmDefaultSort.AccessibleName = "DefaultSort";
-            tsmDefaultSort.Name = "tsmDefaultSort";
-            tsmDefaultSort.Size = new Size(180, 22);
-            tsmDefaultSort.Text = "Default Sort";
+            Id.DataPropertyName = "Id";
+            Id.HeaderText = "Id";
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            Id.SortMode = DataGridViewColumnSortMode.Programmatic;
+            Id.Visible = false;
+            // 
+            // ClassificationID
+            // 
+            ClassificationID.DataPropertyName = "ClassificationID";
+            ClassificationID.HeaderText = "ClassificationID";
+            ClassificationID.Name = "ClassificationID";
+            ClassificationID.ReadOnly = true;
+            ClassificationID.Visible = false;
+            // 
+            // NotificationType
+            // 
+            NotificationType.DataPropertyName = "NotificationType";
+            NotificationType.HeaderText = "Notification Type";
+            NotificationType.Name = "NotificationType";
+            NotificationType.ReadOnly = true;
+            NotificationType.SortMode = DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ClassificationName
+            // 
+            ClassificationName.DataPropertyName = "ClassificationName";
+            ClassificationName.HeaderText = "Classification";
+            ClassificationName.Name = "ClassificationName";
+            ClassificationName.ReadOnly = true;
+            ClassificationName.SortMode = DataGridViewColumnSortMode.Programmatic;
+            // 
+            // Title
+            // 
+            Title.DataPropertyName = "Title";
+            Title.HeaderText = "Title";
+            Title.Name = "Title";
+            Title.ReadOnly = true;
+            Title.SortMode = DataGridViewColumnSortMode.Programmatic;
+            // 
+            // AlertDateTime
+            // 
+            AlertDateTime.HeaderText = "Alert Date Time";
+            AlertDateTime.Name = "AlertDateTime";
+            AlertDateTime.ReadOnly = true;
+            AlertDateTime.SortMode = DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ToAlert
+            // 
+            ToAlert.DataPropertyName = "ToAlert";
+            ToAlert.HeaderText = "To Alert";
+            ToAlert.Name = "ToAlert";
+            ToAlert.ReadOnly = true;
+            ToAlert.SortMode = DataGridViewColumnSortMode.Programmatic;
             // 
             // MainForm
             // 
@@ -402,6 +408,9 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem tsdmExit;
         private ToolStripMenuItem tsmShowNotificationsFoler;
+        private ToolStripMenuItem tmiEdit;
+        private ToolStripMenuItem tsmDefaultSort;
+        private ToolStripMenuItem tmiNotifyConfigFolder;
         private DataGridViewTextBoxColumn OrderIndex;
         private DataGridViewTextBoxColumn Id;
         private DataGridViewTextBoxColumn ClassificationID;
@@ -409,8 +418,6 @@
         private DataGridViewTextBoxColumn ClassificationName;
         private DataGridViewTextBoxColumn Title;
         private DataGridViewTextBoxColumn AlertDateTime;
-        private DataGridViewTextBoxColumn IsAlerted;
-        private ToolStripMenuItem tmiEdit;
-        private ToolStripMenuItem tsmDefaultSort;
+        private DataGridViewTextBoxColumn ToAlert;
     }
 }
