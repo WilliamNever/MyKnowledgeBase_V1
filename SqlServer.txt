@@ -26,6 +26,14 @@ declare
 
 ------------------------------------------------------------------------------------------
 
+-- To check if a column exists or not.
+if exists(SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'[--Table name--]') AND name = '--Column name--')
+Begin
+	--some commands
+end
+
+------------------------------------------------------------------------------------------
+
 Try / Catch block in T-sql
 .there is no finally block in T-sql
 
