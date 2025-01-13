@@ -1,0 +1,58 @@
+            services
+                .AddAuthentication(
+                opt =>
+                {
+                    opt.DefaultAuthenticateScheme = "Multi-Bearer";
+                    opt.DefaultChallengeScheme = "Multi-Bearer";
+                }
+                //IdentityServerAuthenticationDefaults.AuthenticationScheme
+                )
+                .AddPolicyScheme("Multi-Bearer", "Authenticate TASS or JWT", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                        if (authHeader?.ToLower().StartsWith("bearer ") == true)
+                        {
+                            if ((authHeader.Length > 64) && authHeader.Contains('.'))
+                            { // Assume a JWT Bearer Token was passed and use JwtBearer to authenticate the request
+                                return "JWT";
+                            }
+                            // Assume a TAAS Bearer Token was passed and use IdentityServerAuthentication to authenticate the request
+                            return "TAAS";
+                        }
+                        return "TAAS";
+                    };
+                })
+                .AddIdentityServerAuthentication("TAAS", options =>
+                {
+                    using (var provider = services.BuildServiceProvider())
+                    {
+                        var authenticationSettings = provider.GetService<IOptions<AuthenticationSettings>>().Value;
+
+                        options.Authority = authenticationSettings.IAM_Authority;
+                        options.ApiName = authenticationSettings.IAM_ApiName;
+                        options.ApiSecret = authenticationSettings.IAM_ApiSecret;
+                        options.CacheDuration = TimeSpan.FromMinutes(int.Parse(authenticationSettings.IAM_TokenCacheDuration));
+                        options.EnableCaching = true;
+                    }
+                })
+                .AddJwtBearer("JWT", options =>
+                {
+                    using (var provider = services.BuildServiceProvider())
+                    {
+                        var jwtSettings = provider.GetService<IOptions<JwtSettings>>().Value;
+
+                        options.Authority = jwtSettings.Authority;
+                        //options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidIssuer = jwtSettings.Issuer,
+                            ValidateIssuer = true,
+                            ValidAudience = jwtSettings.Audience,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                        };
+                    }
+                })
+                ;

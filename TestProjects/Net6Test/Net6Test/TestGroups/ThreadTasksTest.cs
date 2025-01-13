@@ -122,5 +122,17 @@ namespace Net6Test.TestGroups
             //await Task.Run(() => { act2(); act1(); });
             Console.WriteLine("Exit");
         }
+
+        public static async Task TaskAwait_Test()
+        {
+            int i = 0;
+            i = await Task.Run(async () => {
+                Console.WriteLine("In <-");
+                await Task.Delay(3000);
+                Console.WriteLine("out ->");
+                return 3;
+            }).ConfigureAwait(false);
+            Console.WriteLine($"Ended - {i}");
+        }
     }
 }
