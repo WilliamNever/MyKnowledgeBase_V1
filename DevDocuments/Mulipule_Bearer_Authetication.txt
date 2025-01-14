@@ -1,3 +1,4 @@
+1.
 reference to - 
 https://learn.microsoft.com/en-us/aspnet/core/security/authorization/limitingidentitybyscheme?view=aspnetcore-9.0
 
@@ -59,3 +60,7 @@ https://learn.microsoft.com/en-us/aspnet/core/security/authorization/limitingide
                     }
                 })
                 ;
+
+
+2.
+implement IClaimsTransformation to rearrange the claims in HttpContext
