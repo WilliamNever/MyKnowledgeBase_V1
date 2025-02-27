@@ -288,3 +288,14 @@ function RandomString(charNum, baseStrings = null) {
     }
     return rsl;
 }
+/*
+reference js lib by jscript
+ */
+function AddJsReferences(urls = [], rdm = false) {
+    if (urls.length > 0) {
+        for (var i = 0; i < urls.length; i++) {
+            let url = urls[i] + (rdm === true ? '?v=' + RandomString(15) : '');
+            $('html>head').append($('<script src="' + url + '" type="text/javascript"></script>'));
+        }
+    }
+}
