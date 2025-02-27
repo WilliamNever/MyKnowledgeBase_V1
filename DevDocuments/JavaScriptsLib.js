@@ -270,3 +270,21 @@ var GetInforModal = async function () {
         },
     };
 };
+
+/*
+Get random strings with specificated char number.
+ */
+function RandomString(charNum, baseStrings = null) {
+    let loop = Math.ceil(charNum) < 1 ? 1 : Math.ceil(charNum);
+    let stringBase = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    if (baseStrings)
+        stringBase = baseStrings;
+    let rsl = '';
+    let min = 0;
+    let max = stringBase.length;
+    for (let i = 0; i < loop; i++) {
+        let rnd = Math.floor(Math.random() * (max - min));
+        rsl = rsl + stringBase[min + rnd];
+    }
+    return rsl;
+}
