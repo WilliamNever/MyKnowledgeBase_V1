@@ -42,7 +42,8 @@ namespace Net6Test.TestEntrances
             //StronglyTypedEnumTests.Test1();
             //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
             //ThreadTasksTest.TaskAwait_Test().Wait();
-            CollectionListTest.NestListToExtraList_Test(provider).Wait();
+            //CollectionListTest.NestListToExtraList_Test(provider).Wait();
+            StringChangeTests.UrlParseQueryString_Test().Wait();
         }
 
         private async Task ValueTupleTest()
