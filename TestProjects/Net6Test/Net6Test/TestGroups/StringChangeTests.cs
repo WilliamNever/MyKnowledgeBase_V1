@@ -19,6 +19,8 @@ namespace Net6Test.TestGroups
             var query = new Uri(url).Query;
             var querystring = System.Web.HttpUtility.ParseQueryString(query);
             await Console.Out.WriteLineAsync(query);
+            await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("DoMain")));
+            await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("dtype")));
             await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("field")));
             await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("code")));
         }
