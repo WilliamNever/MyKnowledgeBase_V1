@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.Extensions.Primitives;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,15 @@ namespace Net6Test.TestGroups
             await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("dtype")));
             await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("field")));
             await Console.Out.WriteLineAsync(WebUtility.UrlDecode(querystring.Get("code")));
+
+            var tt = "string cut";// await Console.In.ReadLineAsync();
+            Console.WriteLine(StringValues.Empty.ToString() == string.Empty);
+            string str = "0123456789";
+            await Console.Out.WriteLineAsync($"{tt} - {str[4..5]}");
+
+            Console.WriteLine("Date time - ");
+            await Console.Out.WriteLineAsync(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+            await Console.Out.WriteLineAsync(DateTime.Now.ToString("zzz"));
         }
     }
 }
