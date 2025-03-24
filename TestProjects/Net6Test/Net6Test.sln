@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6WebSite", "Net6WebSite\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardLibrary", "StandardLibrary\StandardLibrary.csproj", "{E9E16879-7341-4FD1-806E-2FE78988BD80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApisTest", "ApisTest\ApisTest.csproj", "{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApisTest", "ApisTest\ApisTest.csproj", "{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartialLibrary", "PartialLibrary\PartialLibrary.csproj", "{C04388A9-D1A5-4F11-A1AB-FD4BCC228B72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87DEA81F-FFC4-4FF9-A6E3-D7DE09F72A03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04388A9-D1A5-4F11-A1AB-FD4BCC228B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04388A9-D1A5-4F11-A1AB-FD4BCC228B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04388A9-D1A5-4F11-A1AB-FD4BCC228B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04388A9-D1A5-4F11-A1AB-FD4BCC228B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

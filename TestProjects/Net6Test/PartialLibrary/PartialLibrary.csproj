@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="StandardLibrary">
+      <HintPath>Lib\StandardLibrary.dll</HintPath>
+    </Reference>
+    <None Include="Lib\ReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lib\ReadMe.txt">
+      <Pack>true</Pack>
+      <PackagePath>lib\</PackagePath>
+    </Content>
+    <Content Include="Lib\StandardLibrary.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\net6.0</PackagePath>
+    </Content>
+    <Content Include="Lib\StandardLibrary.dll">
+      <Pack>true</Pack>
+      <PackagePath>lib\netstandard2.0</PackagePath>
+    </Content>
+  </ItemGroup>
+</Project>

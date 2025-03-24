@@ -43,7 +43,9 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
             //ThreadTasksTest.TaskAwait_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
-            StringChangeTests.UrlParseQueryString_Test().Wait();
+            //StringChangeTests.UrlParseQueryString_Test().Wait();
+
+            XMLSchemaTest.Test1().Wait();
         }
 
         private async Task ValueTupleTest()
