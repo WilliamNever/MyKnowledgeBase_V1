@@ -299,3 +299,45 @@ function AddJsReferences(urls = [], rdm = false) {
         }
     }
 }
+
+
+/*
+    Packaged a js file, the js in this file will run before Dom loaded.
+    Use it with caution.
+ */
+var waitingDialog = waitingDialog || (function ($) {
+    'use strict';   // constrain the access level
+    var htmlPannel = '#progressModal';
+    var dialog = undefined;
+    return {
+        
+        show: function (message, options) {
+            this.hide();
+
+            let opt = options ? options : { backdrop: 'static', keyboard: false };
+            if (message) {
+                $(htmlPannel + ' .modal-header h3').text(message);
+            }
+            else {
+                $(htmlPannel + ' .modal-header h3').text('Loading...');
+            }
+            dialog = new bootstrap.Modal(htmlPannel, opt);
+            dialog.show();
+        },
+        /*
+         * Closes dialog
+         */
+        hide: function () {
+            if (dialog) {
+                dialog.hide();
+                if ($('div.modal-backdrop.fade.show').is('*')) {
+                    $('div.modal-backdrop.fade.show').remove();
+                }
+            }
+        },
+        getInstance: function () {
+            return dialog;
+        }
+    };
+
+})(jQuery);
