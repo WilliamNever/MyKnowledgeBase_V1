@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Net6Test.TestGroups
@@ -33,6 +34,14 @@ namespace Net6Test.TestGroups
             Console.WriteLine("Date time - ");
             await Console.Out.WriteLineAsync(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             await Console.Out.WriteLineAsync(DateTime.Now.ToString("zzz"));
+        }
+
+        public async static Task StringEndsSub_Test()
+        {
+            string ss = "VD_ASEFF23FE.FasdfRe__28";
+            var exp = new Regex(@"[\d]+$", RegexOptions.RightToLeft);
+            var mc = exp.Match(ss);
+            var mcs = exp.Matches(ss);
         }
     }
 }

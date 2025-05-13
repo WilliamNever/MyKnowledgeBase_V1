@@ -45,7 +45,8 @@ namespace Net6Test.TestEntrances
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
             //StringChangeTests.UrlParseQueryString_Test().Wait();
 
-            XMLSchemaTest.Test1().Wait();
+            //XMLSchemaTest.Test1().Wait();
+            StringChangeTests.StringEndsSub_Test().Wait();
         }
 
         private async Task ValueTupleTest()
