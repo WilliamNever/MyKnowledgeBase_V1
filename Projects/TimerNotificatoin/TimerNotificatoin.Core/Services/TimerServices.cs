@@ -41,8 +41,12 @@ namespace TimerNotificatoin.Core.Services
                     x.StartDateTime = dt;
                 });
                 actNotifies.AddRange(activeAlerts.Where(x => !(x.LeftSeconds > 0)).ToList());
-                actNotifies.ForEach(x => x.ToAlert = false);
-
+                //To send out notification/s
+                if (actNotifies.Any())
+                {
+                    notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
+                }
+                actNotifies.ForEach(x => { x.ToAlert = false; x.LoopReset(dt); });
                 isAllAlerted = Notifications.All(x => !x.ToAlert);
                 if (isAllAlerted) Stop();
             }
@@ -63,12 +67,6 @@ namespace TimerNotificatoin.Core.Services
                 }
             }
 
-
-            if (actNotifies.Any())
-            {
-                notificatoin.ShowMessage(actNotifies, Enums.EnMessageType.NotificationShow);
-            }
-            
             if (!isAllAlerted)
             {
                 var refreshGrid = StartDate != dt.Date;

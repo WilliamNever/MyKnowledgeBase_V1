@@ -10,6 +10,12 @@ namespace TimerNotificatoin.Forms
         {
             InitializeComponent();
         }
+        public static ContentsForm CreateForm(string title, Action? ClosedAction, Font fnt)
+        {
+            var fm = CreateForm(title, fnt);
+            fm.SelfClosed = ClosedAction;
+            return fm;
+        }
         public static ContentsForm CreateForm(string title, Font fnt)
         {
             var fm = new ContentsForm() { Text = title };
@@ -25,7 +31,8 @@ namespace TimerNotificatoin.Forms
 
         public void ShowMessage(NotificationModel message, EnMessageType messageType)
         {
-            if (messageType == EnMessageType.NotificationShow) { 
+            if (messageType == EnMessageType.NotificationShow)
+            {
                 TopMost = true;
             }
             Text = $"{message.Title} - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
@@ -37,6 +44,13 @@ namespace TimerNotificatoin.Forms
 
         public void ShowMessage(IEnumerable<NotificationModel> message, EnMessageType messageType)
         {
+        }
+
+        public Action? SelfClosed { get; set; } = null;
+        private void ContentsForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (SelfClosed != null)
+                SelfClosed();
         }
     }
 }

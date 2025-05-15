@@ -174,6 +174,8 @@ namespace TimerNotificatoin
 
         private List<NotificationModel> ReadConfigedAlerts()
         {
+            HOSTServices.LoadNotificationTemplatesFromFile();
+
             var txt = File.ReadAllText(settings.Notifications);
             var notifies = ConversionsHelper.NJ_DeserializeToJson<List<NotificationModel>>(txt);
             return notifies ?? new List<NotificationModel>();

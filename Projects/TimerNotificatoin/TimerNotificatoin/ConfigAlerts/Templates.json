@@ -1,2 +1,7 @@
-{
-}
+[
+  {
+    "Id": "f954c0a7-17cf-4c1e-82e3-4883ca4ca397",
+    "Name": "15:00 every days",
+    "CronoExp": "0 15 * * *"
+  }
+]
