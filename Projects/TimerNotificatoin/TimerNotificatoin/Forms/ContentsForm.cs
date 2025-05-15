@@ -35,8 +35,8 @@ namespace TimerNotificatoin.Forms
             {
                 TopMost = true;
             }
-            Text = $"{message.Title} - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
-            txtContent.Text = $"Date Time - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
+            Text = $"{message.Title} - {message.CurrentAlertDateTime:yyyy-MM-dd HH:mm:ss} {message.CurrentAlertDateTime.DayOfWeek}";
+            txtContent.Text = $"Date Time - {message.CurrentAlertDateTime:yyyy-MM-dd HH:mm:ss} {message.CurrentAlertDateTime.DayOfWeek}";
             txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
             txtContent.Text += message.Description;
             txtContent.Select(0, 0);
