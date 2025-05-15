@@ -1,4 +1,5 @@
 ﻿using TimerNotificatoin.Core.Attributes;
+using TimerNotificatoin.Core.Interfaces;
 
 namespace TimerNotificatoin.Core.Models
 {
@@ -19,8 +20,10 @@ namespace TimerNotificatoin.Core.Models
     //}
 
     [HelperOutput(@"class NotificationTemplateModel - Template of Notification")]
-    public class NotificationTemplateModel
+    public class NotificationTemplateModel : ICompareIdentity<Guid>
     {
+        Guid ICompareIdentity<Guid>.Identity { get => Id; }
+
         [HelperOutput("Guid Id - The identity of the alert")]
         public Guid Id { get; set; }
         [HelperOutput("string Name - The name of the Notification Template")]

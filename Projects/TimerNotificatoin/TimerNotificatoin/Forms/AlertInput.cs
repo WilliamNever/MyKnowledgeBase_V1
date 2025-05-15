@@ -1,8 +1,8 @@
 ﻿using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 using TimerNotificatoin.Core.Helpers;
+using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TimerNotificatoin.Forms
 {
@@ -46,16 +46,45 @@ namespace TimerNotificatoin.Forms
             txtDescription.Text = notification.Description;
             dtPicker.Value = notification.AlertDateTime;
             cbAlert.Checked = notification.ToAlert;
-            for (int i = 0; i < cbNType.Items.Count; i++)
+            //for (int i = 0; i < cbNType.Items.Count; i++)
+            //{
+            //    var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
+            //    if (itmVal.ID == notification.ClassificationID)
+            //    {
+            //        cbNType.SelectedIndex = i;
+            //        break;
+            //    }
+            //}
+            ComboBoxSelectedItemChange(cbNType, notificate.ClassificationID);
+
+            cbkHasEndDate.Checked = false;
+            if (notificate.NotificationType == EnNotificationType.Loop)
             {
-                var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
-                if (itmVal.ID == notification.ClassificationID)
+                if (notificate.EndDatetime.HasValue)
                 {
-                    cbNType.SelectedIndex = i;
+                    cbkHasEndDate.Checked = notificate.EndDatetime.HasValue;
+                    dtpEndOfDate.Value = notificate.EndDatetime.Value;
+                }
+                if (notificate.NTemplateId.HasValue)
+                {
+                    ComboBoxSelectedItemChange(dlLoopTemplates, notificate.NTemplateId.Value);
+                }
+            }
+        }
+        #region function methods
+        protected static void ComboBoxSelectedItemChange<T>(ComboBox cbbk, T value)
+        {
+            for (int i = 0; i < cbbk.Items.Count; i++)
+            {
+                var itmVal = cbbk.Items[i] as ICompareIdentity<T>;
+                if (itmVal != null && itmVal.Identity != null && itmVal.Identity.Equals(value))
+                {
+                    cbbk.SelectedIndex = i;
                     break;
                 }
             }
         }
+        #endregion
         public NotificationModel GetNotification()
         {
             notificate.Title = txtTitle.Text;
@@ -63,6 +92,12 @@ namespace TimerNotificatoin.Forms
             notificate.AlertDateTime = dtPicker.Value;
             notificate.ToAlert = cbAlert.Checked;
             notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
+
+            if (notificate.NotificationType == EnNotificationType.Loop)
+            {
+                notificate.EndDatetime = cbkHasEndDate.Checked ? dtpEndOfDate.Value : null;
+                notificate.NTemplateId = (dlLoopTemplates.SelectedItem as NotificationTemplateModel)?.Id;
+            }
             return notificate;
         }
 
@@ -116,10 +151,12 @@ namespace TimerNotificatoin.Forms
                 && selectedType.NotificationType == EnNotificationType.Loop)
             {
                 grpBoxLooper.Show();
+                grpBoxLooper.Enabled = true;
             }
             else
             {
                 grpBoxLooper.Hide();
+                grpBoxLooper.Enabled = false;
             }
         }
 
