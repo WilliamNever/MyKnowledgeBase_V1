@@ -21,9 +21,10 @@ namespace TimerNotificatoin.Core.Models
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
         public virtual DateTime AlertDateTime { get; set; }
 #if !Debug
-        [Newtonsoft.Json.JsonIgnore]
 #endif
-        public virtual DateTime CurrentAlertDateTime { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual DateTime CurrentAlertDateTime { get => currAlertDate ?? AlertDateTime; set => currAlertDate = value; }
+        private DateTime? currAlertDate = null;
 #if !Debug
         [Newtonsoft.Json.JsonIgnore]
 #endif

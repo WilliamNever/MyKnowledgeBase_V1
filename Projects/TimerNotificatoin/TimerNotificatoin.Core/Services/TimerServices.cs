@@ -43,7 +43,6 @@ namespace TimerNotificatoin.Core.Services
                 actNotifies.AddRange(activeAlerts.Where(x => !(x.LeftSeconds > 0)).ToList());
                 actNotifies.ForEach(x => { 
                     x.ToAlert = false; 
-                    x.CurrentAlertDateTime = x.AlertDateTime; 
                     x.LoopReset(dt); 
                 });
                 isAllAlerted = Notifications.All(x => !x.ToAlert);
@@ -83,6 +82,11 @@ namespace TimerNotificatoin.Core.Services
 
                 notificatoin.ShowMessage("Check Point",
                     refreshGrid ? Enums.EnMessageType.CheckPoint | Enums.EnMessageType.RefreshData : Enums.EnMessageType.CheckPoint);
+            }
+
+            if (actNotifies.Any())
+            {
+                actNotifies.ForEach(x => x.CurrentAlertDateTime = x.AlertDateTime);
             }
         }
         public List<NotificationModel> GetActiveNotification()

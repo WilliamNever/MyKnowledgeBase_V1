@@ -92,6 +92,7 @@ namespace TimerNotificatoin.Forms
             notificate.AlertDateTime = dtPicker.Value;
             notificate.ToAlert = cbAlert.Checked;
             notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
+            notificate.CurrentAlertDateTime = notificate.AlertDateTime;
 
             if (notificate.NotificationType == EnNotificationType.Loop)
             {
