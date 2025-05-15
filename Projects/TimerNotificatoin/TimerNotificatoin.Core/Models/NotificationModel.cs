@@ -86,16 +86,16 @@ namespace TimerNotificatoin.Core.Models
             if (tmp != null)
             {
                 CronExpression expression = CronExpression.Parse(tmp.CronoExp);
-                var next = expression.GetNextOccurrence(DateTime.UtcNow)?.ToLocalTime();
+                var next = expression.GetNextOccurrence(new DateTimeOffset(dt), TimeZoneInfo.Local);
 
                 if (
                     next.HasValue
                     && (
                     (!EndDatetime.HasValue)
-                    || (EndDatetime.HasValue && next >= EndDatetime.Value && EndDatetime.Value > AlertDateTime)
+                    || (EndDatetime.HasValue && next <= EndDatetime.Value && EndDatetime.Value > AlertDateTime)
                     ))
                 {
-                    AlertDateTime = next.Value;
+                    AlertDateTime = next.Value.DateTime;
                     LeftSeconds = AlertDateTime.Subtract(dt).TotalSeconds * 1000;
                     StartDateTime = dt;
                     ToAlert = true;
