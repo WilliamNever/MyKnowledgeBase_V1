@@ -14,8 +14,8 @@ namespace TimerNotificatoin
             ApplicationConfiguration.Initialize();
 
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NonClientAreaEnabled;
-            //Application.Run(new MainForm());
-            Application.Run(new Forms.AlertInput());
+            Application.Run(new MainForm());
+            //Application.Run(new Forms.AlertInput());
         }
     }
 }
