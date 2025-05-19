@@ -43,6 +43,7 @@ namespace TimerNotificatoin.Core.Services
                 actNotifies.AddRange(activeAlerts.Where(x => !(x.LeftSeconds > 0)).ToList());
                 actNotifies.ForEach(x => { 
                     x.ToAlert = false; 
+                    x.CurrentAlertDateTime = x.AlertDateTime;
                     x.LoopReset(dt); 
                 });
                 isAllAlerted = Notifications.All(x => !x.ToAlert);
