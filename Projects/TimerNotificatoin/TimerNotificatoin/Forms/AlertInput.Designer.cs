@@ -74,6 +74,7 @@
             // 
             // grpBoxLooper
             // 
+            grpBoxLooper.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             grpBoxLooper.Controls.Add(cbkHasEndDate);
             grpBoxLooper.Controls.Add(btnShowDetails);
             grpBoxLooper.Controls.Add(dlLoopTemplates);
@@ -81,7 +82,7 @@
             grpBoxLooper.Controls.Add(label7);
             grpBoxLooper.Location = new Point(324, 11);
             grpBoxLooper.Name = "grpBoxLooper";
-            grpBoxLooper.Size = new Size(267, 125);
+            grpBoxLooper.Size = new Size(267, 129);
             grpBoxLooper.TabIndex = 12;
             grpBoxLooper.TabStop = false;
             grpBoxLooper.Text = "Loop";
@@ -103,7 +104,8 @@
             // 
             // btnShowDetails
             // 
-            btnShowDetails.Location = new Point(200, 88);
+            btnShowDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnShowDetails.Location = new Point(200, 91);
             btnShowDetails.Name = "btnShowDetails";
             btnShowDetails.Size = new Size(61, 23);
             btnShowDetails.TabIndex = 14;
@@ -113,9 +115,10 @@
             // 
             // dlLoopTemplates
             // 
+            dlLoopTemplates.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dlLoopTemplates.DropDownStyle = ComboBoxStyle.DropDownList;
             dlLoopTemplates.FormattingEnabled = true;
-            dlLoopTemplates.Location = new Point(6, 88);
+            dlLoopTemplates.Location = new Point(6, 91);
             dlLoopTemplates.Name = "dlLoopTemplates";
             dlLoopTemplates.Size = new Size(188, 23);
             dlLoopTemplates.TabIndex = 13;
@@ -133,7 +136,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(6, 63);
+            label7.Location = new Point(6, 61);
             label7.Name = "label7";
             label7.Size = new Size(102, 15);
             label7.TabIndex = 1;
@@ -184,18 +187,18 @@
             // txtDescription
             // 
             txtDescription.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtDescription.Location = new Point(117, 158);
+            txtDescription.Location = new Point(117, 186);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
             txtDescription.ScrollBars = ScrollBars.Vertical;
-            txtDescription.Size = new Size(474, 234);
+            txtDescription.Size = new Size(474, 206);
             txtDescription.TabIndex = 7;
             txtDescription.Validating += txtRequired_Validating;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 158);
+            label4.Location = new Point(15, 186);
             label4.Name = "label4";
             label4.Size = new Size(75, 15);
             label4.TabIndex = 6;
@@ -203,16 +206,17 @@
             // 
             // txtTitle
             // 
-            txtTitle.Location = new Point(117, 113);
+            txtTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtTitle.Location = new Point(117, 146);
             txtTitle.Name = "txtTitle";
-            txtTitle.Size = new Size(200, 23);
+            txtTitle.Size = new Size(475, 23);
             txtTitle.TabIndex = 5;
             txtTitle.Validating += txtRequired_Validating;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 117);
+            label3.Location = new Point(15, 150);
             label3.Name = "label3";
             label3.Size = new Size(38, 15);
             label3.TabIndex = 4;
@@ -223,7 +227,7 @@
             cbAlert.AutoSize = true;
             cbAlert.Checked = true;
             cbAlert.CheckState = CheckState.Checked;
-            cbAlert.Location = new Point(117, 85);
+            cbAlert.Location = new Point(117, 107);
             cbAlert.Name = "cbAlert";
             cbAlert.Size = new Size(15, 14);
             cbAlert.TabIndex = 3;
@@ -232,7 +236,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(15, 85);
+            label2.Location = new Point(15, 107);
             label2.Name = "label2";
             label2.Size = new Size(40, 15);
             label2.TabIndex = 2;
@@ -241,7 +245,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(15, 52);
+            label1.Location = new Point(15, 63);
             label1.Name = "label1";
             label1.Size = new Size(97, 15);
             label1.TabIndex = 1;
@@ -252,7 +256,7 @@
             dtPicker.CalendarFont = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             dtPicker.Format = DateTimePickerFormat.Custom;
-            dtPicker.Location = new Point(117, 48);
+            dtPicker.Location = new Point(117, 59);
             dtPicker.Name = "dtPicker";
             dtPicker.Size = new Size(200, 23);
             dtPicker.TabIndex = 0;
