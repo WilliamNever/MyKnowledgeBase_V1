@@ -272,6 +272,7 @@
             Name = "AlertInput";
             Text = "Notification input";
             FormClosing += AlertInput_FormClosing;
+            FormClosed += AlertInput_FormClosed;
             pnlBackGrd.ResumeLayout(false);
             pnlBackGrd.PerformLayout();
             grpBoxLooper.ResumeLayout(false);

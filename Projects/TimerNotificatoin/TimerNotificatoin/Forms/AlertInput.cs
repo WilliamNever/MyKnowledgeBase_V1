@@ -6,8 +6,14 @@ using TimerNotificatoin.Core.Models;
 
 namespace TimerNotificatoin.Forms
 {
-    public partial class AlertInput : Form
+    public partial class AlertInput : Form, IDisposable
     {
+        void IDisposable.Dispose()
+        {
+            _cform?.Close();
+            Dispose(true);
+        }
+
         private NotificationModel notificate = null!;
         private ContentsForm? _cform = null;
         public AlertInput()
@@ -135,6 +141,7 @@ namespace TimerNotificatoin.Forms
         private void AlertInput_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = DialogResult == DialogResult.Continue;
+            ((IDisposable)this).Dispose();
         }
 
         private void ReSetCausesValidation(Control[] controls, bool canCause)
@@ -177,6 +184,10 @@ namespace TimerNotificatoin.Forms
                 _cform.ShowMessage(ConversionsHelper.NJ_SerializeToJson(tmp), EnMessageType.MessageShow);
                 _cform.Show();
             }
+        }
+
+        private void AlertInput_FormClosed(object sender, FormClosedEventArgs e)
+        {
         }
     }
 }
