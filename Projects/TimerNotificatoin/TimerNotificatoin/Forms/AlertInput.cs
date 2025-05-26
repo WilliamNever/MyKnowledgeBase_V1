@@ -11,7 +11,6 @@ namespace TimerNotificatoin.Forms
         void IDisposable.Dispose()
         {
             _cform?.Close();
-            Dispose(true);
         }
 
         private NotificationModel notificate = null!;
