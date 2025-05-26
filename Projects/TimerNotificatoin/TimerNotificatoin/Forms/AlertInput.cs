@@ -141,7 +141,9 @@ namespace TimerNotificatoin.Forms
         private void AlertInput_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = DialogResult == DialogResult.Continue;
-            ((IDisposable)this).Dispose();
+
+            if (!e.Cancel)
+                ((IDisposable)this).Dispose();
         }
 
         private void ReSetCausesValidation(Control[] controls, bool canCause)
