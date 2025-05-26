@@ -63,6 +63,7 @@
             Controls.Add(panel1);
             Name = "ContentsForm";
             Text = "ContentsForm";
+            FormClosed += ContentsForm_FormClosed;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);

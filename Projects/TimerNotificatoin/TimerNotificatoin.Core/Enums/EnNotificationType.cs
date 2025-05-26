@@ -13,9 +13,14 @@ namespace TimerNotificatoin.Core.Enums
     {
         [HelperOutput("Unclassified(0) - not classified, Keep in untill manually removed")]
         Unclassified = 0,
+
         [HelperOutput("Common(1) - popped up then removed")]
         Common = 1,
+
         [HelperOutput("Remain(2) - Keep in untill manually removed")]
         Remain = 2,
+
+        [HelperOutput("Loop(4) - Keep in and auto loop to notify, untill manually removed")]
+        Loop = 4,
     }
 }

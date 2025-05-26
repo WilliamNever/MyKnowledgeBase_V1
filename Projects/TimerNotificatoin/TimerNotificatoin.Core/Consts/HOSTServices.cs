@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using TimerNotificatoin.Core.Helpers;
 using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 using TimerNotificatoin.Core.Services;
@@ -11,17 +12,30 @@ namespace TimerNotificatoin.Core.Consts
     {
         private static IServiceProvider Provider;
         private static List<ClassificationModel> Classifications;
+        private static string TemplatePath;
+        private static List<NotificationTemplateModel>? NotificationTemplates;
 
         public static void InitHostServices(IServiceProvider provider)
         {
             Provider = provider;
             Classifications = GetRequiredService<IOptions<List<ClassificationModel>>>().Value
                 .OrderBy(x => x.NotificationType).ThenBy(x => x.Name).ToList();
+            TemplatePath = GetRequiredService<IOptions<AppSettings>>().Value.Templates;
         }
 
         public static List<ClassificationModel> GetClassifications()
         {
             return Classifications;
+        }
+        public static List<NotificationTemplateModel> LoadNotificationTemplatesFromFile()
+        {
+            var js = File.ReadAllText(TemplatePath);
+            NotificationTemplates = ConversionsHelper.NJ_DeserializeToJson<List<NotificationTemplateModel>>(js);
+            return NotificationTemplates;
+        }
+        public static List<NotificationTemplateModel> GetTemplates()
+        {
+            return NotificationTemplates ?? LoadNotificationTemplatesFromFile();
         }
         public static TS? GetService<TS>()
         {

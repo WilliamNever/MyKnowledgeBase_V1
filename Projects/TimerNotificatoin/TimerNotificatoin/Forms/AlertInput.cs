@@ -1,12 +1,20 @@
 ﻿using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
+using TimerNotificatoin.Core.Helpers;
+using TimerNotificatoin.Core.Interfaces;
 using TimerNotificatoin.Core.Models;
 
 namespace TimerNotificatoin.Forms
 {
-    public partial class AlertInput : Form
+    public partial class AlertInput : Form, IDisposable
     {
+        void IDisposable.Dispose()
+        {
+            _cform?.Close();
+        }
+
         private NotificationModel notificate = null!;
+        private ContentsForm? _cform = null;
         public AlertInput()
         {
             var dtn = DateTime.Now;
@@ -14,6 +22,8 @@ namespace TimerNotificatoin.Forms
             ReSetCausesValidation(pnlBackGrd.Controls.OfType<Control>().ToArray(), false);
             dtPicker.MinDate = dtn.AddYears(-20);
             dtPicker.MaxDate = dtn.AddYears(20);
+            dtpEndOfDate.MinDate = dtn.AddYears(-20);
+            dtpEndOfDate.MaxDate = dtn.AddYears(20);
 
             InitControls();
         }
@@ -25,6 +35,12 @@ namespace TimerNotificatoin.Forms
             cbNType.SelectedIndex = 0;
             cbNType.DisplayMember = "DisplayName";
             cbNType.ValueMember = "ID";
+
+            var tmps = HOSTServices.GetTemplates();
+            dlLoopTemplates.Items.AddRange(tmps.ToArray());
+            dlLoopTemplates.SelectedIndex = 0;
+            dlLoopTemplates.DisplayMember = "Name";
+            dlLoopTemplates.ValueMember = "Id";
         }
 
         public void SetNotification(NotificationModel notification)
@@ -35,16 +51,45 @@ namespace TimerNotificatoin.Forms
             txtDescription.Text = notification.Description;
             dtPicker.Value = notification.AlertDateTime;
             cbAlert.Checked = notification.ToAlert;
-            for (int i = 0; i < cbNType.Items.Count; i++)
+            //for (int i = 0; i < cbNType.Items.Count; i++)
+            //{
+            //    var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
+            //    if (itmVal.ID == notification.ClassificationID)
+            //    {
+            //        cbNType.SelectedIndex = i;
+            //        break;
+            //    }
+            //}
+            ComboBoxSelectedItemChange(cbNType, notificate.ClassificationID);
+
+            cbkHasEndDate.Checked = false;
+            if (notificate.NotificationType == EnNotificationType.Loop)
             {
-                var itmVal = (cbNType.Items[i] as ClassificationModel) ?? new ClassificationModel();
-                if (itmVal.ID == notification.ClassificationID)
+                if (notificate.EndDatetime.HasValue)
                 {
-                    cbNType.SelectedIndex = i;
+                    cbkHasEndDate.Checked = notificate.EndDatetime.HasValue;
+                    dtpEndOfDate.Value = notificate.EndDatetime.Value;
+                }
+                if (notificate.NTemplateId.HasValue)
+                {
+                    ComboBoxSelectedItemChange(dlLoopTemplates, notificate.NTemplateId.Value);
+                }
+            }
+        }
+        #region function methods
+        protected static void ComboBoxSelectedItemChange<T>(ComboBox cbbk, T value)
+        {
+            for (int i = 0; i < cbbk.Items.Count; i++)
+            {
+                var itmVal = cbbk.Items[i] as ICompareIdentity<T>;
+                if (itmVal != null && itmVal.Identity != null && itmVal.Identity.Equals(value))
+                {
+                    cbbk.SelectedIndex = i;
                     break;
                 }
             }
         }
+        #endregion
         public NotificationModel GetNotification()
         {
             notificate.Title = txtTitle.Text;
@@ -52,6 +97,13 @@ namespace TimerNotificatoin.Forms
             notificate.AlertDateTime = dtPicker.Value;
             notificate.ToAlert = cbAlert.Checked;
             notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
+            notificate.CurrentAlertDateTime = notificate.AlertDateTime;
+
+            if (notificate.NotificationType == EnNotificationType.Loop)
+            {
+                notificate.EndDatetime = cbkHasEndDate.Checked ? dtpEndOfDate.Value : null;
+                notificate.NTemplateId = (dlLoopTemplates.SelectedItem as NotificationTemplateModel)?.Id;
+            }
             return notificate;
         }
 
@@ -88,6 +140,9 @@ namespace TimerNotificatoin.Forms
         private void AlertInput_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = DialogResult == DialogResult.Continue;
+
+            if (!e.Cancel)
+                ((IDisposable)this).Dispose();
         }
 
         private void ReSetCausesValidation(Control[] controls, bool canCause)
@@ -96,6 +151,44 @@ namespace TimerNotificatoin.Forms
             {
                 c.CausesValidation = canCause;
             }
+        }
+
+        private void cbNType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedType = cbNType.SelectedItem as ClassificationModel;
+            if (selectedType != null
+                && selectedType.NotificationType == EnNotificationType.Loop)
+            {
+                grpBoxLooper.Show();
+                grpBoxLooper.Enabled = true;
+            }
+            else
+            {
+                grpBoxLooper.Hide();
+                grpBoxLooper.Enabled = false;
+            }
+        }
+
+        private void cbkHasEndDate_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpEndOfDate.Enabled = cbkHasEndDate.Checked;
+        }
+
+        private void btnShowDetails_Click(object sender, EventArgs e)
+        {
+            var tmp = dlLoopTemplates.SelectedItem as NotificationTemplateModel;
+            if (tmp != null)
+            {
+                _cform ??= ContentsForm.CreateForm($"Template - {tmp.Name}"
+                    , () => Invoke(() => _cform = null)
+                    , new Font(new FontFamily("Times New Roman"), 14f));
+                _cform.ShowMessage(ConversionsHelper.NJ_SerializeToJson(tmp), EnMessageType.MessageShow);
+                _cform.Show();
+            }
+        }
+
+        private void AlertInput_FormClosed(object sender, FormClosedEventArgs e)
+        {
         }
     }
 }

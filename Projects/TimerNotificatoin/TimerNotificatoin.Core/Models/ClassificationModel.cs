@@ -1,11 +1,13 @@
 ﻿using TimerNotificatoin.Core.Attributes;
 using TimerNotificatoin.Core.Enums;
+using TimerNotificatoin.Core.Interfaces;
 
 namespace TimerNotificatoin.Core.Models
 {
     [HelperOutput("class Classification Model - Indicated the classification of the notification")]
-    public class ClassificationModel
+    public class ClassificationModel : ICompareIdentity<int>
     {
+        int ICompareIdentity<int>.Identity { get => ID; }
         [HelperOutput("int ID - the identity of the classification, default is 1")]
         public int ID { get; set; } = 1;
         [HelperOutput("string Name - name of the classification, default is Unclassified")]
