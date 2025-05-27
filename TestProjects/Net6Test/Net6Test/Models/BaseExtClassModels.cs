@@ -75,6 +75,11 @@ namespace Net6Test.Models
         public string? Base0_HiFiInfor { get; set; }
         public virtual int Rec { get; set; }
         public List<Base1> b1List { get; set; }
+
+        public virtual void ShowId(string str)
+        {
+            Console.WriteLine($"Base0 - {id} - {str}");
+        }
     }
 
     public class Base1 : Base0
@@ -82,6 +87,10 @@ namespace Net6Test.Models
         public int Acg { get; set; }
         public string Acgx { get; set; }
         public List<Base2> b2List { get; set; }
+        public override void ShowId(string str)
+        {
+            base.ShowId($"Base1 - {Acg} - {str}");
+        }
     }
 
     public class Base2 : Base1
