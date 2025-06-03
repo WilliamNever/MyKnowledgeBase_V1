@@ -12,7 +12,7 @@ namespace ConsolePreTest.Tests
         public static async Task CronoExpress_Test()
         {
             var dtOffSet = new DateTimeOffset(DateTime.Now);
-            CronExpression expression = CronExpression.Parse("45 09 * * TUE,THU");
+            CronExpression expression = CronExpression.Parse("45 09 L-2W * *");
             var next = expression.GetNextOccurrence(dtOffSet, TimeZoneInfo.Local).Value.DateTime;//?.ToLocalTime();
         }
     }
