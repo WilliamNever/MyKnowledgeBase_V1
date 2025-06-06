@@ -80,6 +80,11 @@ namespace Net6Test.Models
         {
             Console.WriteLine($"Base0 - {id} - {str}");
         }
+
+        public virtual void ShowInfor(string str, Guid? gid = null)
+        {
+            Console.WriteLine($"Base0 - ShowInfor(string str, Guid? gid = null) - {str} / {gid}.");
+        }
     }
 
     public class Base1 : Base0
@@ -89,7 +94,16 @@ namespace Net6Test.Models
         public List<Base2> b2List { get; set; }
         public override void ShowId(string str)
         {
+            ShowInfor(str);
+            ShowInfor(str, null);
+            Console.WriteLine();
             base.ShowId($"Base1 - {Acg} - {str}");
+        }
+
+        
+        public new void ShowInfor(string str, Guid? gid)
+        {
+            base.ShowInfor($"Base1 - {str}|{gid}/", gid);
         }
     }
 
