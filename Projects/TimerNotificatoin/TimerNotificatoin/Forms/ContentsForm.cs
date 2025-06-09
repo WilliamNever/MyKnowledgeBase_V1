@@ -39,6 +39,14 @@ namespace TimerNotificatoin.Forms
             txtContent.Text = $"Date Time - {message.CurrentAlertDateTime:yyyy-MM-dd HH:mm:ss} {message.CurrentAlertDateTime.DayOfWeek}";
             txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
             txtContent.Text += message.Description;
+
+            if (message.NotificationType == EnNotificationType.Loop)
+            {
+                txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}" +
+                    $"-------------------------------------------------------" +
+                    $"{Environment.NewLine}{Environment.NewLine}";
+                txtContent.Text += $"Next alert date time - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.CurrentAlertDateTime.DayOfWeek}";
+            }
             txtContent.Select(0, 0);
         }
 
