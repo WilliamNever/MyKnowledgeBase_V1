@@ -51,7 +51,9 @@ namespace Net6Test.TestEntrances
 
             //HttpInteract_Test.HttpClientFactory_Test(provider).Wait();
 
-            XMLSchemaTest.ReadXMLFile_Test().Wait();
+            //XMLSchemaTest.ReadXMLFile_Test().Wait();
+
+            ThreadTasksTest.Parallel_ForEach_Test().Wait();
         }
 
         private async Task ValueTupleTest()

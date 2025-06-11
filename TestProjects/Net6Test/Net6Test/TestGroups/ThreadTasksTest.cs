@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Net6Test.Models;
+using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
@@ -28,7 +29,7 @@ namespace Net6Test.TestGroups
             try
             {
                 var xx = await Task.WhenAll(
-                    await tsk1.ContinueWith( async rsl =>
+                    await tsk1.ContinueWith(async rsl =>
                     {
                         Console.WriteLine($"{rsl.Status} - In task 3.");
                         return new KeyValuePair<string, int>("key", 12);
@@ -123,16 +124,34 @@ namespace Net6Test.TestGroups
             Console.WriteLine("Exit");
         }
 
-        public static async Task TaskAwait_Test()
+        public static async Task TaskAwait_Test(SimpleModel? model = null)
         {
             int i = 0;
-            i = await Task.Run(async () => {
+            i = await Task.Run(async () =>
+            {
                 Console.WriteLine("In <-");
                 await Task.Delay(5000);
                 Console.WriteLine("out ->");
+                if (model != null)
+                    model.Name = $"Name - {model.Id}";
                 return 3;
-            }).ConfigureAwait(false);
+            });//.ConfigureAwait(false);
             Console.WriteLine($"Ended - {i}");
+        }
+
+        public static async Task Parallel_ForEach_Test()
+        {
+            var list = new List<SimpleModel>() { new SimpleModel { Id = 1 }, new SimpleModel { Id = 2 }, new SimpleModel { Id = 3 } };
+            var rsl = Parallel.ForEach(list, x =>
+            {
+                //await TaskAwait_Test();
+                //await TaskAwait_Test(x).ConfigureAwait(false);
+                //TaskAwait_Test(x).ConfigureAwait(false).GetAwaiter().GetResult();
+                TaskAwait_Test(x).Wait();
+            });
+            await Console.Out.WriteLineAsync("Run ending Point 1");
+            var i = 3;
+            await Task.Delay(15000);
         }
     }
 }
