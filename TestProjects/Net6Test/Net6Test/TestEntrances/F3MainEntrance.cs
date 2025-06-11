@@ -47,7 +47,11 @@ namespace Net6Test.TestEntrances
 
             //XMLSchemaTest.Test1().Wait();
             //StringChangeTests.StringEndsSub_Test().Wait();
-            LogicShema_Tests.Test1();
+            //LogicShema_Tests.Test1();
+
+            //HttpInteract_Test.HttpClientFactory_Test(provider).Wait();
+
+            XMLSchemaTest.ReadXMLFile_Test().Wait();
         }
 
         private async Task ValueTupleTest()

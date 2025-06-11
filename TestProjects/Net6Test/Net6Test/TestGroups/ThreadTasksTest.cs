@@ -128,7 +128,7 @@ namespace Net6Test.TestGroups
             int i = 0;
             i = await Task.Run(async () => {
                 Console.WriteLine("In <-");
-                await Task.Delay(3000);
+                await Task.Delay(5000);
                 Console.WriteLine("out ->");
                 return 3;
             }).ConfigureAwait(false);
