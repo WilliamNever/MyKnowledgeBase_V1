@@ -135,7 +135,7 @@ namespace Net6Test.TestGroups
                 if (model != null)
                     model.Name = $"Name - {model.Id}";
 
-                throw new Exception($"End of {nameof(TaskAwait_Test)} - {model?.Id}");
+                throw new Exception($"End of {nameof(TaskAwait_Test)} - model.Id : {model?.Id}");
                 return 3;
             });//.ConfigureAwait(false);
             Console.WriteLine($"Ended - {i}");
@@ -168,6 +168,27 @@ namespace Net6Test.TestGroups
             await Console.Out.WriteLineAsync("Run ending Point 1");
 
             await Task.Delay(15000);
+        }
+
+        public static async Task ThreadThrowException_Test()
+        {
+            Task<int> tsk = null;
+            try
+            {
+                tsk = TaskAwait_Test(new SimpleModel { Id = 100 });
+            }
+            catch(Exception ex)
+            {
+
+            }
+            try
+            {
+                _ = await tsk;
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 }

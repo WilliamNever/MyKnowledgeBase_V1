@@ -53,7 +53,8 @@ namespace Net6Test.TestEntrances
 
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
 
-            ThreadTasksTest.Parallel_ForEach_Test().Wait();
+            //ThreadTasksTest.Parallel_ForEach_Test().Wait();
+            ThreadTasksTest.ThreadThrowException_Test().Wait();
         }
 
         private async Task ValueTupleTest()
