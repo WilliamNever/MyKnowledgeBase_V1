@@ -30,6 +30,7 @@
         {
             pnlBackGrd = new Panel();
             grpBoxLooper = new GroupBox();
+            cbkUsedCronTime = new CheckBox();
             cbkHasEndDate = new CheckBox();
             btnShowDetails = new Button();
             dlLoopTemplates = new ComboBox();
@@ -69,23 +70,35 @@
             pnlBackGrd.Dock = DockStyle.Fill;
             pnlBackGrd.Location = new Point(0, 0);
             pnlBackGrd.Name = "pnlBackGrd";
-            pnlBackGrd.Size = new Size(614, 436);
+            pnlBackGrd.Size = new Size(698, 436);
             pnlBackGrd.TabIndex = 0;
             // 
             // grpBoxLooper
             // 
             grpBoxLooper.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            grpBoxLooper.Controls.Add(cbkUsedCronTime);
             grpBoxLooper.Controls.Add(cbkHasEndDate);
             grpBoxLooper.Controls.Add(btnShowDetails);
             grpBoxLooper.Controls.Add(dlLoopTemplates);
             grpBoxLooper.Controls.Add(dtpEndOfDate);
             grpBoxLooper.Controls.Add(label7);
-            grpBoxLooper.Location = new Point(324, 11);
+            grpBoxLooper.Location = new Point(309, 11);
             grpBoxLooper.Name = "grpBoxLooper";
-            grpBoxLooper.Size = new Size(267, 129);
+            grpBoxLooper.Size = new Size(367, 129);
             grpBoxLooper.TabIndex = 12;
             grpBoxLooper.TabStop = false;
             grpBoxLooper.Text = "Loop";
+            // 
+            // cbkUsedCronTime
+            // 
+            cbkUsedCronTime.AutoSize = true;
+            cbkUsedCronTime.CheckAlign = ContentAlignment.MiddleRight;
+            cbkUsedCronTime.Location = new Point(240, 27);
+            cbkUsedCronTime.Name = "cbkUsedCronTime";
+            cbkUsedCronTime.Size = new Size(111, 19);
+            cbkUsedCronTime.TabIndex = 17;
+            cbkUsedCronTime.Text = "Used Cron Time";
+            cbkUsedCronTime.UseVisualStyleBackColor = true;
             // 
             // cbkHasEndDate
             // 
@@ -105,7 +118,7 @@
             // btnShowDetails
             // 
             btnShowDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnShowDetails.Location = new Point(200, 91);
+            btnShowDetails.Location = new Point(300, 91);
             btnShowDetails.Name = "btnShowDetails";
             btnShowDetails.Size = new Size(61, 23);
             btnShowDetails.TabIndex = 14;
@@ -120,7 +133,7 @@
             dlLoopTemplates.FormattingEnabled = true;
             dlLoopTemplates.Location = new Point(6, 91);
             dlLoopTemplates.Name = "dlLoopTemplates";
-            dlLoopTemplates.Size = new Size(188, 23);
+            dlLoopTemplates.Size = new Size(288, 23);
             dlLoopTemplates.TabIndex = 13;
             // 
             // dtpEndOfDate
@@ -130,7 +143,7 @@
             dtpEndOfDate.Format = DateTimePickerFormat.Custom;
             dtpEndOfDate.Location = new Point(89, 25);
             dtpEndOfDate.Name = "dtpEndOfDate";
-            dtpEndOfDate.Size = new Size(172, 23);
+            dtpEndOfDate.Size = new Size(145, 23);
             dtpEndOfDate.TabIndex = 2;
             // 
             // label7
@@ -148,7 +161,7 @@
             cbNType.FormattingEnabled = true;
             cbNType.Location = new Point(117, 11);
             cbNType.Name = "cbNType";
-            cbNType.Size = new Size(200, 23);
+            cbNType.Size = new Size(186, 23);
             cbNType.TabIndex = 11;
             cbNType.SelectedIndexChanged += cbNType_SelectedIndexChanged;
             // 
@@ -165,7 +178,7 @@
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSave.DialogResult = DialogResult.OK;
-            btnSave.Location = new Point(517, 398);
+            btnSave.Location = new Point(601, 398);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 9;
@@ -191,7 +204,7 @@
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
             txtDescription.ScrollBars = ScrollBars.Vertical;
-            txtDescription.Size = new Size(474, 206);
+            txtDescription.Size = new Size(558, 206);
             txtDescription.TabIndex = 7;
             txtDescription.Validating += txtRequired_Validating;
             // 
@@ -209,7 +222,7 @@
             txtTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtTitle.Location = new Point(117, 146);
             txtTitle.Name = "txtTitle";
-            txtTitle.Size = new Size(475, 23);
+            txtTitle.Size = new Size(559, 23);
             txtTitle.TabIndex = 5;
             txtTitle.Validating += txtRequired_Validating;
             // 
@@ -258,14 +271,14 @@
             dtPicker.Format = DateTimePickerFormat.Custom;
             dtPicker.Location = new Point(117, 59);
             dtPicker.Name = "dtPicker";
-            dtPicker.Size = new Size(200, 23);
+            dtPicker.Size = new Size(186, 23);
             dtPicker.TabIndex = 0;
             // 
             // AlertInput
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(614, 436);
+            ClientSize = new Size(698, 436);
             Controls.Add(pnlBackGrd);
             MinimizeBox = false;
             MinimumSize = new Size(630, 475);
@@ -301,5 +314,6 @@
         private ComboBox dlLoopTemplates;
         private Button btnShowDetails;
         private CheckBox cbkHasEndDate;
+        private CheckBox cbkUsedCronTime;
     }
 }
