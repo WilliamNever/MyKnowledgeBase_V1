@@ -76,7 +76,7 @@ namespace TimerNotificatoin.Core.Models
 
         public void LoopReset(DateTime dt)
         {
-            if (NotificationType == EnNotificationType.Loop && NTemplateId.HasValue)
+            if ((NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop && NTemplateId.HasValue)
             {
                 try
                 {

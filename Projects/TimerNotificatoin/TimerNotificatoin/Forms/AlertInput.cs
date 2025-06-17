@@ -63,7 +63,7 @@ namespace TimerNotificatoin.Forms
             ComboBoxSelectedItemChange(cbNType, notificate.ClassificationID);
 
             cbkHasEndDate.Checked = false;
-            if (notificate.NotificationType == EnNotificationType.Loop)
+            if ((notificate.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop)
             {
                 if (notificate.EndDatetime.HasValue)
                 {
@@ -100,7 +100,7 @@ namespace TimerNotificatoin.Forms
             notificate.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
             notificate.CurrentAlertDateTime = notificate.AlertDateTime;
 
-            if (notificate.NotificationType == EnNotificationType.Loop)
+            if ((notificate.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop)
             {
                 notificate.EndDatetime = cbkHasEndDate.Checked ? dtpEndOfDate.Value : null;
                 notificate.NTemplateId = (dlLoopTemplates.SelectedItem as NotificationTemplateModel)?.Id;
@@ -159,7 +159,7 @@ namespace TimerNotificatoin.Forms
         {
             var selectedType = cbNType.SelectedItem as ClassificationModel;
             if (selectedType != null
-                && selectedType.NotificationType == EnNotificationType.Loop)
+                && (selectedType.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop)
             {
                 grpBoxLooper.Show();
                 grpBoxLooper.Enabled = true;

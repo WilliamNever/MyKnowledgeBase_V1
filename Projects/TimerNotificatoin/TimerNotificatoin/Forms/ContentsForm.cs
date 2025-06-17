@@ -42,7 +42,7 @@ namespace TimerNotificatoin.Forms
             txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
             txtContent.Text += message.Description;
 
-            if (message.NotificationType == EnNotificationType.Loop && message.ToAlert)
+            if ((message.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop && message.ToAlert)
             {
                 txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}" +
                     $"-------------------------------------------------------" +
