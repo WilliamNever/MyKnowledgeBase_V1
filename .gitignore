@@ -16,3 +16,4 @@ packages
 *.nupkg
 *.exe
 *.user
+**/Lib/StandardLibrary.dll

@@ -13,9 +13,9 @@ Console.WriteLine($"{dtDes}");
 //CommonTest.ThreadTimerTest();
 
 //SecTest.OpenTest1();
-SecTest.DateTimeUtcConverTest();
+//SecTest.DateTimeUtcConverTest();
 
-
+await CronoExp_Test.CronoExpress_Test();
 
 
 

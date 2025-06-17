@@ -40,7 +40,21 @@ namespace Net6Test.TestEntrances
             //InjectionTest.HttpClient_Test(provider).Wait();
 
             //StronglyTypedEnumTests.Test1();
-            ThreadTasksTest.ContinumeWithAsync_Test().Wait();
+            //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
+            //ThreadTasksTest.TaskAwait_Test().Wait();
+            //CollectionListTest.NestListToExtraList_Test(provider).Wait();
+            //StringChangeTests.UrlParseQueryString_Test().Wait();
+
+            //XMLSchemaTest.Test1().Wait();
+            //StringChangeTests.StringEndsSub_Test().Wait();
+            //LogicShema_Tests.Test1();
+
+            //HttpInteract_Test.HttpClientFactory_Test(provider).Wait();
+
+            //XMLSchemaTest.ReadXMLFile_Test().Wait();
+
+            //ThreadTasksTest.Parallel_ForEach_Test().Wait();
+            ThreadTasksTest.ThreadThrowException_Test().Wait();
         }
 
         private async Task ValueTupleTest()

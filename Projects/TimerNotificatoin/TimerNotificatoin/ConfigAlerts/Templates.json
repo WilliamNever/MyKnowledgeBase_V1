@@ -1,2 +1,22 @@
-{
-}
+[
+  {
+    "Id": "f954c0a7-17cf-4c1e-82e3-4883ca4ca397",
+    "Name": "at 15:00 every days",
+    "CronoExp": "0 15 * * *"
+  },
+  {
+    "Id": "46827fde-cd4e-4d6e-bebb-7ed737501a1c",
+    "Name": "at 09:30 every Tuesday and Thursday",
+    "CronoExp": "30 09 * * TUE,THU"
+  },
+  {
+    "Id": "fbf1da90-00ec-415b-9503-78436d47c0a2",
+    "Name": "at 10:30 every Tuesday and Thursday",
+    "CronoExp": "30 10 * * TUE,THU"
+  },
+  {
+    "Id": "d1b261bb-0a5e-4aee-9ee2-b185d1bf80eb",
+    "Name": "at 15:30 every TUE",
+    "CronoExp": "30 15 * * TUE"
+  }
+]

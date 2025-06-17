@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Net6Test.Models;
+using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
@@ -28,7 +29,7 @@ namespace Net6Test.TestGroups
             try
             {
                 var xx = await Task.WhenAll(
-                    await tsk1.ContinueWith( async rsl =>
+                    await tsk1.ContinueWith(async rsl =>
                     {
                         Console.WriteLine($"{rsl.Status} - In task 3.");
                         return new KeyValuePair<string, int>("key", 12);
@@ -121,6 +122,73 @@ namespace Net6Test.TestGroups
 
             //await Task.Run(() => { act2(); act1(); });
             Console.WriteLine("Exit");
+        }
+
+        public static async Task<int> TaskAwait_Test(SimpleModel? model = null)
+        {
+            int i = 0;
+            i = await Task.Run(async () =>
+            {
+                Console.WriteLine("In <-");
+                await Task.Delay(5000);
+                Console.WriteLine("out ->");
+                if (model != null)
+                    model.Name = $"Name - {model.Id}";
+
+                throw new Exception($"End of {nameof(TaskAwait_Test)} - model.Id : {model?.Id}");
+                return 3;
+            });//.ConfigureAwait(false);
+            Console.WriteLine($"Ended - {i}");
+            //throw new Exception($"End of {nameof(TaskAwait_Test)} - {model?.Id}");
+            return i;
+        }
+
+        public static async Task Parallel_ForEach_Test()
+        {
+            var list = new List<SimpleModel>() { new SimpleModel { Id = 1 }, new SimpleModel { Id = 2 }, new SimpleModel { Id = 3 } };
+            ParallelLoopResult rsl;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    rsl = Parallel.ForEach(list, x =>
+                    {
+                        //await TaskAwait_Test();
+                        //await TaskAwait_Test(x).ConfigureAwait(false);
+                        //TaskAwait_Test(x).ConfigureAwait(false).GetAwaiter().GetResult();
+                        //TaskAwait_Test(x).Wait();
+                        _ = TaskAwait_Test(x).Result;
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+            }
+            await Console.Out.WriteLineAsync("Run ending Point 1");
+
+            await Task.Delay(15000);
+        }
+
+        public static async Task ThreadThrowException_Test()
+        {
+            Task<int> tsk = null;
+            try
+            {
+                tsk = TaskAwait_Test(new SimpleModel { Id = 100 });
+            }
+            catch(Exception ex)
+            {
+
+            }
+            try
+            {
+                _ = await tsk;
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 }

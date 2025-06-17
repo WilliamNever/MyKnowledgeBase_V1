@@ -1,4 +1,5 @@
-﻿using TimerNotificatoin.Core.Attributes;
+﻿using Cronos;
+using TimerNotificatoin.Core.Attributes;
 using TimerNotificatoin.Core.Consts;
 using TimerNotificatoin.Core.Enums;
 
@@ -9,12 +10,25 @@ namespace TimerNotificatoin.Core.Models
     {
         [HelperOutput("Guid Id - The identity of the alert")]
         public Guid Id { get; set; }
+
+        #region For Template
+        [HelperOutput("Guid NotificationTemplateModel id - applied NotificationTemplate")]
+        public Guid? NTemplateId { get; set; }
+        [HelperOutput("Date time EndDatetime - the ends date. if it is null, it indicates the notification is endless.")]
+        public DateTime? EndDatetime { get; set; } = null;
+        #endregion
+
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
         public virtual DateTime AlertDateTime { get; set; }
-        //[HelperOutput("DateTime StartDateTime - Start Date Time")]
+#if !Debug
+#endif
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual DateTime CurrentAlertDateTime { get => currAlertDate ?? AlertDateTime; set => currAlertDate = value; }
+        private DateTime? currAlertDate = null;
 #if !Debug
         [Newtonsoft.Json.JsonIgnore]
 #endif
+        //[HelperOutput("DateTime StartDateTime - Start Date Time")]
         public virtual DateTime StartDateTime { get; set; }
         //[HelperOutput("double LeftSeconds - The seconds left to notifing, it was auto-calculated according AlertDateTime.")]
 #if !Debug
@@ -38,7 +52,7 @@ namespace TimerNotificatoin.Core.Models
         public EnNotificationType NotificationType
         {
             get =>
-                HOSTServices.GetClassifications().FirstOrDefault(x => x.ID == ClassificationID)?.NotificationType 
+                HOSTServices.GetClassifications().FirstOrDefault(x => x.ID == ClassificationID)?.NotificationType
                 ?? new ClassificationModel().NotificationType;
         }
 #if !Debug
@@ -47,7 +61,7 @@ namespace TimerNotificatoin.Core.Models
         public string ClassificationName
         {
             get =>
-                HOSTServices.GetClassifications().FirstOrDefault(x => x.ID == ClassificationID)?.Name 
+                HOSTServices.GetClassifications().FirstOrDefault(x => x.ID == ClassificationID)?.Name
                 ?? new ClassificationModel().Name;
         }
 
@@ -55,6 +69,44 @@ namespace TimerNotificatoin.Core.Models
         {
             Id = Guid.NewGuid();
             AlertDateTime = DateTime.Now.Date;
+        }
+
+        public void LoopReset(DateTime dt)
+        {
+            if (NotificationType == EnNotificationType.Loop && NTemplateId.HasValue)
+            {
+                try
+                {
+                    _ = ResetNotification(this, dt);
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+
+        private static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
+        {
+            var tmp = HOSTServices.GetTemplates().FirstOrDefault(x => x.Id == model.NTemplateId);
+            if (tmp != null)
+            {
+                CronExpression expression = CronExpression.Parse(tmp.CronoExp);
+                var next = expression.GetNextOccurrence(new DateTimeOffset(dt), TimeZoneInfo.Local);
+
+                if (
+                    next.HasValue
+                    && (
+                    (!model.EndDatetime.HasValue)
+                    || (model.EndDatetime.HasValue && next <= model.EndDatetime.Value && model.EndDatetime.Value > model.AlertDateTime)
+                    ))
+                {
+                    model.AlertDateTime = next.Value.DateTime;
+                    model.LeftSeconds = model.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
+                    model.StartDateTime = dt;
+                    model.ToAlert = true;
+                }
+            }
+            return model;
         }
     }
 }

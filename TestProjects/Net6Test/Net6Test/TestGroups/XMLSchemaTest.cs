@@ -146,6 +146,22 @@ namespace Net6Test.TestGroups
             JObject job = JObject.Parse(json);  //"{\"Order\":\"Here\"}"
             string? order = job["Order"]?.ToString();
         }
+
+        public static async Task ReadXMLFile_Test()
+        {
+            string str = "";
+            var s = str.Split(';')[^1];
+
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(@"D:\Temp\Minted\OrderStatus_Archive\SPEED Order Rejection-19760518_NX.xxml");
+                //doc.Load(@"D:\Temp\Minted\OrderStatus_Archive\SPEED Order Rejection-19760518_U16.xxml");
+            }
+            catch(Exception ex) { 
+
+            }
+        }
     }
 
     [XmlRoot("STC", Namespace = "TSP")]//
