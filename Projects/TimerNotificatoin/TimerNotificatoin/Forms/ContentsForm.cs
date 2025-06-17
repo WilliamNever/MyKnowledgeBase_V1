@@ -61,7 +61,7 @@ namespace TimerNotificatoin.Forms
                 }
                 else
                 {
-                    txtContent.Text += $"Next alert date time - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.CurrentAlertDateTime.DayOfWeek}";
+                    txtContent.Text += $"Next alert date time - {message.AlertDateTime:yyyy-MM-dd HH:mm:ss} {message.AlertDateTime.DayOfWeek}";
                 }
             }
             txtContent.Select(0, 0);

@@ -77,7 +77,7 @@ namespace TimerNotificatoin.Core.Models
             {
                 try
                 {
-                    ResetNotification(dt);
+                    _ = ResetNotification(this, dt);
                 }
                 catch (Exception ex)
                 {
@@ -85,9 +85,9 @@ namespace TimerNotificatoin.Core.Models
             }
         }
 
-        private void ResetNotification(DateTime dt)
+        private static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
         {
-            var tmp = HOSTServices.GetTemplates().FirstOrDefault(x => x.Id == NTemplateId);
+            var tmp = HOSTServices.GetTemplates().FirstOrDefault(x => x.Id == model.NTemplateId);
             if (tmp != null)
             {
                 CronExpression expression = CronExpression.Parse(tmp.CronoExp);
@@ -96,16 +96,17 @@ namespace TimerNotificatoin.Core.Models
                 if (
                     next.HasValue
                     && (
-                    (!EndDatetime.HasValue)
-                    || (EndDatetime.HasValue && next <= EndDatetime.Value && EndDatetime.Value > AlertDateTime)
+                    (!model.EndDatetime.HasValue)
+                    || (model.EndDatetime.HasValue && next <= model.EndDatetime.Value && model.EndDatetime.Value > model.AlertDateTime)
                     ))
                 {
-                    AlertDateTime = next.Value.DateTime;
-                    LeftSeconds = AlertDateTime.Subtract(dt).TotalSeconds * 1000;
-                    StartDateTime = dt;
-                    ToAlert = true;
+                    model.AlertDateTime = next.Value.DateTime;
+                    model.LeftSeconds = model.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
+                    model.StartDateTime = dt;
+                    model.ToAlert = true;
                 }
             }
+            return model;
         }
     }
 }
