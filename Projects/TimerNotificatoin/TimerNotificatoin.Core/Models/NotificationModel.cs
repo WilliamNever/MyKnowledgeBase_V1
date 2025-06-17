@@ -123,7 +123,7 @@ namespace TimerNotificatoin.Core.Models
             }
             return curNDt;
         }
-        private static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
+        public static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
         {
             if (HOSTServices.GetTemplates().Any(x => x.Id == model.NTemplateId))
             {
