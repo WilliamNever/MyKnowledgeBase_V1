@@ -16,6 +16,9 @@ namespace TimerNotificatoin.Core.Models
         public Guid? NTemplateId { get; set; }
         [HelperOutput("Date time EndDatetime - the ends date. if it is null, it indicates the notification is endless.")]
         public DateTime? EndDatetime { get; set; } = null;
+        [HelperOutput("Indicated if the next alert date time used Cron express time or used the pre-set time in alert date time. " +
+            "True used Cron express, False used Pre-set time.")]
+        public bool? UseCronTime { get; set; }
         #endregion
 
         [HelperOutput("DateTime AlertDateTime - Alert Date Time")]
@@ -85,25 +88,57 @@ namespace TimerNotificatoin.Core.Models
             }
         }
 
-        private static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
+        public static DateTime? GetNextRunDateTime(NotificationModel model, DateTime dt)
         {
             var tmp = HOSTServices.GetTemplates().FirstOrDefault(x => x.Id == model.NTemplateId);
-            if (tmp != null)
-            {
-                CronExpression expression = CronExpression.Parse(tmp.CronoExp);
-                var next = expression.GetNextOccurrence(new DateTimeOffset(dt), TimeZoneInfo.Local);
+            if (tmp == null) return null;
 
-                if (
-                    next.HasValue
-                    && (
-                    (!model.EndDatetime.HasValue)
-                    || (model.EndDatetime.HasValue && next <= model.EndDatetime.Value && model.EndDatetime.Value > model.AlertDateTime)
-                    ))
+            DateTime? curNDt = null;
+
+            CronExpression expression = CronExpression.Parse(tmp.CronoExp);
+            var next = expression.GetNextOccurrence(new DateTimeOffset(dt), TimeZoneInfo.Local);
+            if (next.HasValue)
+            {
+                if (model.UseCronTime.HasValue && model.UseCronTime.Value)
                 {
-                    model.AlertDateTime = next.Value.DateTime;
-                    model.LeftSeconds = model.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
-                    model.StartDateTime = dt;
-                    model.ToAlert = true;
+                    curNDt = next.Value.DateTime;
+                }
+                else
+                {
+                    curNDt = next.Value.Date.Add(
+                        new TimeSpan(model.AlertDateTime.Hour, model.AlertDateTime.Minute, model.AlertDateTime.Second));
+                    if (curNDt <= dt)
+                    {
+                        curNDt = null;
+                        var nNext = expression.GetNextOccurrence(next.Value, TimeZoneInfo.Local);
+                        if (nNext.HasValue)
+                        {
+                            curNDt = nNext.Value.Date.Add(
+                            new TimeSpan(model.AlertDateTime.Hour, model.AlertDateTime.Minute, model.AlertDateTime.Second));
+                        }
+                    }
+                    if (!curNDt.HasValue)
+                        curNDt = next.Value.DateTime;
+                }
+            }
+            return curNDt;
+        }
+        private static NotificationModel ResetNotification(NotificationModel model, DateTime dt)
+        {
+            if (HOSTServices.GetTemplates().Any(x => x.Id == model.NTemplateId))
+            {
+                var curNDt = GetNextRunDateTime(model, dt);
+                if (curNDt != null)
+                {
+                    if ((!model.EndDatetime.HasValue)
+                            || (model.EndDatetime.HasValue && curNDt.Value <= model.EndDatetime.Value && model.AlertDateTime < model.EndDatetime.Value)
+                            )
+                    {
+                        model.AlertDateTime = curNDt.Value;
+                        model.LeftSeconds = model.AlertDateTime.Subtract(dt).TotalSeconds * 1000;
+                        model.StartDateTime = dt;
+                        model.ToAlert = true;
+                    }
                 }
             }
             return model;
