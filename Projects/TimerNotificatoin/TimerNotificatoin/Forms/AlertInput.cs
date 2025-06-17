@@ -74,6 +74,7 @@ namespace TimerNotificatoin.Forms
                 {
                     ComboBoxSelectedItemChange(dlLoopTemplates, notificate.NTemplateId.Value);
                 }
+                cbkUsedCronTime.Checked = notificate.UseCronTime.HasValue && notificate.UseCronTime.Value;
             }
         }
         #region function methods
@@ -103,6 +104,7 @@ namespace TimerNotificatoin.Forms
             {
                 notificate.EndDatetime = cbkHasEndDate.Checked ? dtpEndOfDate.Value : null;
                 notificate.NTemplateId = (dlLoopTemplates.SelectedItem as NotificationTemplateModel)?.Id;
+                notificate.UseCronTime = cbkUsedCronTime.Checked;
             }
             return notificate;
         }
