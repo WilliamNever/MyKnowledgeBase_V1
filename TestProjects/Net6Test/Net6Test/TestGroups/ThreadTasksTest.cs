@@ -134,5 +134,29 @@ namespace Net6Test.TestGroups
             }).ConfigureAwait(false);
             Console.WriteLine($"Ended - {i}");
         }
+
+        public async static Task ContinueWith_Test()
+        {
+            var tsk = Task.Run(() => { return 1; });
+            var x = await await tsk.ContinueWith( tsk => { throw new Exception("No Name"); return tsk.Result; })
+                .ContinueWith( tsk => {
+                    //throw new Exception("Second No Name");
+                }, TaskContinuationOptions.OnlyOnFaulted)
+                .ContinueWith(async tsk => {
+                    try
+                    {
+                        await tsk;
+                        return 2;
+                    }
+                    catch
+                    {
+                        return 3;
+                    }
+                })
+                .ContinueWith(async tsk => { 
+                    return await await tsk; 
+                });
+            await Console.Out.WriteLineAsync($"return value: {x}");
+        }
     }
 }
