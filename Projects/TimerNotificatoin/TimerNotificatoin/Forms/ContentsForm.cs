@@ -42,7 +42,7 @@ namespace TimerNotificatoin.Forms
             txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}";
             txtContent.Text += message.Description;
 
-            if (message.NotificationType == EnNotificationType.Loop && message.ToAlert)
+            if ((message.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop && message.ToAlert)
             {
                 txtContent.Text += $"{Environment.NewLine}{Environment.NewLine}" +
                     $"-------------------------------------------------------" +
@@ -53,10 +53,11 @@ namespace TimerNotificatoin.Forms
                     var tmp = HOSTServices.GetTemplates().FirstOrDefault(x => x.Id == message.NTemplateId);
                     if (tmp != null)
                     {
-                        CronExpression expression = CronExpression.Parse(tmp.CronoExp);
-                        var next = expression.GetNextOccurrence(new DateTimeOffset(message.CurrentAlertDateTime), TimeZoneInfo.Local);
+                        //CronExpression expression = CronExpression.Parse(tmp.CronoExp);
+                        //var next = expression.GetNextOccurrence(new DateTimeOffset(message.CurrentAlertDateTime), TimeZoneInfo.Local);
+                        var next = NotificationModel.GetNextRunDateTime(message, message.CurrentAlertDateTime);
                         if (next.HasValue)
-                            txtContent.Text += $"Next alert date time - {next.Value.DateTime:yyyy-MM-dd HH:mm:ss} {next.Value.DateTime.DayOfWeek}";
+                            txtContent.Text += $"Next alert date time - {next.Value:yyyy-MM-dd HH:mm:ss} {next.Value.DayOfWeek}";
                     }
                 }
                 else
