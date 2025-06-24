@@ -55,6 +55,7 @@ namespace Net6Test.TestEntrances
 
             //ThreadTasksTest.Parallel_ForEach_Test().Wait();
             ThreadTasksTest.ThreadThrowException_Test().Wait();
+            ThreadTasksTest.ContinueWith_Test().Wait();
         }
 
         private async Task ValueTupleTest()
