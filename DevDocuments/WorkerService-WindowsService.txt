@@ -12,6 +12,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
 
 Commands to create/start/stop/delete a windows service
+ref - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-create
 
 Create and start windows service -
 rem start=delayed-auto
