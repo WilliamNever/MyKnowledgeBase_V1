@@ -24,7 +24,7 @@ namespace Net6Test.TestEntrances
             //QuartzCronExpressionTestAsync().Wait();
             //ValueTupleTest().Wait();
 
-            //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
+            ThreadTasksTest.ConcurrentBag_T_Test().Wait();
             //ConversionTest.TypeTest().Wait();
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
 
@@ -55,7 +55,8 @@ namespace Net6Test.TestEntrances
 
             //ThreadTasksTest.Parallel_ForEach_Test().Wait();
             //ThreadTasksTest.ThreadThrowException_Test().Wait();
-            ThreadTasksTest.ContinueWith_Test().Wait();
+            //ThreadTasksTest.ContinueWith_Test().Wait();
+            //StringChangeTests.SomeStringConvertTest().Wait();
         }
 
         private async Task ValueTupleTest()

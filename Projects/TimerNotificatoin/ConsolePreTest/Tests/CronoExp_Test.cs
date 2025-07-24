@@ -11,9 +11,20 @@ namespace ConsolePreTest.Tests
     {
         public static async Task CronoExpress_Test()
         {
+            var dtOffSet = new DateTimeOffset(DateTime.UtcNow);
+            //CronExpression expression = CronExpression.Parse("45 09 L-2W * *");
+            //CronExpression expression = CronExpression.Parse("45 09 * * *");
+            CronExpression expression = CronExpression.Parse("0 * * * *");
+            var nextDTOff = expression.GetNextOccurrence(dtOffSet, TimeZoneInfo.Utc).Value;
+            var next = nextDTOff.DateTime;//?.ToLocalTime();
+            var next1 = expression.GetNextOccurrence(nextDTOff, TimeZoneInfo.Utc).Value.DateTime;//?.ToLocalTime();
+        }
+        public static async Task CronoExpress_Test1()
+        {
             var dtOffSet = new DateTimeOffset(DateTime.Now);
             //CronExpression expression = CronExpression.Parse("45 09 L-2W * *");
-            CronExpression expression = CronExpression.Parse("45 09 * * *");
+            //CronExpression expression = CronExpression.Parse("45 09 * * *");
+            CronExpression expression = CronExpression.Parse("0 * * * *");
             var nextDTOff = expression.GetNextOccurrence(dtOffSet, TimeZoneInfo.Local).Value;
             var next = nextDTOff.DateTime;//?.ToLocalTime();
             var next1 = expression.GetNextOccurrence(nextDTOff, TimeZoneInfo.Local).Value.DateTime;//?.ToLocalTime();

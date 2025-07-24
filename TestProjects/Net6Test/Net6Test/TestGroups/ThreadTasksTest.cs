@@ -1,4 +1,5 @@
 ﻿using Net6Test.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
@@ -47,7 +48,8 @@ namespace Net6Test.TestGroups
 
         public async static Task ConcurrentBag_T_Test()
         {
-            var bag = new ConcurrentBag<int>();
+            //var bag = new ConcurrentBag<int>();
+            var bag = new BlockingCollection<int>();
             var bagList = new List<int>();
 
             Func<int, Task> act = async (i) =>
@@ -60,7 +62,7 @@ namespace Net6Test.TestGroups
                             bagList.Add(i);
                         }
                         Console.WriteLine($"Enter - {i} - {Thread.CurrentThread.ManagedThreadId}");
-                        Thread.Sleep(3000);
+                        //Thread.Sleep(3000);
                         Console.WriteLine($"Exit - {i} - {Thread.CurrentThread.ManagedThreadId}");
                     });
                 };
@@ -78,11 +80,57 @@ namespace Net6Test.TestGroups
                 numList[m] = m;
             }
             await Parallel.ForEachAsync(numList,
-                new ParallelOptions { MaxDegreeOfParallelism = 3 },
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
                 (itm, cnlt) => new ValueTask(act(itm)));
 
             var list = bag.ToList();
             var blst = bagList.ToList();
+
+            var tokenSource = new CancellationTokenSource();
+            try
+            {
+                AddItems(bag, tokenSource);
+                foreach (var itm in bag.GetConsumingEnumerable(tokenSource.Token))
+                {
+                    //tokenSource.Token.ThrowIfCancellationRequested();
+                    try
+                    {
+                        Console.WriteLine(itm);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+                var lst2 = bag.GetConsumingEnumerable(tokenSource.Token).ToList();
+            }
+            catch (Exception ex)
+            { 
+                Console.WriteLine(ex.ToString()); 
+            }
+        }
+
+        private static async Task AddItems(BlockingCollection<int> bag, CancellationTokenSource ts)
+        {
+            await await Task.Factory.StartNew(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(5000);
+                    var rdm = new Random();
+                    var step = rdm.Next(1, 100);
+                    Console.WriteLine($"-------------------{step}-------------------");
+                    for (int i = 0; i < step; i++)
+                    {
+                        bag.Add(i);
+                    }
+                    if (step < -1)
+                    {
+                        ts.Cancel();
+                        break;
+                    }
+                }
+            });
         }
 
         public static async Task LockObj_Test()

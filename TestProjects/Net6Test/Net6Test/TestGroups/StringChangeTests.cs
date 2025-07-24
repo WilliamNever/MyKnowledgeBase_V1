@@ -43,5 +43,14 @@ namespace Net6Test.TestGroups
             var mc = exp.Match(ss);
             var mcs = exp.Matches(ss);
         }
+
+        public async static Task SomeStringConvertTest()
+        {
+            var uri = new Uri("ttcdb://rssl/" + "53d2afdf-b9ad-461d-99d9-90ca3f09c1a8");
+            var p1 = Guid.Parse(uri.PathAndQuery.TrimStart('/'));
+            var uri1 = new Uri(@"\\fallec\Software\Free tools\Chrome\");
+            var uri2 = new Uri(@"http://www.baidu.com/");
+            var uri3 = new Uri(@"https://www.baidu.com/");
+        }
     }
 }
