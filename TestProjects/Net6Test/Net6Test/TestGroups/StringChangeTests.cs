@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Primitives;
 using Microsoft.VisualBasic.FileIO;
+using Net6Test.StaticUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,11 @@ namespace Net6Test.TestGroups
 
         public async static Task SomeStringConvertTest()
         {
+            var fileName = @"D:\WorkSpaces\DevAzure\ssd\ffv.wve\sde\bsm.cs";
+            var fn = Path.GetFileName(fileName);
+            //fn = null;
+            var isEqual = fn.ToEquals("BSm.cs");
+
             var uri = new Uri("ttcdb://rssl/" + "53d2afdf-b9ad-461d-99d9-90ca3f09c1a8");
             var p1 = Guid.Parse(uri.PathAndQuery.TrimStart('/'));
             var uri1 = new Uri(@"\\fallec\Software\Free tools\Chrome\");
