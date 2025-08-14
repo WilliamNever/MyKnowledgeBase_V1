@@ -47,6 +47,9 @@ namespace Net6Test.TestGroups
 
         public async static Task SomeStringConvertTest()
         {
+            string mmx = "True";
+            var rslt = bool.TryParse(mmx, out var rsl);
+            //var brsl = bool.Parse(mmx);
             var fileName = @"D:\WorkSpaces\DevAzure\ssd\ffv.wve\sde\bsm.cs";
             var fn = Path.GetFileName(fileName);
             //fn = null;
