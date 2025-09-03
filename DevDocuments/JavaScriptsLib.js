@@ -341,3 +341,37 @@ var waitingDialog = waitingDialog || (function ($) {
     };
 
 })(jQuery);
+
+
+
+
+
+
+            var convertSingleValuesToArray = function (obj) {
+                if (obj != null) {
+                    if (obj.hasOwnProperty("value")) {
+                        if (Object.prototype.toString.call(obj.value) !== '[object Array]') {
+                            obj.value = [obj.value];
+                        }
+                    }
+
+                    if (obj.hasOwnProperty("condition")) {
+                        if (
+                            Object.prototype.toString.call(obj.condition) === '[object Array]'
+                            && obj.condition.length > 0
+                        ) {
+                            obj.condition = obj.condition[0];
+                        }
+                        else
+                        {
+                            if(!(Object.prototype.toString.call(obj.condition) === '[object String]' && obj.condition))
+                                delete obj.condition;
+                        }
+                    }
+                    if (obj.hasOwnProperty("rules") && obj.rules != null) {
+                        for (var i = 0; i < obj.rules.length; i++) {
+                            convertSingleValuesToArray(obj.rules[i]);
+                        }
+                    }
+                }
+            }

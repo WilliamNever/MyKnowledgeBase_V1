@@ -57,7 +57,11 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ThreadThrowException_Test().Wait();
             //ThreadTasksTest.ContinueWith_Test().Wait();
             //StringChangeTests.SomeStringConvertTest().Wait();
-            DelegateFuncAction_Tests.DelegateGrpTest().Wait();
+            //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
+
+            //JsonTests.JsTestAsync().Wait();
+
+            CompressionEncrypt.CETest1Async().Wait();
         }
 
         private async Task ValueTupleTest()
