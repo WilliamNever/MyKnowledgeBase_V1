@@ -38,6 +38,7 @@ namespace Net6Test.TestEntrances
             //MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
+            //SecurityCryptography_Tests.ToMD5_Test();
 
             //InjectionTest.InjectScopeTest();
             //InjectionTest.HttpClient_Test(provider).Wait();
@@ -49,6 +50,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.UrlParseQueryString_Test().Wait();
             //StringChangeTests.StringEndsSub_Test().Wait();
             //StringChangeTests.SomeStringConvertTest().Wait();
+            StringChangeTests.PathCombine();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
@@ -75,7 +77,7 @@ namespace Net6Test.TestEntrances
             //CompressionEncrypt.CETest1Async().Wait();
 
             //ZipTest.ZipToFile();
-            ZipTest.ZipFolder();
+            //ZipTest.ZipFolder();
         }
 
         private async Task ValueTupleTest()

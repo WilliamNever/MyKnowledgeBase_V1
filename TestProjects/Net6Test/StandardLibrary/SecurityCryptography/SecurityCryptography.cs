@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StandardLibrary.SecurityCryptography
@@ -24,6 +25,19 @@ namespace StandardLibrary.SecurityCryptography
                 }
 
                 return stringBuilder.ToString();
+            }
+        }
+
+        public static string GenerateMD5Hash(this string input)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var hexString = new StringBuilder();
+
+                foreach (byte b in data) hexString.Append(b.ToString("x2"));
+
+                return hexString.ToString();
             }
         }
     }

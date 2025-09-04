@@ -61,5 +61,14 @@ namespace Net6Test.TestGroups
             var uri2 = new Uri(@"http://www.baidu.com/ori/xxx.xml");
             var uri3 = new Uri(@"https://www.baidu.com/xx?xxv=1&xvve=3x");
         }
+
+        public static void PathCombine()
+        {
+            var sb = @"d:\tmp";
+            var sp = "xxx/11_jioi.zip";
+            
+            var fp = Path.Combine(sb, sp);
+            var fp1 = Path.GetFullPath(sp);
+        }
     }
 }

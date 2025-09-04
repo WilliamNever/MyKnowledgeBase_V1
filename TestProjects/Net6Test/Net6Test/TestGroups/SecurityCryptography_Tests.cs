@@ -4,6 +4,11 @@ namespace Net6Test.TestGroups
 {
     public class SecurityCryptography_Tests
     {
+        public static void ToMD5_Test()
+        {
+            string str = "111111";
+            var enc = str.GenerateMD5Hash();
+        }
         public static void ToHashSha256_Test()
         {
             string str = "111111";
