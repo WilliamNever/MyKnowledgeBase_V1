@@ -24,11 +24,13 @@ namespace Net6Test.TestEntrances
             //QuartzCronExpressionTestAsync().Wait();
             //ValueTupleTest().Wait();
 
-            //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
-            //ConversionTest.TypeTest().Wait();
-            //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
 
-            //InjectionTest.InjectScopeTest();
+            //ConversionTest.TypeTest().Wait();
+
+            //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
+            //CollectionListTest.NestListToExtraList_Test(provider).Wait();
+
+
             //RecordTest.Test1Async().Wait();
             //RecordTest.Test2Async().Wait();
             //Type_Reflect_Tests.RunTest();
@@ -36,32 +38,44 @@ namespace Net6Test.TestEntrances
             //MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
-            //ThreadTasksTest.LockObj_Test().Wait();
+
+            //InjectionTest.InjectScopeTest();
             //InjectionTest.HttpClient_Test(provider).Wait();
+            //InjectionTest.ScopeInjuected_Test(provider).Wait();
 
             //StronglyTypedEnumTests.Test1();
-            //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
-            //ThreadTasksTest.TaskAwait_Test().Wait();
-            //CollectionListTest.NestListToExtraList_Test(provider).Wait();
+
+
             //StringChangeTests.UrlParseQueryString_Test().Wait();
+            //StringChangeTests.StringEndsSub_Test().Wait();
+            //StringChangeTests.SomeStringConvertTest().Wait();
 
             //XMLSchemaTest.Test1().Wait();
-            //StringChangeTests.StringEndsSub_Test().Wait();
+            //XMLSchemaTest.ReadXMLFile_Test().Wait();
+
             //LogicShema_Tests.Test1();
 
             //HttpInteract_Test.HttpClientFactory_Test(provider).Wait();
 
-            //XMLSchemaTest.ReadXMLFile_Test().Wait();
 
+            //ThreadTasksTest.ConcurrentBag_T_Test().Wait();
+            //ThreadTasksTest.LockObj_Test().Wait();
+            //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
+            //ThreadTasksTest.TaskAwait_Test().Wait();
             //ThreadTasksTest.Parallel_ForEach_Test().Wait();
             //ThreadTasksTest.ThreadThrowException_Test().Wait();
             //ThreadTasksTest.ContinueWith_Test().Wait();
-            //StringChangeTests.SomeStringConvertTest().Wait();
+            //ThreadTasksTest.Task_Dispose_Test().Wait();
+
+
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
 
             //JsonTests.JsTestAsync().Wait();
 
-            CompressionEncrypt.CETest1Async().Wait();
+            //CompressionEncrypt.CETest1Async().Wait();
+
+            //ZipTest.ZipToFile();
+            ZipTest.ZipFolder();
         }
 
         private async Task ValueTupleTest()

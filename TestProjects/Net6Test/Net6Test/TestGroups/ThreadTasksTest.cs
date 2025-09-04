@@ -1,11 +1,47 @@
 ﻿using Net6Test.Models;
-using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task Task_Dispose_Test()
+        {
+            Func<CancellationToken, Task<int>> func = async (token) =>
+            {
+                //while (true)
+                while (!token.IsCancellationRequested)
+                {
+                    //token.ThrowIfCancellationRequested();
+                    Console.WriteLine($"In Task - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                await Task.Delay(3000);
+                return 3;
+            };
+            try
+            {
+                CancellationTokenSource ts = new CancellationTokenSource();
+                using (var tsk = func(ts.Token))
+                {
+                    await Task.Delay(5000);
+                    ts.Cancel();
+                    //ts.Dispose(); //Dispose cannot stop the running Task.
+                    var r = await tsk;
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                await Task.Delay(10000);
+            }
+        }
+
         public async static Task ContinumeWithAsync_Test()
         {
             var cans = new CancellationTokenSource();
@@ -27,6 +63,7 @@ namespace Net6Test.TestGroups
             //var tsk2 = Task.Run(async () => { await Console.Out.WriteLineAsync("In task 2."); });
             Thread.Sleep(1500);
             cans.Cancel();
+
             try
             {
                 var xx = await Task.WhenAll(

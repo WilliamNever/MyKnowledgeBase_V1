@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Net6Test.ConfigurationsClasses;
 using Net6Test.Models;
+using Net6Test.Services;
 using Net6Test.StaticUtilities;
 
 namespace Net6Test
@@ -26,6 +27,10 @@ namespace Net6Test
             services.AddMemoryCache(x => { });
             services.AddTransient<Func<string, string, string>>(_ => (x, y) => ExtensionsClass.GetName(x, y));
             services.AddHttpClient("PostClientXy");
+
+            services.AddScoped<TestingServiceMain>()
+                .AddScoped<TestingServiceInjected>()
+                ;
         }
 
         public abstract void MainRun();
