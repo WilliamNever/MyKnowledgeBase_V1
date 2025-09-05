@@ -10,6 +10,30 @@ namespace Net6Test.TestGroups
             CancellationTokenSource ts = new CancellationTokenSource();
             var sl = new ManualResetEventSlim(false);
 
+            _ = Task.Run(async () => { 
+                await Task.Delay(5000); 
+                try
+                {
+                    //Console.WriteLine($"To cancel token");
+                    sl.Set();
+                    //ts.Cancel();
+                }
+                catch(Exception ex)
+                {
+                }
+            });
+
+            try
+            {
+                sl.Wait(ts.Token);
+            }
+            catch (Exception ex)
+            {
+            }
+            finally {
+                sl.Reset();
+            }
+
             int totalTasks = 3;
             ConcurrentDictionary<string, Task<string>> bags = new();
             ConcurrentQueue<string> Sids = new();
