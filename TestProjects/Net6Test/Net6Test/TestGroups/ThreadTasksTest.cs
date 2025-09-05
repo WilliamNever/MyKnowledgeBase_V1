@@ -5,6 +5,92 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task Task_WhenAny_Test()
+        {
+            CancellationTokenSource ts = new CancellationTokenSource();
+            var sl = new ManualResetEventSlim(false);
+
+            int totalTasks = 3;
+            ConcurrentDictionary<string, Task<string>> bags = new();
+            ConcurrentQueue<string> Sids = new();
+
+            Func<string, string, int, Task<string>> func = async (id, name, ltime) =>
+            {
+                for (int i = 0; i < ltime; i++)
+                {
+                    Console.WriteLine($"Task {name} - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                bags.TryRemove(id, out _);
+                return $"{name} / {ltime}";
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                Sids.Enqueue($"Queue - {i}");
+            }
+
+            _ = Task.Run(async () => {
+                await Task.Delay(10000);
+                for (int i = 0; i < 10; i++)
+                {
+                    Sids.Enqueue($"Append Queue - {i}");
+                    await Task.Delay(1000);
+                }
+            });
+
+
+            var t1 = Task.Run(async () => await func("1", "Thr - 1", 3));
+            var t2 = Task.Run(async () => await func("2", "Thr - 2", 3));
+            var t3 = Task.Run(async () => await func("3", "Thr - 3", 3));
+            //bags.TryAdd("1", t1);
+            //bags.TryAdd("2", t2);
+            //bags.TryAdd("3", t3);
+            _ = bags.AddOrUpdate("1", t1, (key, tsk1) => { return t1; });
+            _ = bags.AddOrUpdate("2", t2, (key, tsk1) => { return t2; });
+            _ = bags.AddOrUpdate("3", t3, (key, tsk1) => { return t3; });
+
+            await Task.Delay(5000);
+            //ts.Cancel();
+            sl.Set();
+            while (true)
+            {
+                sl.Wait(ts.Token);
+                Console.WriteLine($"Starting......");
+                
+                var ccout = bags.Count;
+                if (ccout < totalTasks)
+                {
+                    var left = totalTasks - ccout;
+                    for (int i = 0; i < left; i++)
+                    {
+                        if (Sids.TryDequeue(out var sid))
+                        {
+                            bags.TryAdd(sid, Task.Run(async () => await func(sid, $"Thr - {sid}", i + 3)));
+                        }
+                        else
+                        { }
+                    }
+                }
+
+                if (bags.Count > 0)
+                {
+                    var t = await Task.WhenAny(bags.Select(x => x.Value));
+                    Console.WriteLine(await t);
+                }
+                else
+                {
+                    if (Sids.Count < 1)
+                    {
+                        sl.Reset();
+                        //sl.Wait(ts.Token);
+                        break;
+                    }
+                    else
+                    { }
+                }
+            }
+        }
         public async static Task Task_Dispose_Test()
         {
             Func<CancellationToken, Task<int>> func = async (token) =>

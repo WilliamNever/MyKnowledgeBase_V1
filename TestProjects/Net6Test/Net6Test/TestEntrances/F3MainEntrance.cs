@@ -50,7 +50,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.UrlParseQueryString_Test().Wait();
             //StringChangeTests.StringEndsSub_Test().Wait();
             //StringChangeTests.SomeStringConvertTest().Wait();
-            StringChangeTests.PathCombine();
+            //StringChangeTests.PathCombine();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
@@ -68,6 +68,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ThreadThrowException_Test().Wait();
             //ThreadTasksTest.ContinueWith_Test().Wait();
             //ThreadTasksTest.Task_Dispose_Test().Wait();
+            ThreadTasksTest.Task_WhenAny_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
