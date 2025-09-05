@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Net6Test": {
+      "commandName": "Project"
+    }
+  }
+}
