@@ -35,7 +35,7 @@ namespace Net6Test.TestGroups
             {
             }
 
-            int totalTasks = 3;
+            int totalTasks = 10;
             ConcurrentDictionary<string, Task<string>> bags = new();
             ConcurrentQueue<string> Sids = new();
 
@@ -52,18 +52,18 @@ namespace Net6Test.TestGroups
                 return $"{name} / {ltime}";
             };
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Sids.Enqueue($"Queue - {i}");
             }
 
             _ = Task.Run(async () =>
             {
-                await Task.Delay(60000);
-                for (int i = 0; i < 10; i++)
+                await Task.Delay(120000);
+                for (int i = 0; i < 100; i++)
                 {
                     Sids.Enqueue($"Append Queue - {i}");
-                    await Task.Delay(1000);
+                    //await Task.Delay(1000);
                     if (ss.CurrentCount < 2)
                         ss.Release(2);
                 }
@@ -80,6 +80,7 @@ namespace Net6Test.TestGroups
             _ = bags.AddOrUpdate("3", t3, (key, tsk1) => { return t3; });
 
             await Task.Delay(5000);
+            Console.WriteLine($"APP Starting......");
             while (true)
             {
                 gid = Guid.NewGuid();
@@ -95,7 +96,7 @@ namespace Net6Test.TestGroups
                         {
                             var m = i;
                             bags.TryAdd(sid, Task.Run(async () => await func(sid, $"Thr - {sid}", m, gid)));
-                            await Task.Delay(500, ts.Token);
+                            //await Task.Delay(500, ts.Token);
                         }
                     }
                 }
@@ -103,10 +104,11 @@ namespace Net6Test.TestGroups
 
                 try
                 {
-                    //await Task.Delay(5000, ts.Token);
                     var tss = bags.Select(x => x.Value).ToList();
-                    var t = await Task.WhenAny(tss.Count > 0 ? tss : new Task[] { Task.CompletedTask });
-                    //Console.WriteLine(await t);
+                    if (tss.Count > 0)
+                    {
+                        var t = await Task.WhenAny(tss);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -114,6 +116,7 @@ namespace Net6Test.TestGroups
                 if (bags.Count < 1 && Sids.Count < 1)
                 {
                     var stpId = Guid.NewGuid();
+                    Console.WriteLine();
                     Console.WriteLine($"Begin to sleep at {DateTime.Now} - {stpId}");
                     await ss.WaitAsync(5 * 60 * 1000, ts.Token);
                     Console.WriteLine($"Awake sleep at {DateTime.Now} - {stpId}");
