@@ -5,6 +5,126 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task Task_WhenAny_With_SemaphoreSlim_Test()
+        {
+            CancellationTokenSource ts = new CancellationTokenSource();
+            //SemaphoreSlim ss = new SemaphoreSlim(1,1);
+            SemaphoreSlim ss = new SemaphoreSlim(0);
+            //await ss.WaitAsync(3 * 1000, ts.Token);
+            ss.Release(3);
+            await ss.WaitAsync(5 * 1000, ts.Token);
+            await ss.WaitAsync(5 * 1000, ts.Token);
+            var needsToAdding = ss.CurrentCount > 2;
+            //await ss.WaitAsync(300 * 1000, ts.Token);
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(5000);
+                try
+                {
+                    //ts.Cancel();
+                }
+                catch (Exception ex)
+                {
+                }
+            });
+            try
+            {
+                await ss.WaitAsync(300 * 1000, ts.Token);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            int totalTasks = 3;
+            ConcurrentDictionary<string, Task<string>> bags = new();
+            ConcurrentQueue<string> Sids = new();
+
+            Func<string, string, int, Guid, Task<string>> func = async (id, name, ltime, guid) =>
+            {
+                var stime = ltime + 3;
+                for (int i = 0; i < stime; i++)
+                {
+                    Console.WriteLine($"Task {name} - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                bags.TryRemove(id, out _);
+                Console.WriteLine($"{name} - {guid} / {ltime} // Thread ID - {Thread.CurrentThread.ManagedThreadId}");
+                return $"{name} / {ltime}";
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                Sids.Enqueue($"Queue - {i}");
+            }
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(60000);
+                for (int i = 0; i < 10; i++)
+                {
+                    Sids.Enqueue($"Append Queue - {i}");
+                    await Task.Delay(1000);
+                    if (ss.CurrentCount < 2)
+                        ss.Release(2);
+                }
+            });
+            var gid = Guid.NewGuid();
+            var t1 = Task.Run(async () => await func("1", "Thr - 1", 3, gid), ts.Token);
+            var t2 = Task.Run(async () => await func("2", "Thr - 2", 3, gid), ts.Token);
+            var t3 = Task.Run(async () => await func("3", "Thr - 3", 3, gid), ts.Token);
+            //bags.TryAdd("1", t1);
+            //bags.TryAdd("2", t2);
+            //bags.TryAdd("3", t3);
+            _ = bags.AddOrUpdate("1", t1, (key, tsk1) => { return t1; });
+            _ = bags.AddOrUpdate("2", t2, (key, tsk1) => { return t2; });
+            _ = bags.AddOrUpdate("3", t3, (key, tsk1) => { return t3; });
+
+            await Task.Delay(5000);
+            while (true)
+            {
+                gid = Guid.NewGuid();
+                Console.WriteLine();
+                Console.WriteLine($"{gid} Starting......");
+                var ccout = bags.Count;
+                if (ccout < totalTasks)
+                {
+                    var left = totalTasks - ccout;
+                    for (int i = 0; i < left; i++)
+                    {
+                        if (Sids.TryDequeue(out var sid))
+                        {
+                            var m = i;
+                            bags.TryAdd(sid, Task.Run(async () => await func(sid, $"Thr - {sid}", m, gid)));
+                            await Task.Delay(500, ts.Token);
+                        }
+                    }
+                }
+
+
+                try
+                {
+                    //await Task.Delay(5000, ts.Token);
+                    var tss = bags.Select(x => x.Value).ToList();
+                    var t = await Task.WhenAny(tss.Count > 0 ? tss : new Task[] { Task.CompletedTask });
+                    //Console.WriteLine(await t);
+                }
+                catch (Exception ex)
+                {
+                }
+                if (bags.Count < 1 && Sids.Count < 1)
+                {
+                    var stpId = Guid.NewGuid();
+                    Console.WriteLine($"Begin to sleep at {DateTime.Now} - {stpId}");
+                    await ss.WaitAsync(5 * 60 * 1000, ts.Token);
+                    Console.WriteLine($"Awake sleep at {DateTime.Now} - {stpId}");
+
+                    //await ss.WaitAsync(5 * 1000, ts.Token);
+                    //break;
+
+                }
+            }
+        }
+
         public async static Task Task_WhenAny_Test()
         {
             CancellationTokenSource ts = new CancellationTokenSource();
