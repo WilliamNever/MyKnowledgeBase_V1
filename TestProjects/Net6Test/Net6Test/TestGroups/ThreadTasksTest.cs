@@ -30,13 +30,13 @@ namespace Net6Test.TestGroups
             CancellationTokenSource ts = new CancellationTokenSource();
 
             var mtk = Task.Run(async () => await funcMain("Tsk - main", ts.Token), ts.Token);
+            var mtk1 = await Task.Factory.StartNew(async () => await funcMain("Tsk - main-Factory", ts.Token), ts.Token);
 
             var ts1 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
             var tk1 = Task.Run(async () => await func("Tsk - 1", ts1.Token), ts1.Token);
 
             var ts2 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
             var tk2 = Task.Run(async () => await func("Tsk - 2", ts2.Token), ts2.Token);
-
 
 
             await Task.Delay(5000);

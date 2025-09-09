@@ -69,8 +69,8 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ContinueWith_Test().Wait();
             //ThreadTasksTest.Task_Dispose_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test().Wait();
-            ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
-            //ThreadTasksTest.Task_Cancel_Test().Wait();
+            //ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
+            ThreadTasksTest.Task_Cancel_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
