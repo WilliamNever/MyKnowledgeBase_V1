@@ -1,10 +1,50 @@
 ﻿using Net6Test.Models;
+using System;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task Task_Cancel_Test()
+        {
+            Func<string, CancellationToken, Task> func = async (name, token) =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    Console.WriteLine($"{name} - {DateTime.Now} - {Thread.CurrentThread.ManagedThreadId}");
+                    await Task.Delay(1000);
+                }
+                Console.WriteLine($"{name} - {DateTime.Now} /// {Thread.CurrentThread.ManagedThreadId}");
+            };
+
+            Func<string, CancellationToken, Task> funcMain = async (name, token) =>
+            {
+                while (true)
+                {
+                    Console.WriteLine($"{name} - {DateTime.Now} - {Thread.CurrentThread.ManagedThreadId}");
+                    await Task.Delay(1000);
+                }
+                Console.WriteLine($"{name} - {DateTime.Now} /// {Thread.CurrentThread.ManagedThreadId}");
+            };
+            CancellationTokenSource ts = new CancellationTokenSource();
+
+            var mtk = Task.Run(async () => await funcMain("Tsk - main", ts.Token), ts.Token);
+
+            var ts1 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
+            var tk1 = Task.Run(async () => await func("Tsk - 1", ts1.Token), ts1.Token);
+
+            var ts2 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
+            var tk2 = Task.Run(async () => await func("Tsk - 2", ts2.Token), ts2.Token);
+
+
+
+            await Task.Delay(5000);
+            ts2.Cancel();
+            await Task.Delay(5000);
+            ts.Cancel(true);
+            await Task.Delay(10000);
+        }
         public async static Task Task_WhenAny_With_SemaphoreSlim_Test()
         {
             CancellationTokenSource ts = new CancellationTokenSource();
@@ -44,7 +84,7 @@ namespace Net6Test.TestGroups
                 var stime = ltime + 3;
                 for (int i = 0; i < stime; i++)
                 {
-                    Console.WriteLine($"Task {name} - {DateTime.Now}");
+                    //Console.WriteLine($"Task {name} - {DateTime.Now}");
                     await Task.Delay(1000);
                 }
                 bags.TryRemove(id, out _);
