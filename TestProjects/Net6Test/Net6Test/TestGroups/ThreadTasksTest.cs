@@ -55,10 +55,17 @@ namespace Net6Test.TestGroups
             {
                 Task.WaitAll(mtk, mtk1);
             }
+            catch (OperationCanceledException ex) when (ts.IsCancellationRequested)
+            {
+            }
+            catch (Exception ex) when (ex.InnerException != null)
+            { 
+            }
             catch (Exception ex)
             {
             }
-            finally {
+            finally
+            {
                 await Task.Delay(5000);
             }
         }
