@@ -37,11 +37,11 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(TestStringPointTest());
             //Task.WaitAll(MD5Encoding());
             //Task.WaitAll(SkipTakeTest());
-            //Task.WaitAll(ConvertionsTest());
+            Task.WaitAll(ConvertionsTest());
             //Task.WaitAll(ReadAttributesStringTest());
             //Task.WaitAll(BitOperationTest<Bxx1, UserException>(new Bxx1()));
             //Task.WaitAll(ListArrayTest());
-            Task.WaitAll(SplitString());
+            //Task.WaitAll(SplitString());
         }
 
         private async Task SplitString()
@@ -155,20 +155,24 @@ namespace Net6Test.TestEntrances
             //var dt = DateTime.Now;
             //var sss = TimeZoneInfo.ConvertTimeToUtc(dt, TimeZoneInfo.Local);
 
-            var utcNow = DateTime.UtcNow;
-            Console.WriteLine(utcNow);
+            var utcNow = DateTime.Now.ToUniversalTime();
+            Console.WriteLine($"{utcNow} - {utcNow.ToUniversalTime()}");
             Console.WriteLine("------------");
             var lastRun = TimeZoneInfo.ConvertTimeToUtc(utcNow, TimeZoneInfo.Utc);
             Console.WriteLine(lastRun);
 
 
             CronExpression expression = CronExpression.Parse("0 9,16 * * *");
-            for (int i = 0; i < 10; i++)
-            {
-                var NextRunUTC = expression.GetNextOccurrence(utcNow, TimeZoneInfo.Local);
-                utcNow = NextRunUTC ?? utcNow;
-                Console.WriteLine(utcNow);
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+                var NextRunUTC = expression.GetNextOccurrence(utcNow, TimeZoneInfo.Local, false);
+                Console.WriteLine($"{NextRunUTC} - {NextRunUTC.Value.ToLocalTime()}");
+
+                NextRunUTC = expression.GetNextOccurrence(utcNow, TimeZoneInfo.Local, true);
+                Console.WriteLine($"{NextRunUTC} - {NextRunUTC.Value.ToLocalTime()}");
+
+                //utcNow = NextRunUTC ?? utcNow;
+            //}
         }
 
         private async Task SkipTakeTest()

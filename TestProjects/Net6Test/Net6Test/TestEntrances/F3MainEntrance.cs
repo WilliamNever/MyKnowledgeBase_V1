@@ -54,6 +54,7 @@ namespace Net6Test.TestEntrances
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
+            //XMLSchemaTest.XDocument_Descendants().Wait();
 
             //LogicShema_Tests.Test1();
 
@@ -70,7 +71,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_Dispose_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
-            ThreadTasksTest.Task_Cancel_Test().Wait();
+            //ThreadTasksTest.Task_Cancel_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -81,6 +82,8 @@ namespace Net6Test.TestEntrances
 
             //ZipTest.ZipToFile();
             //ZipTest.ZipFolder();
+
+            MessTests.T1().Wait();
         }
 
         private async Task ValueTupleTest()
