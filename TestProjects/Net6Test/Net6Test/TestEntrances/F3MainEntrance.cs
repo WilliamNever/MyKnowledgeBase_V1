@@ -83,7 +83,11 @@ namespace Net6Test.TestEntrances
             //ZipTest.ZipToFile();
             //ZipTest.ZipFolder();
 
-            MessTests.T1().Wait();
+            //MessTests.T1().Wait();
+
+            //ConcurrentClassTests.ConcurrentDictionary_Test().Wait();
+
+            ListTests.ListJoinTest();
         }
 
         private async Task ValueTupleTest()
