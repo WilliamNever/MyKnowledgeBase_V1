@@ -72,6 +72,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.Task_Cancel_Test().Wait();
+            ThreadTasksTest.Task_SemaphoreSlim_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -87,7 +88,9 @@ namespace Net6Test.TestEntrances
 
             //ConcurrentClassTests.ConcurrentDictionary_Test().Wait();
 
-            ListTests.ListJoinTest();
+            //ListTests.ListJoinTest();
+
+            //Cronos_Tests.DateTimeTest();
         }
 
         private async Task ValueTupleTest()

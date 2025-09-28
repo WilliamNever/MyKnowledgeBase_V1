@@ -28,6 +28,10 @@ namespace Net6Test.TestGroups
                 //Console.WriteLine($"{name} - {DateTime.Now} /// {Thread.CurrentThread.ManagedThreadId}");
             };
             CancellationTokenSource ts = new CancellationTokenSource();
+            ts.Cancel();
+            ts.Cancel();
+            ts.Dispose();
+            ts.Dispose();
 
             var def = TaskScheduler.Default;
             var current = TaskScheduler.Current;
@@ -35,7 +39,7 @@ namespace Net6Test.TestGroups
             var fstk = await Task.Factory.StartNew(
                 async () => await func("Tsk - main-Factory-LongRunning", ts.Token)
                 , TaskCreationOptions.LongRunning);
-
+            await Task.Delay(10000);
             var mtk = Task.Run(async () => await funcMain("Tsk - main", ts.Token), ts.Token);
             var mtk1 = await Task.Factory.StartNew(async () => await funcMain("Tsk - main-Factory", ts.Token), ts.Token);
 
@@ -595,6 +599,20 @@ namespace Net6Test.TestGroups
                     return await await tsk; 
                 });
             await Console.Out.WriteLineAsync($"return value: {x}");
+        }
+
+        public async static Task Task_SemaphoreSlim_Test()
+        {
+            SemaphoreSlim ss = new SemaphoreSlim(0);
+            Func<Task> func = async () => {
+                await ss.WaitAsync();
+                Console.WriteLine($"Go End ------");
+            };
+            ss.Release(2);
+            while (true)
+            {
+                await func();
+            }
         }
     }
 }
