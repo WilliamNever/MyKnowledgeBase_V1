@@ -6,6 +6,13 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task CancellationTokenSource_Test()
+        {
+            var mth = () => { Console.WriteLine($"Write a line."); };
+            CancellationTokenSource ts = new();
+            ts.Token.Register(mth);
+            ts.Cancel();
+        }
         public async static Task Task_Cancel_Test()
         {
             Func<string, CancellationToken, Task> func = async (name, token) =>
