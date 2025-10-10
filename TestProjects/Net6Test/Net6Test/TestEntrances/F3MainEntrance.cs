@@ -34,7 +34,11 @@ namespace Net6Test.TestEntrances
             //RecordTest.Test1Async().Wait();
             //RecordTest.Test2Async().Wait();
             //Type_Reflect_Tests.RunTest();
+
             //DateTime_Tests.Test().Wait();
+            DateTime_Tests.Ticker_Test().Wait();
+
+
             //MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
@@ -73,7 +77,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.Task_Cancel_Test().Wait();
             //ThreadTasksTest.Task_SemaphoreSlim_Test().Wait();
-            ThreadTasksTest.CancellationTokenSource_Test().Wait();
+            //ThreadTasksTest.CancellationTokenSource_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();

@@ -11,6 +11,16 @@ namespace Net6Test.TestGroups
 {
     public class DateTime_Tests
     {
+        public static async Task Ticker_Test()
+        {
+            var ticker = 1530216375388;
+            var dateTime = DateTimeOffset.FromUnixTimeMilliseconds(ticker);
+            var dtoMS = dateTime.ToUnixTimeMilliseconds();
+            var dtt = dateTime.Ticks;
+            var dtOff = new DateTimeOffset(dateTime.DateTime);
+            var dtOff1 = new DateTimeOffset(dateTime.UtcDateTime);
+            var dtts = dtOff1.ToUnixTimeMilliseconds();
+        }
         public static async Task Test()
         {
             var NowDateTime = DateTimeOffset.Now;
