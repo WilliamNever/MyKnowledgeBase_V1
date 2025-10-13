@@ -68,6 +68,7 @@ namespace Net6Test.TestGroups
             var sp = "xxx/11_jioi.zip";
             
             var fp = Path.Combine(sb, sp);
+            var fp2 = Path.Combine("/", sp);
             var fp1 = Path.GetFullPath(sp);
         }
     }

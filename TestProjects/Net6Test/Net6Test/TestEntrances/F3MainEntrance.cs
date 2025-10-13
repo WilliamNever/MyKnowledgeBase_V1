@@ -36,7 +36,7 @@ namespace Net6Test.TestEntrances
             //Type_Reflect_Tests.RunTest();
 
             //DateTime_Tests.Test().Wait();
-            DateTime_Tests.Ticker_Test().Wait();
+            //DateTime_Tests.Ticker_Test().Wait();
 
 
             //MemoryCache_Tests.Test();
@@ -54,7 +54,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.UrlParseQueryString_Test().Wait();
             //StringChangeTests.StringEndsSub_Test().Wait();
             //StringChangeTests.SomeStringConvertTest().Wait();
-            //StringChangeTests.PathCombine();
+            StringChangeTests.PathCombine();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
