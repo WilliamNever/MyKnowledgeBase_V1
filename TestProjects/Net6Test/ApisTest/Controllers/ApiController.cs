@@ -53,5 +53,5 @@ namespace ApisTest.Controllers
         }
     }
 
-    public record AX (string Name);
+    public record AX (string Name, bool isAge);
 }

@@ -563,14 +563,18 @@ namespace Net6Test.TestGroups
             await Task.Delay(15000);
         }
 
-        public static async Task ThreadThrowException_Test()
+        public static async Task ThreadThrowException_Test(CancellationToken token = default)
         {
+            token.ThrowIfCancellationRequested();
+            var ts = new CancellationTokenSource();
+            var tk = ts.Token;
+
             Task<int> tsk = null;
             try
             {
                 tsk = TaskAwait_Test(new SimpleModel { Id = 100 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -578,7 +582,7 @@ namespace Net6Test.TestGroups
             {
                 _ = await tsk;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

@@ -12,10 +12,12 @@ namespace ApisTest.Middlewares
         }
         public async Task Invoke(HttpContext context)
         {
-            var PostTxt = await ReadHttpRequestBodyByBodyReaderAsync(context.Request);
+            await next(context);
+            //var PostTxt = await ReadHttpRequestBodyByBodyReaderAsync(context.Request);
         }
         private static async Task<string> ReadHttpRequestBodyByBodyReaderAsync(HttpRequest request)
         {
+            //request.EnableBuffering();
             var reader = request.BodyReader;
             var buffer = new ArrayBufferWriter<byte>();
             var result = await reader.ReadAsync();

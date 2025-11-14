@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Net6Test.Models;
+using Net6Test.Services;
+using Net6Test.StaticUtilities;
 using Net6Test.TestGroups;
 using Newtonsoft.Json;
 using StandardLibrary.Helpers;
@@ -54,7 +56,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.UrlParseQueryString_Test().Wait();
             //StringChangeTests.StringEndsSub_Test().Wait();
             //StringChangeTests.SomeStringConvertTest().Wait();
-            StringChangeTests.PathCombine();
+            //StringChangeTests.PathCombine();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
@@ -70,7 +72,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
             //ThreadTasksTest.TaskAwait_Test().Wait();
             //ThreadTasksTest.Parallel_ForEach_Test().Wait();
-            //ThreadTasksTest.ThreadThrowException_Test().Wait();
+            ThreadTasksTest.ThreadThrowException_Test().Wait();
             //ThreadTasksTest.ContinueWith_Test().Wait();
             //ThreadTasksTest.Task_Dispose_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test().Wait();
@@ -96,6 +98,9 @@ namespace Net6Test.TestEntrances
             //ListTests.ListJoinTest();
 
             //Cronos_Tests.DateTimeTest();
+
+            //RegexesTestService.RegexFileNameReplace_Test();
+            //CalculateService.LiquidMixedTemperature().Wait();
         }
 
         private async Task ValueTupleTest()
