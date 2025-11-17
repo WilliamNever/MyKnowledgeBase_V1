@@ -23,10 +23,31 @@ namespace Net6Test.TestGroups
                     await Task.Delay(1000, ts.Token);
                 }
             });
+            
             try { 
                 //await Task.Delay(5000);
                 //ts.Cancel(true);//false
                 await tsk;
+            }
+            catch (Exception ex) 
+            {
+            }
+            try {
+                ts = new(10 * 1000);
+                var tsk1 = Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("1-1");
+                        await Task.Delay(1000, ts.Token);
+                        Console.WriteLine("1-2");
+                        ts.Token.ThrowIfCancellationRequested();
+                        if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                        Console.WriteLine("1-3");
+                        await Task.Delay(1000, ts.Token);
+                    }
+                });
+                await tsk1;
             }
             catch (Exception ex) 
             {
