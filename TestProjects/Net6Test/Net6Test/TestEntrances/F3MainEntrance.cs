@@ -72,7 +72,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.ContinumeWithAsync_Test().Wait();
             //ThreadTasksTest.TaskAwait_Test().Wait();
             //ThreadTasksTest.Parallel_ForEach_Test().Wait();
-            ThreadTasksTest.ThreadThrowException_Test().Wait();
+            //ThreadTasksTest.ThreadThrowException_Test().Wait();
             //ThreadTasksTest.ContinueWith_Test().Wait();
             //ThreadTasksTest.Task_Dispose_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test().Wait();
@@ -80,6 +80,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_Cancel_Test().Wait();
             //ThreadTasksTest.Task_SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.CancellationTokenSource_Test().Wait();
+            ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();

@@ -1,4 +1,5 @@
 ﻿using Net6Test.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 
@@ -6,6 +7,27 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task CancellationTokenSourceThrowException_Test()
+        {
+            CancellationTokenSource ts = new();
+            var tsk = Task.Run(async () =>
+            {
+                while (true) {
+                    ts.Token.ThrowIfCancellationRequested();
+                    if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                    Console.WriteLine("1");
+                    await Task.Delay(1000);
+                }
+            });
+            try { 
+                await Task.Delay(5000);
+                ts.Cancel(true);//false
+                await tsk;
+            }
+            catch (Exception ex) 
+            {
+            }
+        }
         public async static Task CancellationTokenSource_Test()
         {
             var mth = () => { Console.WriteLine($"Write a line."); };
