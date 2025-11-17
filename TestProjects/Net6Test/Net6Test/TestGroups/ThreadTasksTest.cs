@@ -9,19 +9,23 @@ namespace Net6Test.TestGroups
     {
         public async static Task CancellationTokenSourceThrowException_Test()
         {
-            CancellationTokenSource ts = new();
+            CancellationTokenSource ts = new(10 * 1000);
+            //ts.Cancel(false);
             var tsk = Task.Run(async () =>
             {
                 while (true) {
+                    Console.WriteLine("1");
+                    await Task.Delay(1000, ts.Token);
+                    Console.WriteLine("2");
                     ts.Token.ThrowIfCancellationRequested();
                     if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
-                    Console.WriteLine("1");
-                    await Task.Delay(1000);
+                    Console.WriteLine("3");
+                    await Task.Delay(1000, ts.Token);
                 }
             });
             try { 
-                await Task.Delay(5000);
-                ts.Cancel(true);//false
+                //await Task.Delay(5000);
+                //ts.Cancel(true);//false
                 await tsk;
             }
             catch (Exception ex) 

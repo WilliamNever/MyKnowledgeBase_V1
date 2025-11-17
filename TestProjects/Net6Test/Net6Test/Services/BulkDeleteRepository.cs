@@ -40,17 +40,17 @@ namespace Net6Test.Services
 
             int pages = 1;
             int pageSize = pagesize;
-            var ts = new CancellationTokenSource(CancelledBlockedProcessingSeconds * 1000);
+            CancellationTokenSource ts;
             var query = dbc.Set<TEntity>().Where(expression).Take(pageSize);
 
-            ts.Cancel(false);
             try
             {
                 while (query.Any())
                 {
                     //var dts = DateTime.Now;
-
+                    
                     token.ThrowIfCancellationRequested();
+                    ts = new CancellationTokenSource(CancelledBlockedProcessingSeconds * 1000);
                     await query.ExecuteDeleteAsync(ts.Token);
 
                     //Console.WriteLine($"Sub cose in Rond #{pages} - {DateTime.Now.Subtract(dts).TotalSeconds} seconds");
