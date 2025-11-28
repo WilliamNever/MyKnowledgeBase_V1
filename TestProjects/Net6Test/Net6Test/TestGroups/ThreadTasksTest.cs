@@ -13,14 +13,15 @@ namespace Net6Test.TestGroups
             //ts.Cancel(false);
             var tsk = Task.Run(async () =>
             {
+                var i = 1;
                 while (true) {
-                    Console.WriteLine("1");
+                    Console.WriteLine($"1 - {i++}");
                     await Task.Delay(1000, ts.Token);
-                    Console.WriteLine("2");
-                    ts.Token.ThrowIfCancellationRequested();
-                    if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
-                    Console.WriteLine("3");
-                    await Task.Delay(1000, ts.Token);
+                    //Console.WriteLine("2");
+                    //ts.Token.ThrowIfCancellationRequested();
+                    //if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                    //Console.WriteLine("3");
+                    //await Task.Delay(1000, ts.Token);
                 }
             });
             
@@ -33,18 +34,23 @@ namespace Net6Test.TestGroups
             {
             }
             try {
-                ts = new(10 * 1000);
+                //ts = new(10 * 1000);
                 var tsk1 = Task.Run(async () =>
                 {
+                    using CancellationTokenSource ts1 = new(5 * 1000);
+                    var i = 1;
                     while (true)
                     {
-                        Console.WriteLine("1-1");
-                        await Task.Delay(1000, ts.Token);
-                        Console.WriteLine("1-2");
-                        ts.Token.ThrowIfCancellationRequested();
-                        if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
-                        Console.WriteLine("1-3");
-                        await Task.Delay(1000, ts.Token);
+                        Console.WriteLine($"2 - {i++}");
+                        await Task.Delay(1000, ts1.Token);
+                        Console.WriteLine($"2 - {i++}");
+                        await Task.Delay(1000, ts1.Token);
+                        //await Task.Delay(1000, ts.Token);
+                        //Console.WriteLine("1-2");
+                        //ts.Token.ThrowIfCancellationRequested();
+                        //if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                        //Console.WriteLine("1-3");
+                        //await Task.Delay(1000, ts.Token);
                     }
                 });
                 await tsk1;
