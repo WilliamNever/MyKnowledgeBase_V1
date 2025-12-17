@@ -1,3 +1,6 @@
+const DefaulNone = '#None#'
+
+
 /*
 	Usages -
 	var helper = CreateValidation();
@@ -271,6 +274,61 @@ var GetInforModal = async function () {
     };
 };
 
+
+var CreateInforModal = () => {
+    return {
+        ModalWindow: undefined,
+        SetTitle: function (html) {
+            $("#InforModal .modal-title").html(html);
+        },
+        SetBody: function (html) {
+            $("#InforModal .modal-body").html(html);
+        },
+        SetModalStyle: function (style) {
+            $("#InforModal .modal-dialog").attr("style", style);
+        },
+        Show: function () {
+            if (!this.ModalWindow) this.Init();
+            this.ModalWindow.show();
+        },
+        Close: async function () {
+            if (this.ModalWindow?._isShown === true) {
+                let promise = new Promise((s, r) => {
+                    $("#InforModal")[0].addEventListener('hidden.bs.modal', event => {
+                        s(true);
+                    }, { once: true });
+                });
+
+                this.ModalWindow?.hide();
+                return await promise;
+            }
+            return true;
+        },
+        Init: function (options) {
+            this.SetTitle("------");
+            this.SetBody("Loading ...");
+            this.SetModalStyle("max-width:60%;width:60%");
+            let opt = options ? options : { backdrop: 'static', keyboard: false };
+            this.ModalWindow = new bootstrap.Modal('#InforModal', opt);
+        },
+        ShowError: function (err) {
+            let errModal = new bootstrap.Modal('#InforModal', { backdrop: 'static', keyboard: false });
+            this.SetModalStyle("");
+            this.SetTitle("<span style='color:red'>" + err?.Title + "</span>");
+            this.SetBody("<span style='color:red'>" + err?.Messages + "</span>");
+            errModal.show();
+        },
+        ShowSuccess: function (sucess) {
+            let errModal = new bootstrap.Modal('#InforModal', { backdrop: true, keyboard: true });
+            this.SetModalStyle("");
+            this.SetTitle("<span style='color:green'>" + sucess?.Title + "</span>");
+            this.SetBody("<span style='color:green'>" + sucess?.Messages + "</span>");
+            errModal.show();
+        },
+    };
+};
+
+
 /*
 Get random strings with specificated char number.
  */
@@ -347,7 +405,7 @@ var waitingDialog = waitingDialog || (function ($) {
 
 
 
-            var convertSingleValuesToArray = function (obj) {
+var convertSingleValuesToArray = function (obj) {
                 if (obj != null) {
                     if (obj.hasOwnProperty("value")) {
                         if (Object.prototype.toString.call(obj.value) !== '[object Array]') {
@@ -375,3 +433,43 @@ var waitingDialog = waitingDialog || (function ($) {
                     }
                 }
             }
+
+
+
+/**
+ * 
+ * var obj = $('form').serializeObject();
+ * 
+ */
+$.fn.serializeObject = function () {
+    var o = {};
+    var a = this.serializeArray();
+    a.forEach(function (itm) {
+        if (itm['name'])
+            itm['part'] = itm['name'].split('.').length;
+        else
+            itm['part'] = 0;
+    })
+
+    a.forEach(function (itm) {
+        if (itm['part'] > 0) {
+            let pts = itm['name'].split('.');
+            CreateSubObj(o, pts, itm['value']);
+        }
+    });
+
+    return o;
+};
+
+function CreateSubObj(obj, properties, vlu) {
+    let prop = properties.shift();
+    if (!obj[prop]) {
+        obj[prop] = {};
+    }
+    if (properties.length > 0) {
+        CreateSubObj(obj[prop], properties, vlu);
+    }
+    else {
+        obj[prop] = vlu;
+    }
+}
