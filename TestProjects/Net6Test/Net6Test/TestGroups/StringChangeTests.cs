@@ -71,5 +71,11 @@ namespace Net6Test.TestGroups
             var fp2 = Path.Combine("/", sp);
             var fp1 = Path.GetFullPath(sp);
         }
+
+        public static void StringTrimTest()
+        {
+            var str = " ;  ;; aaa;;  ; ;";
+            var des = str.Trim("; ".ToCharArray());
+        }
     }
 }

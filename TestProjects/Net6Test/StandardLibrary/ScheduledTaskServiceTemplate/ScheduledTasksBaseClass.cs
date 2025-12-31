@@ -62,7 +62,8 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             {
                 var t = await Task.WhenAny(tss);
             }
-            if (bags.Count < 1 && sids.Count < 1)
+            //if (bags.Count < 1 && sids.Count < 1)
+            if (bags.IsEmpty && sids.IsEmpty)
             {
                 await NoInBoundDataAWaitAsync(stoppingToken);
             }

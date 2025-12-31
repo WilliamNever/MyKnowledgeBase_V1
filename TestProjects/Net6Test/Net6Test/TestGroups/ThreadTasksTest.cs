@@ -61,9 +61,33 @@ namespace Net6Test.TestGroups
         }
         public async static Task CancellationTokenSource_Test()
         {
-            var mth = () => { Console.WriteLine($"Write a line."); };
+            var mth = () => { Console.WriteLine($"Register Write a line."); };
             CancellationTokenSource ts = new();
             ts.Token.Register(mth);
+
+            var tsk = Task.Run(async () =>
+            {
+                while (true)
+                {
+                    Console.WriteLine($"Inner Write a line.");
+                    await Task.Delay(1000, ts.Token);//
+                }
+            }, ts.Token);
+
+            //tsk.Dispose();
+            await Task.Delay(5000);
+            ts.Cancel();
+            ts.Cancel();
+            ts.Dispose();
+            ts.Dispose();
+            var isc = ts.IsCancellationRequested;
+            tsk.Dispose();
+            if (!ts.IsCancellationRequested)
+            {
+                await Task.Delay(10000);
+                ts.Cancel();
+            }
+            tsk.Dispose();
             ts.Cancel();
         }
         public async static Task Task_Cancel_Test()
