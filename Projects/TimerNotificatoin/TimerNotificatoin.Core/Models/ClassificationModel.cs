@@ -22,7 +22,10 @@ namespace TimerNotificatoin.Core.Models
         public int Green { get; set; } = 0xff;
         [HelperOutput("int Blue - blue value in ARGB, default is 0xff")]
         public int Blue { get; set; } = 0xff;
-
+#if DEBUG
+        public string DisplayName { get => $"{Name} - {NotificationType} -> {ID}"; }
+#else
         public string DisplayName { get => $"{Name} - {NotificationType}"; }
+#endif
     }
 }
