@@ -1,22 +1,20 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StandardLibrary.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection;
 
 namespace Net6Test.TestGroups
 {
     public static class XMLSchemaTest
     {
+        public static async Task XDocument_Descendants()
+        {
+            var speedDoc = XDocument.Parse("<Status><Code id=\"inforId\" respcode=\"200\">SUCCESS</Code><Info><User>yyy</User></Info><User>xxx</User><Groups><Group><User>1</User></Group><Group><User>2</User></Group><Group><User>3</User></Group></Groups></Status>");
+            var users = speedDoc.Descendants("User")?.ToList();
+        }
         public static async Task Test4()
         {
             var attr = typeof(SPO).GetCustomAttributes<XmlRootAttribute>(true).FirstOrDefault();

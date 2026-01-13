@@ -20,7 +20,7 @@ namespace TimerNotificatoin.Core.Enums
         [HelperOutput("Remain(2) - Keep in untill manually removed")]
         Remain = 2,
 
-        [HelperOutput("Loop(4) - Keep in and auto loop to notify, untill manually removed")]
+        [HelperOutput("Loop(4) - Keep in and auto loop to notify")]
         Loop = 4,
     }
 }

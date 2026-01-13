@@ -12,9 +12,9 @@ namespace Net6Test.StaticUtilities
         /// <summary>
         /// Regex expression to fit 3 or more continuous special charactors
         /// </summary>
-        public Regex RegexMultiSpecLetters { get; set; } = new Regex(@"([a-z0-9A-Z])\1{2,}");
-        public Regex RegexMultiSpecLetters1 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\2");
-        public Regex RegexMultiSpecLetters2 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\1");
+        public static Regex RegexMultiSpecLetters { get; set; } = new Regex(@"([a-z0-9A-Z])\1{2,}");
+        public static Regex RegexMultiSpecLetters1 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\2");
+        public static Regex RegexMultiSpecLetters2 { get; set; } = new Regex(@"([a-z0-9A-Z])\1(cb)\1");
 
         public RegexesTestService()
         {
@@ -30,6 +30,14 @@ namespace Net6Test.StaticUtilities
 
             var isMatch2 = RegexMultiSpecLetters2.IsMatch("aaaacbacbbcc");
             var matches2 = RegexMultiSpecLetters2.Matches("aaaacbacbbcc").ToList();
+        }
+
+        public static void RegexFileNameReplace_Test()
+        {
+            var errChars = @"\\/:*?""<>|";
+            var regx = new Regex($"[{errChars}]");
+            var str = @"c\\a/:*?""<>|";
+            var dst = regx.Replace(str, "-");
         }
     }
 }

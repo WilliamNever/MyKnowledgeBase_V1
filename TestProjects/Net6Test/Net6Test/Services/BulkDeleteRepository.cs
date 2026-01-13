@@ -1,0 +1,110 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
+
+namespace Net6Test.Services
+{
+    /// <summary>
+    /// this class needs EF core 7.0.0 at least
+    /// </summary>
+    public class BulkDataProcessRepository
+    {
+        private readonly ILogger<BulkDataProcessRepository> _logger;
+        public int CancelledBlockedProcessingSeconds { get; private set; }
+        public BulkDataProcessRepository(ILogger<BulkDataProcessRepository> logger)
+        {
+            _logger = logger;
+            CancelledBlockedProcessingSeconds = 30;
+        }
+
+        public void SetCancellationExpiredSeconds(int seconds)
+        {
+            CancelledBlockedProcessingSeconds = seconds;
+        }
+
+        public async Task CleanExpiredDataAsync<TContext, TEntity>(IDbContextFactory<TContext> contextFactory,
+            Expression<Func<TEntity, bool>> expression, CancellationToken token = default, int pagesize = 100000, int maxpages = 0)
+            where TEntity : class
+            where TContext : DbContext
+        {
+            using (var dbc = await contextFactory.CreateDbContextAsync(token))
+            {
+                await CleanExpiredDataAsync(dbc, expression, token, pagesize, maxpages);
+            }
+        }
+        public async Task CleanExpiredDataAsync<TEntity>(DbContext dbc,
+            Expression<Func<TEntity, bool>> expression, CancellationToken token = default, int pagesize = 100000, int maxpages = 0)
+            where TEntity : class
+        {
+            //var dt = DateTime.Now;
+
+            int pages = 1;
+            int pageSize = pagesize;
+            CancellationTokenSource ts;
+            var query = dbc.Set<TEntity>().Where(expression).Take(pageSize);
+
+            try
+            {
+                while (query.Any())
+                {
+                    //var dts = DateTime.Now;
+
+                    token.ThrowIfCancellationRequested();
+                    ts = new CancellationTokenSource(CancelledBlockedProcessingSeconds * 1000);
+                    await query.ExecuteDeleteAsync(ts.Token);
+
+                    //Console.WriteLine($"Sub cose in Rond #{pages} - {DateTime.Now.Subtract(dts).TotalSeconds} seconds");
+
+                    pages++;
+                    if (maxpages > 0 && pages > maxpages) break;
+                    query = dbc.Set<TEntity>().Where(expression).Take(pageSize);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to remove {typeof(TEntity).Name} entity from data base in round {pages}, {pagesize} records per round.");
+            }
+
+            //Console.WriteLine($"Total cose - {DateTime.Now.Subtract(dt).TotalSeconds} seconds");
+        }
+
+        public async Task AddDataRangeAsync<TContext, TEntity>(IDbContextFactory<TContext> contextFactory,
+            IEnumerable<TEntity> data, CancellationToken token = default, int pagesize = 10000, int maxpages = 0)
+            where TEntity : class
+            where TContext : DbContext
+        {
+            using (var dbc = await contextFactory.CreateDbContextAsync(token))
+            {
+                await AddDataRangeAsync(dbc, data, token, pagesize, maxpages);
+            }
+        }
+        public async Task AddDataRangeAsync<TEntity>(DbContext dbc,
+            IEnumerable<TEntity> data, CancellationToken token = default, int pagesize = 10000, int maxpages = 0)
+            where TEntity : class
+        {
+            int pages = 1;
+            int pageSize = pagesize;
+            CancellationTokenSource ts;
+            var query = data.Skip((pages - 1) * pageSize).Take(pageSize);
+
+            try
+            {
+                while (query.Any())
+                {
+                    token.ThrowIfCancellationRequested();
+                    ts = new CancellationTokenSource(CancelledBlockedProcessingSeconds * 1000);
+                    await dbc.Set<TEntity>().AddRangeAsync(query, ts.Token);
+                    await dbc.SaveChangesAsync(ts.Token);
+
+                    pages++;
+                    if (maxpages > 0 && pages > maxpages) break;
+                    query = data.Skip((pages - 1) * pageSize).Take(pageSize);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to add {typeof(TEntity).Name} entity to data base in round {pages}, {pagesize} records per round.");
+            }
+        }
+    }
+}

@@ -11,6 +11,19 @@ namespace Net6Test.TestGroups
 {
     public class CollectionListTest
     {
+        public static async Task ArrayList_Test()
+        {
+            var lst = new List<BaseStringIndex> {
+                new BaseStringIndex { PV = 1 } ,
+                new BaseStringIndex { PV = 2 } ,
+                new BaseStringIndex { PV = 3 } ,
+                new BaseStringIndex { PV = 4 } ,
+                new BaseStringIndex { PV = 5 } ,
+            };
+            var nlst = lst;//.ToList();//.Where(x => x.PV < 3)
+            lst.RemoveAll(x => x.PV < 3);
+            var n1lst = nlst.ToList();
+        }
         public async static Task DictionaryExtensionsModel_Test()
         {
             var dcEx = new DictionaryExtensionsModel();

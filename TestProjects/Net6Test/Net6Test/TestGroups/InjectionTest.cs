@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Net6Test.Services;
+using System.Configuration;
 
 namespace Net6Test.TestGroups
 {
@@ -9,6 +11,20 @@ namespace Net6Test.TestGroups
             InjectDomainTest().Wait();
         }
 
+        public static async Task ScopeInjuected_Test(IServiceProvider provider)
+        {
+            var sm1 = provider.GetService<TestingServiceMain>();
+            var sm2 = provider.GetService<TestingServiceMain>();
+
+            using (var prv = provider.CreateScope())
+            {
+                var scp = prv.ServiceProvider;
+                var s1 = scp.GetService<TestingServiceMain>();
+                var s2 = scp.GetService<TestingServiceMain>();
+            }
+            var scp1 = provider.CreateScope().ServiceProvider;
+            var s3 = scp1.GetService<TestingServiceMain>();
+        }
         public static async Task HttpClient_Test(IServiceProvider provider)
         {
             var scp = provider.CreateScope().ServiceProvider;

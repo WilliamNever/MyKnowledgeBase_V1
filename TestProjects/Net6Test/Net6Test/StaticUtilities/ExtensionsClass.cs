@@ -58,5 +58,17 @@ namespace Net6Test.StaticUtilities
         {
             return System.Web.HttpUtility.UrlEncode(str ?? "");
         }
+        public static bool ToEquals(this string? str1, string? str2, bool IgnoreCases = true)
+        {
+            if (str1 == null) return str1 == str2;
+            if (IgnoreCases)
+            {
+                return str1.Equals(str2, StringComparison.OrdinalIgnoreCase);
+            }
+            else
+            {
+                return str1.Equals(str2);
+            }
+        }
     }
 }

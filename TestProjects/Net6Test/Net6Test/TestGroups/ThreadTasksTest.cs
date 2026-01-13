@@ -1,10 +1,432 @@
 ﻿using Net6Test.Models;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task CancellationTokenSourceThrowException_Test()
+        {
+            CancellationTokenSource ts = new(10 * 1000);
+            //ts.Cancel(false);
+            var tsk = Task.Run(async () =>
+            {
+                var i = 1;
+                while (true) {
+                    Console.WriteLine($"1 - {i++}");
+                    await Task.Delay(1000, ts.Token);
+                    //Console.WriteLine("2");
+                    //ts.Token.ThrowIfCancellationRequested();
+                    //if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                    //Console.WriteLine("3");
+                    //await Task.Delay(1000, ts.Token);
+                }
+            });
+            
+            try { 
+                //await Task.Delay(5000);
+                //ts.Cancel(true);//false
+                await tsk;
+            }
+            catch (Exception ex) 
+            {
+            }
+            try {
+                //ts = new(10 * 1000);
+                var tsk1 = Task.Run(async () =>
+                {
+                    using CancellationTokenSource ts1 = new(5 * 1000);
+                    var i = 1;
+                    while (true)
+                    {
+                        Console.WriteLine($"2 - {i++}");
+                        await Task.Delay(1000, ts1.Token);
+                        Console.WriteLine($"2 - {i++}");
+                        await Task.Delay(1000, ts1.Token);
+                        //await Task.Delay(1000, ts.Token);
+                        //Console.WriteLine("1-2");
+                        //ts.Token.ThrowIfCancellationRequested();
+                        //if (ts.Token.IsCancellationRequested) break;    //if invoking cancelling without throw out exception.
+                        //Console.WriteLine("1-3");
+                        //await Task.Delay(1000, ts.Token);
+                    }
+                });
+                await tsk1;
+            }
+            catch (Exception ex) 
+            {
+            }
+        }
+        public async static Task CancellationTokenSource_Test()
+        {
+            var mth = () => { Console.WriteLine($"Register Write a line."); };
+            CancellationTokenSource ts = new();
+            ts.Token.Register(mth);
+
+            var tsk = Task.Run(async () =>
+            {
+                while (true)
+                {
+                    Console.WriteLine($"Inner Write a line.");
+                    await Task.Delay(1000, ts.Token);//
+                }
+            }, ts.Token);
+
+            //tsk.Dispose();
+            await Task.Delay(5000);
+            ts.Cancel();
+            ts.Cancel();
+            ts.Dispose();
+            ts.Dispose();
+            var isc = ts.IsCancellationRequested;
+            tsk.Dispose();
+            if (!ts.IsCancellationRequested)
+            {
+                await Task.Delay(10000);
+                ts.Cancel();
+            }
+            tsk.Dispose();
+            ts.Cancel();
+        }
+        public async static Task Task_Cancel_Test()
+        {
+            Func<string, CancellationToken, Task> func = async (name, token) =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    Console.WriteLine($"{name} - {DateTime.Now} - {Thread.CurrentThread.ManagedThreadId}");
+                    await Task.Delay(1000);
+                }
+                Console.WriteLine($"{name} - {DateTime.Now} /// {Thread.CurrentThread.ManagedThreadId}");
+            };
+
+            Func<string, CancellationToken, Task> funcMain = async (name, token) =>
+            {
+                while (true)
+                {
+                    Console.WriteLine($"{name} - {DateTime.Now} - {Thread.CurrentThread.ManagedThreadId}");
+                    await Task.Delay(1000, token);
+                }
+                //Console.WriteLine($"{name} - {DateTime.Now} /// {Thread.CurrentThread.ManagedThreadId}");
+            };
+            CancellationTokenSource ts = new CancellationTokenSource();
+            ts.Cancel();
+            ts.Cancel();
+            ts.Dispose();
+            ts.Dispose();
+
+            var def = TaskScheduler.Default;
+            var current = TaskScheduler.Current;
+
+            var fstk = await Task.Factory.StartNew(
+                async () => await func("Tsk - main-Factory-LongRunning", ts.Token)
+                , TaskCreationOptions.LongRunning);
+            await Task.Delay(10000);
+            var mtk = Task.Run(async () => await funcMain("Tsk - main", ts.Token), ts.Token);
+            var mtk1 = await Task.Factory.StartNew(async () => await funcMain("Tsk - main-Factory", ts.Token), ts.Token);
+
+            var ts1 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
+            var tk1 = Task.Run(async () => await func("Tsk - 1", ts1.Token), ts1.Token);
+
+            var ts2 = CancellationTokenSource.CreateLinkedTokenSource(ts.Token);
+            var tk2 = Task.Run(async () => await func("Tsk - 2", ts2.Token), ts2.Token);
+
+
+            await Task.Delay(5000);
+            ts2.Cancel();
+            await Task.Delay(5000);
+            ts.Cancel(true);
+            await Task.Delay(10000);
+            try
+            {
+                Task.WaitAll(mtk, mtk1);
+            }
+            catch (OperationCanceledException ex) when (ts.IsCancellationRequested)
+            {
+            }
+            catch (Exception ex) when (ex.InnerException != null)
+            { 
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                await Task.Delay(5000);
+            }
+        }
+        public async static Task Task_WhenAny_With_SemaphoreSlim_Test()
+        {
+            CancellationTokenSource ts = new CancellationTokenSource();
+            //SemaphoreSlim ss = new SemaphoreSlim(1,1);
+            SemaphoreSlim ss = new SemaphoreSlim(0);
+            //await ss.WaitAsync(3 * 1000, ts.Token);
+            ss.Release(3);
+            await ss.WaitAsync(5 * 1000, ts.Token);
+            await ss.WaitAsync(5 * 1000, ts.Token);
+            var needsToAdding = ss.CurrentCount > 2;
+            //await ss.WaitAsync(300 * 1000, ts.Token);
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(5000);
+                try
+                {
+                    //ts.Cancel();
+                }
+                catch (Exception ex)
+                {
+                }
+            });
+            try
+            {
+                await ss.WaitAsync(300 * 1000, ts.Token);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            int totalTasks = 10;
+            ConcurrentDictionary<string, Task<string>> bags = new();
+            ConcurrentQueue<string> Sids = new();
+
+            Func<string, string, int, Guid, Task<string>> func = async (id, name, ltime, guid) =>
+            {
+                var stime = ltime + 3;
+                for (int i = 0; i < stime; i++)
+                {
+                    //Console.WriteLine($"Task {name} - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                bags.TryRemove(id, out _);
+                Console.WriteLine($"{name} - {guid} / {ltime} // Thread ID - {Thread.CurrentThread.ManagedThreadId}");
+                return $"{name} / {ltime}";
+            };
+
+            for (int i = 0; i < 100; i++)
+            {
+                Sids.Enqueue($"Queue - {i}");
+            }
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(120000);
+                for (int i = 0; i < 100; i++)
+                {
+                    Sids.Enqueue($"Append Queue - {i}");
+                    //await Task.Delay(1000);
+                    if (ss.CurrentCount < 2)
+                        ss.Release(2);
+                }
+            });
+            var gid = Guid.NewGuid();
+            var t1 = Task.Run(async () => await func("1", "Thr - 1", 3, gid), ts.Token);
+            var t2 = Task.Run(async () => await func("2", "Thr - 2", 3, gid), ts.Token);
+            var t3 = Task.Run(async () => await func("3", "Thr - 3", 3, gid), ts.Token);
+            //bags.TryAdd("1", t1);
+            //bags.TryAdd("2", t2);
+            //bags.TryAdd("3", t3);
+            _ = bags.AddOrUpdate("1", t1, (key, tsk1) => { return t1; });
+            _ = bags.AddOrUpdate("2", t2, (key, tsk1) => { return t2; });
+            _ = bags.AddOrUpdate("3", t3, (key, tsk1) => { return t3; });
+
+            await Task.Delay(5000);
+            Console.WriteLine($"APP Starting......");
+            while (true)
+            {
+                gid = Guid.NewGuid();
+                Console.WriteLine();
+                Console.WriteLine($"{gid} Starting......");
+                var ccout = bags.Count;
+                if (ccout < totalTasks)
+                {
+                    var left = totalTasks - ccout;
+                    for (int i = 0; i < left; i++)
+                    {
+                        if (Sids.TryDequeue(out var sid))
+                        {
+                            var m = i;
+                            bags.TryAdd(sid, Task.Run(async () => await func(sid, $"Thr - {sid}", m, gid)));
+                            //await Task.Delay(500, ts.Token);
+                        }
+                    }
+                }
+
+
+                try
+                {
+                    var tss = bags.Select(x => x.Value).ToList();
+                    if (tss.Count > 0)
+                    {
+                        var t = await Task.WhenAny(tss);
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+                if (bags.Count < 1 && Sids.Count < 1)
+                {
+                    var stpId = Guid.NewGuid();
+                    Console.WriteLine();
+                    Console.WriteLine($"Begin to sleep at {DateTime.Now} - {stpId}");
+                    await ss.WaitAsync(5 * 60 * 1000, ts.Token);
+                    Console.WriteLine($"Awake sleep at {DateTime.Now} - {stpId}");
+
+                    //await ss.WaitAsync(5 * 1000, ts.Token);
+                    //break;
+
+                }
+            }
+        }
+
+        public async static Task Task_WhenAny_Test()
+        {
+            CancellationTokenSource ts = new CancellationTokenSource();
+            var sl = new ManualResetEventSlim(false);
+
+            _ = Task.Run(async () => { 
+                await Task.Delay(5000); 
+                try
+                {
+                    //Console.WriteLine($"To cancel token");
+                    sl.Set();
+                    //ts.Cancel();
+                }
+                catch(Exception ex)
+                {
+                }
+            });
+
+            try
+            {
+                sl.Wait(ts.Token);
+            }
+            catch (Exception ex)
+            {
+            }
+            finally {
+                sl.Reset();
+            }
+
+            int totalTasks = 3;
+            ConcurrentDictionary<string, Task<string>> bags = new();
+            ConcurrentQueue<string> Sids = new();
+
+            Func<string, string, int, Task<string>> func = async (id, name, ltime) =>
+            {
+                for (int i = 0; i < ltime; i++)
+                {
+                    Console.WriteLine($"Task {name} - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                bags.TryRemove(id, out _);
+                return $"{name} / {ltime}";
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                Sids.Enqueue($"Queue - {i}");
+            }
+
+            _ = Task.Run(async () => {
+                await Task.Delay(10000);
+                for (int i = 0; i < 10; i++)
+                {
+                    Sids.Enqueue($"Append Queue - {i}");
+                    await Task.Delay(1000);
+                }
+            });
+
+
+            var t1 = Task.Run(async () => await func("1", "Thr - 1", 3));
+            var t2 = Task.Run(async () => await func("2", "Thr - 2", 3));
+            var t3 = Task.Run(async () => await func("3", "Thr - 3", 3));
+            //bags.TryAdd("1", t1);
+            //bags.TryAdd("2", t2);
+            //bags.TryAdd("3", t3);
+            _ = bags.AddOrUpdate("1", t1, (key, tsk1) => { return t1; });
+            _ = bags.AddOrUpdate("2", t2, (key, tsk1) => { return t2; });
+            _ = bags.AddOrUpdate("3", t3, (key, tsk1) => { return t3; });
+
+            await Task.Delay(5000);
+            //ts.Cancel();
+            sl.Set();
+            while (true)
+            {
+                sl.Wait(ts.Token);
+                Console.WriteLine($"Starting......");
+                
+                var ccout = bags.Count;
+                if (ccout < totalTasks)
+                {
+                    var left = totalTasks - ccout;
+                    for (int i = 0; i < left; i++)
+                    {
+                        if (Sids.TryDequeue(out var sid))
+                        {
+                            bags.TryAdd(sid, Task.Run(async () => await func(sid, $"Thr - {sid}", i + 3)));
+                        }
+                        else
+                        { }
+                    }
+                }
+
+                if (bags.Count > 0)
+                {
+                    var t = await Task.WhenAny(bags.Select(x => x.Value));
+                    Console.WriteLine(await t);
+                }
+                else
+                {
+                    if (Sids.Count < 1)
+                    {
+                        sl.Reset();
+                        //sl.Wait(ts.Token);
+                        break;
+                    }
+                    else
+                    { }
+                }
+            }
+        }
+        public async static Task Task_Dispose_Test()
+        {
+            Func<CancellationToken, Task<int>> func = async (token) =>
+            {
+                //while (true)
+                while (!token.IsCancellationRequested)
+                {
+                    //token.ThrowIfCancellationRequested();
+                    Console.WriteLine($"In Task - {DateTime.Now}");
+                    await Task.Delay(1000);
+                }
+                await Task.Delay(3000);
+                return 3;
+            };
+            try
+            {
+                CancellationTokenSource ts = new CancellationTokenSource();
+                using (var tsk = func(ts.Token))
+                {
+                    await Task.Delay(5000);
+                    ts.Cancel();
+                    //ts.Dispose(); //Dispose cannot stop the running Task.
+                    var r = await tsk;
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                await Task.Delay(10000);
+            }
+        }
+
         public async static Task ContinumeWithAsync_Test()
         {
             var cans = new CancellationTokenSource();
@@ -26,6 +448,7 @@ namespace Net6Test.TestGroups
             //var tsk2 = Task.Run(async () => { await Console.Out.WriteLineAsync("In task 2."); });
             Thread.Sleep(1500);
             cans.Cancel();
+
             try
             {
                 var xx = await Task.WhenAll(
@@ -47,7 +470,8 @@ namespace Net6Test.TestGroups
 
         public async static Task ConcurrentBag_T_Test()
         {
-            var bag = new ConcurrentBag<int>();
+            //var bag = new ConcurrentBag<int>();
+            var bag = new BlockingCollection<int>();
             var bagList = new List<int>();
 
             Func<int, Task> act = async (i) =>
@@ -60,7 +484,7 @@ namespace Net6Test.TestGroups
                             bagList.Add(i);
                         }
                         Console.WriteLine($"Enter - {i} - {Thread.CurrentThread.ManagedThreadId}");
-                        Thread.Sleep(3000);
+                        //Thread.Sleep(3000);
                         Console.WriteLine($"Exit - {i} - {Thread.CurrentThread.ManagedThreadId}");
                     });
                 };
@@ -78,11 +502,57 @@ namespace Net6Test.TestGroups
                 numList[m] = m;
             }
             await Parallel.ForEachAsync(numList,
-                new ParallelOptions { MaxDegreeOfParallelism = 3 },
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
                 (itm, cnlt) => new ValueTask(act(itm)));
 
             var list = bag.ToList();
             var blst = bagList.ToList();
+
+            var tokenSource = new CancellationTokenSource();
+            try
+            {
+                AddItems(bag, tokenSource);
+                foreach (var itm in bag.GetConsumingEnumerable(tokenSource.Token))
+                {
+                    //tokenSource.Token.ThrowIfCancellationRequested();
+                    try
+                    {
+                        Console.WriteLine(itm);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+                var lst2 = bag.GetConsumingEnumerable(tokenSource.Token).ToList();
+            }
+            catch (Exception ex)
+            { 
+                Console.WriteLine(ex.ToString()); 
+            }
+        }
+
+        private static async Task AddItems(BlockingCollection<int> bag, CancellationTokenSource ts)
+        {
+            await await Task.Factory.StartNew(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(5000);
+                    var rdm = new Random();
+                    var step = rdm.Next(1, 100);
+                    Console.WriteLine($"-------------------{step}-------------------");
+                    for (int i = 0; i < step; i++)
+                    {
+                        bag.Add(i);
+                    }
+                    if (step < -1)
+                    {
+                        ts.Cancel();
+                        break;
+                    }
+                }
+            });
         }
 
         public static async Task LockObj_Test()
@@ -170,14 +640,18 @@ namespace Net6Test.TestGroups
             await Task.Delay(15000);
         }
 
-        public static async Task ThreadThrowException_Test()
+        public static async Task ThreadThrowException_Test(CancellationToken token = default)
         {
+            token.ThrowIfCancellationRequested();
+            var ts = new CancellationTokenSource();
+            var tk = ts.Token;
+
             Task<int> tsk = null;
             try
             {
                 tsk = TaskAwait_Test(new SimpleModel { Id = 100 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -185,9 +659,47 @@ namespace Net6Test.TestGroups
             {
                 _ = await tsk;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
+            }
+        }
+
+        public async static Task ContinueWith_Test()
+        {
+            var tsk = Task.Run(() => { return 1; });
+            var x = await await tsk.ContinueWith( tsk => { throw new Exception("No Name"); return tsk.Result; })
+                .ContinueWith( tsk => {
+                    //throw new Exception("Second No Name");
+                }, TaskContinuationOptions.OnlyOnFaulted)
+                .ContinueWith(async tsk => {
+                    try
+                    {
+                        await tsk;
+                        return 2;
+                    }
+                    catch
+                    {
+                        return 3;
+                    }
+                })
+                .ContinueWith(async tsk => { 
+                    return await await tsk; 
+                });
+            await Console.Out.WriteLineAsync($"return value: {x}");
+        }
+
+        public async static Task Task_SemaphoreSlim_Test()
+        {
+            SemaphoreSlim ss = new SemaphoreSlim(0);
+            Func<Task> func = async () => {
+                await ss.WaitAsync();
+                Console.WriteLine($"Go End ------");
+            };
+            ss.Release(2);
+            while (true)
+            {
+                await func();
             }
         }
     }

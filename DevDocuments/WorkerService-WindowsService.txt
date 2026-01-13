@@ -1,0 +1,25 @@
+Include pkg - 
+
+1. <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.3" />
+
+IHost host = Host.CreateDefaultBuilder(args)
+    .UseWindowsService() // it needs the pkg
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<Worker>();
+    })
+    .Build();
+
+
+Commands to create/start/stop/delete a windows service
+ref - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-create
+
+Create and start windows service -
+rem start=delayed-auto
+sc.exe create "ServiceName" binPath="path to service.exe file" start=auto
+sc.exe start "ServiceName"
+
+Stop and delete windows service -
+sc.exe stop "ServiceName"
+sc.exe delete "ServiceName"
+

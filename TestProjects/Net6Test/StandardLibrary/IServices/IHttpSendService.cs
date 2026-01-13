@@ -8,13 +8,13 @@ namespace StandardLibrary.IServices
 {
     public interface IHttpSendService
     {
-        Task<HttpResponseMessage> SendAsync(Func<Task<HttpResponseMessage>> func);
+        Task<HttpResponseMessage> SendAsync(Func<HttpContent, Task<HttpResponseMessage>> func, HttpContent sender, bool RaiseExpWhenBadResponse = true);
+        Task<HttpResponseMessage> SendAsync(Func<Task<HttpResponseMessage>> func, bool RaiseExpWhenBadResponse = true);
 
-        Task<T> SendAndReadFromJsonAsync<T>(Func<Task<HttpResponseMessage>> func);
-        Task<string> SendAndReadAsStringAsync(Func<Task<HttpResponseMessage>> func);
+        Task<T> SendAndReadFromJsonAsync<T>(Func<Task<HttpResponseMessage>> func, bool RaiseExpWhenBadResponse = true);
+        Task<string> SendAndReadAsStringAsync(Func<Task<HttpResponseMessage>> func, bool RaiseExpWhenBadResponse = true);
 
-        Task<T> SendAndReadFromJsonAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> func, HttpClient client);
-        Task<string> SendAndReadAsStringAsync(Func<HttpClient, Task<HttpResponseMessage>> func, HttpClient client);
-
+        Task<T> SendAndReadFromJsonAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> func, HttpClient client, bool RaiseExpWhenBadResponse = true);
+        Task<string> SendAndReadAsStringAsync(Func<HttpClient, Task<HttpResponseMessage>> func, HttpClient client, bool RaiseExpWhenBadResponse = true);
     }
 }

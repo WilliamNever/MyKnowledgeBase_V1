@@ -1,0 +1,37 @@
+1.两种方式
+
+  1.1：row_number() over()函数
+
+SELECT TOP 页大小 *
+   FROM( SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM table1 )as A 
+   WHERE RowNumber > 页大小*(页数-1)
+    
+   --注解：首先利用Row_number()为table1表的每一行添加一个行号，给行号这一列取名'RowNumber' 在over()方法中将'RowNumber'做了升序排列
+   --然后将'RowNumber'列 与table1表的所有列 形成一个表A
+   --重点在where条件。假如当前页(currentPage)是第2页，每页显示10个数据(pageSzie)。那么第一页的数据就是第11-20条
+   --所以为了显示第二页的数据，即显示第11-20条数据，那么就让RowNumber大于 10*(2-1)
+
+ 
+
+  1.2：OFFSET ....FETCH 
+
+从 SQL Server 2012（即版本 11.x）开始，你可以使用 OFFSET 和 FETCH 子句来简化分页查询。这种方法非常直观，适用于大多数分页需求。
+
+        OFFSET { integer_constant | offset_row_count_expression } { ROW | ROWS }
+
+        指定在从查询表达式中开始返回行之前，将跳过的行数。OFFSET 子句的参数可以是大于或等于零的整数或表达式。ROW 和 ROWS 可以互换使用。
+
+        FETCH { FIRST|NEXT } <行计数表达式> { ROW|ROWS } ONLY
+
+      指定在处理 OFFSET 子句后，将返回的行数。FETCH 子句的参数可以是大于或等于 1 的整数或表达式。ROW 和 ROWS 可以互换使用。同样，FIRST 和 NEXT 可以互换使用。
+
+-- 查询XbMaster表第1页数据，每页10行
+select m.[Code],m.[Name] from dbo.XbMaster as m
+order by m.Code asc
+offset 0 rows FETCH NEXT 10 rows only;
+
+-- 查询XbMaster表第2页数据，每页10行
+select m.[Code],m.[Name] from dbo.XbMaster as m
+order by m.Code asc
+offset 10 rows FETCH NEXT 10 rows only;
+
