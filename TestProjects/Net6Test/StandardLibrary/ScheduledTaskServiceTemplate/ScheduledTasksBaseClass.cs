@@ -15,6 +15,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         /// Sync flag
         /// </summary>
         protected object _lock = new object();
+        protected CancellationToken StopCancellationToken;
         public abstract string CronoExpress { get; }
         public abstract DateTime? NextRunDateTime { get; protected set; }
 
@@ -32,12 +33,15 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
         public virtual async Task SetupAsync(CancellationToken stoppingToken)
         {
+            StopCancellationToken = stoppingToken;
             stoppingToken.Register(ReleaseResources);
             _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
-            _ = DistributeWorksAsync(stoppingToken);
+            _ = StartWorking(stoppingToken);
             await Task.CompletedTask;
         }
         public abstract void ReleaseResources();
+
+        protected virtual Task StartWorking(CancellationToken token) => DistributeWorksAsync(token);
 
         private async Task DistributeWorksAsync(CancellationToken stoppingToken)
         {
@@ -46,7 +50,8 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                 try
                 {
                     await DistributeNewWorksAsync(Sids, TaskBags, stoppingToken);
-                    await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken);
+                    if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken))
+                        break;
                 }
                 catch (Exception ex)
                 {
@@ -55,23 +60,24 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             }
         }
 
-        private async Task CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
+        protected virtual async Task<bool> CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var tss = bags.Select(x => x.Value.Task).ToList();
             if (tss.Count > 0)
             {
                 var t = await Task.WhenAny(tss);
             }
-            //if (bags.Count < 1 && sids.Count < 1)
+
             if (bags.IsEmpty && sids.IsEmpty)
             {
                 await NoInBoundDataAWaitAsync(stoppingToken);
             }
+            return true;
         }
 
         protected abstract Task NoInBoundDataAWaitAsync(CancellationToken stoppingToken);
 
-        private async Task DistributeNewWorksAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
+        protected virtual async Task DistributeNewWorksAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var ccout = bags.Count;
             if (ccout < _taskSettings.WorkingTasks)
@@ -83,7 +89,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                     {
                         var tkSource = new CancellationTokenSource();
                         bags[sid].CancellationTokenSource = tkSource;
-                        bags[sid].Task = Task.Run(async () => await DealOneWorkAsync(sid, tkSource.Token), tkSource.Token);
+                        bags[sid].Task = Task.Run(() => DealOneWorkAsync(sid, tkSource.Token), tkSource.Token);
                     }
                 }
             }
@@ -92,5 +98,4 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
 
         protected abstract Task DealOneWorkAsync(TKey sid, CancellationToken token);
     }
-
 }

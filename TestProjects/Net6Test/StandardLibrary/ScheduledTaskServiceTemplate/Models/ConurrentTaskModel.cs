@@ -11,8 +11,17 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate.Models
 
         public void Dispose()
         {
-            //CancellationTokenSource.TryReset();
-            CancellationTokenSource.Dispose();
+            try
+            {
+                if (!CancellationTokenSource.IsCancellationRequested)
+                {
+                    CancellationTokenSource.Cancel();
+                }
+                CancellationTokenSource.Dispose();
+            }
+            catch
+            {
+            }
         }
     }
 }
