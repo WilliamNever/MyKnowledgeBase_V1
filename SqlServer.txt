@@ -6,6 +6,23 @@ declare @tabledec table
     num NVARCHAR(20)
 )
 
+DECLARE @MyTable TABLE (
+    Id INT PRIMARY KEY,         -- This creates a clustered index
+    Name NVARCHAR(100)
+)
+
+DECLARE @MyTable TABLE (
+    Id INT,
+    Name NVARCHAR(100),
+    CONSTRAINT UQ_MyTable_Id UNIQUE (Id)  -- This creates a unique index
+)
+
+DECLARE @MyTable TABLE (
+    Id INT,
+    Name NVARCHAR(100),
+    INDEX IX_MyTable_Name NONCLUSTERED (Name)
+)
+
 INSERT INTO  @tabledec(num) VALUES('111') 
 INSERT INTO  @tabledec(num) VALUES('222') 
 
