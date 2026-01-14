@@ -1,8 +1,8 @@
 [
   {
     "Id": "f954c0a7-17cf-4c1e-82e3-4883ca4ca397",
-    "Name": "at 15:00 every days",
-    "CronoExp": "0 15 * * *"
+    "Name": "at 14:30 every days",
+    "CronoExp": "30 14 * * *"
   },
   {
     "Id": "46827fde-cd4e-4d6e-bebb-7ed737501a1c",
@@ -16,7 +16,17 @@
   },
   {
     "Id": "d1b261bb-0a5e-4aee-9ee2-b185d1bf80eb",
-    "Name": "at 15:30 every TUE",
-    "CronoExp": "30 15 * * TUE"
+    "Name": "at 16:30 every TUE",
+    "CronoExp": "30 16 * * TUE"
+  },
+  {
+    "Id": "55e2ed12-6908-41a1-b1a4-229370d2ffe9",
+    "Name": "at 16:30 every WED",
+    "CronoExp": "30 16 * * WED"
+  },
+  {
+    "Id": "808d9738-e880-435f-bc1c-2510f4e686ab",
+    "Name": "at 10:00 Second to last working day every month",
+    "CronoExp": "00 10 L-2W * *"
   }
 ]

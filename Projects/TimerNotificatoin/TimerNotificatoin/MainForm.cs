@@ -227,7 +227,7 @@ namespace TimerNotificatoin
                 cf.ShowMessage(
                     timerServices.GetTotalNotification().FirstOrDefault(x => x.Id == id)
                     ?? new NotificationModel { Title = "Not Found", Description = "Not Found" }
-                    , EnMessageType.NotificationShow);
+                    , EnMessageType.MessageShow);
                 cf.Show();
             }
         }
