@@ -1,2 +1,16 @@
 ﻿-- a tutorial webStation
 http://www.runoob.com/
+
+Components
+	- <PackageReference Include="NonFactors.Grid.Mvc6" Version="8.0.0" />
+		Guides - https://aspnet-core-grid.azurewebsites.net/
+	- jquery-impromptu https://trentrichardson.com/examples/Impromptu/
+
+	- https://github.com/nabinked/NToastNotify
+
+	- https://querybuilder.js.org/
+		https://github.com/mistic100/jQuery-QueryBuilder
+	- Castle.DynamicLinqQueryBuilder
+
+	- AutoMapper
+	- Newtonsoft.Json
