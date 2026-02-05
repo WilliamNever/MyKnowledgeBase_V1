@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using Microsoft.VisualBasic.FileIO;
 using Net6Test.StaticUtilities;
+using StandardLibrary.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,12 @@ namespace Net6Test.TestGroups
         {
             var str = " ;  ;; aaa;;  ; ;";
             var des = str.Trim("; ".ToCharArray());
+        }
+
+        public static async Task Regex_Replace_Test()
+        {
+            var reg = new Regex($"^(sp-)", RegexOptions.IgnoreCase);
+            var str = reg.Replace("SP-sp-aaa=bbb", "", 1, 0);
         }
     }
 }
