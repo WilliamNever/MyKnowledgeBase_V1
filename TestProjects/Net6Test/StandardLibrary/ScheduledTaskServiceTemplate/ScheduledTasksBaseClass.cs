@@ -25,6 +25,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         protected readonly TaskSettings _taskSettings;
 
         protected ILogger<T> _logger;
+        protected TimeSpan? _taskTimeout;
         public ScheduledTasksBaseClass(ILogger<T> logger, TaskSettings taskSettings)
         {
             _logger = logger;
@@ -87,15 +88,38 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                 {
                     if (sids.TryDequeue(out var sid) && bags.TryAdd(sid, new ConurrentTaskModel()))
                     {
-                        var tkSource = new CancellationTokenSource();
+                        CancellationTokenSource tkSource;
+                        if (_taskTimeout.HasValue) {
+                            tkSource = new CancellationTokenSource(_taskTimeout.Value);
+                        }
+                        else
+                        {
+                            tkSource = new CancellationTokenSource();
+                        }
                         bags[sid].CancellationTokenSource = tkSource;
-                        bags[sid].Task = Task.Run(() => DealOneWorkAsync(sid, tkSource.Token), tkSource.Token);
+                        bags[sid].Task = Task.Run(() => DealOneWorkOutLineAsync(sid, tkSource.Token), tkSource.Token);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
+        private async Task DealOneWorkOutLineAsync(TKey sid, CancellationToken token)
+        {
+            try
+            {
+                await DealOneWorkAsync(sid, token);
+            }
+            catch (Exception) {
+                throw;
+            }
+            finally {
+                if (TaskBags.TryRemove(sid, out var obj))
+                {
+                    obj.Dispose();
+                }
+            }
+        }
         protected abstract Task DealOneWorkAsync(TKey sid, CancellationToken token);
     }
 }

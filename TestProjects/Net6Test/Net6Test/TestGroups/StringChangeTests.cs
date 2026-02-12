@@ -84,5 +84,11 @@ namespace Net6Test.TestGroups
             var reg = new Regex($"^(sp-)", RegexOptions.IgnoreCase);
             var str = reg.Replace("SP-sp-aaa=bbb", "", 1, 0);
         }
+
+        public static async Task StringJoin_Test()
+        {
+            var list = new List<string>() { "aa", null, "bb" };
+            var str = string.Join(",", list);
+        }
     }
 }
