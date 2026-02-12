@@ -41,6 +41,7 @@
             grpDTConverter = new GroupBox();
             usrcBasicInput = new UscBasicEasyInput();
             menuMain = new MenuStrip();
+            btnSetDefaultDateTime = new Button();
             pnlBackGround.SuspendLayout();
             stbStatus.SuspendLayout();
             grp8GuaName.SuspendLayout();
@@ -104,6 +105,7 @@
             // grpEasyTesting
             // 
             grpEasyTesting.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            grpEasyTesting.Controls.Add(btnSetDefaultDateTime);
             grpEasyTesting.Controls.Add(btnClear);
             grpEasyTesting.Controls.Add(btnSave);
             grpEasyTesting.Controls.Add(txtRslt);
@@ -174,6 +176,16 @@
             menuMain.TabIndex = 3;
             menuMain.Text = "menuStrip1";
             // 
+            // btnSetDefaultDateTime
+            // 
+            btnSetDefaultDateTime.Location = new Point(3, 252);
+            btnSetDefaultDateTime.Name = "btnSetDefaultDateTime";
+            btnSetDefaultDateTime.Size = new Size(75, 23);
+            btnSetDefaultDateTime.TabIndex = 3;
+            btnSetDefaultDateTime.Text = "Set Default";
+            btnSetDefaultDateTime.UseVisualStyleBackColor = true;
+            btnSetDefaultDateTime.Click += btnSetDefaultDateTime_Click;
+            // 
             // EasyTestToolForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -211,5 +223,6 @@
         private ToolStripStatusLabel stblMessage;
         private UscHHhourConvert uscHHConverter;
         private UscGuaNameSearch uscGuaNameSearcher;
+        private Button btnSetDefaultDateTime;
     }
 }
