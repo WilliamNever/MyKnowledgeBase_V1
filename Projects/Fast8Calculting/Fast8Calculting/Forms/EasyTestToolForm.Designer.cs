@@ -35,13 +35,13 @@
             uscGuaNameSearcher = new UscGuaNameSearch();
             uscHHConverter = new UscHHhourConvert();
             grpEasyTesting = new GroupBox();
+            btnSetDefaultDateTime = new Button();
             btnClear = new Button();
             btnSave = new Button();
             txtRslt = new TextBox();
             grpDTConverter = new GroupBox();
             usrcBasicInput = new UscBasicEasyInput();
             menuMain = new MenuStrip();
-            btnSetDefaultDateTime = new Button();
             pnlBackGround.SuspendLayout();
             stbStatus.SuspendLayout();
             grp8GuaName.SuspendLayout();
@@ -116,6 +116,17 @@
             grpEasyTesting.TabStop = false;
             grpEasyTesting.Text = "Easy Testing";
             // 
+            // btnSetDefaultDateTime
+            // 
+            btnSetDefaultDateTime.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSetDefaultDateTime.Location = new Point(3, 252);
+            btnSetDefaultDateTime.Name = "btnSetDefaultDateTime";
+            btnSetDefaultDateTime.Size = new Size(75, 23);
+            btnSetDefaultDateTime.TabIndex = 3;
+            btnSetDefaultDateTime.Text = "Set Default";
+            btnSetDefaultDateTime.UseVisualStyleBackColor = true;
+            btnSetDefaultDateTime.Click += btnSetDefaultDateTime_Click;
+            // 
             // btnClear
             // 
             btnClear.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -175,16 +186,6 @@
             menuMain.Size = new Size(814, 24);
             menuMain.TabIndex = 3;
             menuMain.Text = "menuStrip1";
-            // 
-            // btnSetDefaultDateTime
-            // 
-            btnSetDefaultDateTime.Location = new Point(3, 252);
-            btnSetDefaultDateTime.Name = "btnSetDefaultDateTime";
-            btnSetDefaultDateTime.Size = new Size(75, 23);
-            btnSetDefaultDateTime.TabIndex = 3;
-            btnSetDefaultDateTime.Text = "Set Default";
-            btnSetDefaultDateTime.UseVisualStyleBackColor = true;
-            btnSetDefaultDateTime.Click += btnSetDefaultDateTime_Click;
             // 
             // EasyTestToolForm
             // 
