@@ -1,14 +1,5 @@
 ﻿using F8C.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Fast8Calculting.Forms
 {
@@ -76,6 +67,11 @@ namespace Fast8Calculting.Forms
                 sw.Flush();
                 RenderUIStatusBar($"Save to {Path.GetFileName(svf.FileName)}");
             }
+        }
+
+        private void btnSetDefaultDateTime_Click(object sender, EventArgs e)
+        {
+            usrcBasicInput.SetDefaultCalculte();
         }
     }
 }

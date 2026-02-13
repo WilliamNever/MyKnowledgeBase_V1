@@ -702,5 +702,39 @@ namespace Net6Test.TestGroups
                 await func();
             }
         }
+
+        public static async Task Task_WhenAny_Test_1()
+        {
+            var tsks = new List<Task<int>>();
+            for (int i = 0; i < 10; i++)
+            {
+                tsks.Add(Task.Run(() => i));
+            }
+            var rs = await await Task.WhenAny(tsks);
+            var rsAll = await Task.WhenAll(tsks);
+            for (int i = 0; i < 10; i++)
+            {
+                var vInt = await await Task.WhenAny(tsks);
+            }
+            Console.WriteLine("Task_WhenAny_Test_1");
+            await Task.Delay(3000);
+            Console.WriteLine("Task_WhenAny_Test_1 - END");
+        }
+
+        public static async Task Task_WhenAny_Test_2()
+        {
+            try
+            {
+                await Task_WhenAny_Test_1();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                Console.WriteLine("Task_WhenAny_Test_2");
+            }
+        }
     }
 }

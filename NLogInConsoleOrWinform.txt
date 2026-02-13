@@ -46,6 +46,16 @@ var loggerP = NLog.LogManager.LogFactory.GetLogger("aaP");	//Create Logger objec
     <target xsi:type="Null"
             name="blackhole" />
 
+    <target xsi:type="File" name="ToFile" fileName="${basedir}/logs/${shortdate}.log"
+            enableFileDelete="true"
+            archiveFileName="${basedir}/logs/${shortdate}.log"
+            archiveEvery="Day"
+            archiveNumbering="Date"
+            archiveDateFormat="yyyy-MM-dd"
+            maxArchiveFiles="15"
+            layout="${longdate} ${uppercase:${level}} ${newline}${exception:separator=${newline}:exceptionDataSeparator=${newline}}${newline}${message}${newline}" ></target>
+
+
     <target xsi:type="Database"
             name="database">
       <connectionString>${var:connectionString}</connectionString>

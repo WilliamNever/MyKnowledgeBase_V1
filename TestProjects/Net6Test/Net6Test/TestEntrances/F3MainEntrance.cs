@@ -58,6 +58,8 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.SomeStringConvertTest().Wait();
             //StringChangeTests.PathCombine();
             //StringChangeTests.StringTrimTest();
+            //StringChangeTests.Regex_Replace_Test().Wait();
+            //StringChangeTests.StringJoin_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
@@ -80,8 +82,10 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_With_SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.Task_Cancel_Test().Wait();
             //ThreadTasksTest.Task_SemaphoreSlim_Test().Wait();
-            ThreadTasksTest.CancellationTokenSource_Test().Wait();
+            //ThreadTasksTest.CancellationTokenSource_Test().Wait();
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
+            //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
+            ThreadTasksTest.Task_WhenAny_Test_2().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -103,6 +107,8 @@ namespace Net6Test.TestEntrances
 
             //RegexesTestService.RegexFileNameReplace_Test();
             //CalculateService.LiquidMixedTemperature().Wait();
+
+            //UnFiddledTests.KVP_FilterTest().Wait();
         }
 
         private async Task ValueTupleTest()

@@ -2,16 +2,10 @@
 using F8C.Core.Interfaces;
 using F8C.Core.Models;
 using F8C.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Fast8Calculting.Forms
 {
@@ -162,6 +156,20 @@ namespace Fast8Calculting.Forms
                 txtInpuNums.BackColor = Color.Red;
                 MessageBox.Show(this, ex.Message);
             }
+        }
+
+        public void SetDefaultCalculte()
+        {
+            var dt = DateTime.Now;
+            txtUpper.Text = dt.Hour.ToString();
+            txtLower.Text = dt.Minute.ToString();
+
+            txtInpuNums.Text = "";
+            txtInpuNums.Text += $"{txtUpper.Text}{Environment.NewLine}";
+            txtInpuNums.Text += $"{txtLower.Text}{Environment.NewLine}";
+            txtInpuNums.Text += $"{ConstDefine.GetDT12(dt)}{Environment.NewLine}";
+
+            btnSum.PerformClick();
         }
     }
 }
