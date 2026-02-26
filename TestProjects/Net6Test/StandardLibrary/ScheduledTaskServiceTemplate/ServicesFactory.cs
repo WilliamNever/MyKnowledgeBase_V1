@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace StandardLibrary.ScheduledTaskServiceTemplate
 {
+    /// <summary>
+    /// services.AddSingleton<IServicesFactory, ServicesFactory>();
+    /// </summary>
     public class ServicesFactory: IServicesFactory
     {
         private object _lock = new object();
