@@ -40,7 +40,17 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             _ = StartWorking(stoppingToken);
             await Task.CompletedTask;
         }
-        public abstract void ReleaseResources();
+        public virtual void ReleaseResources()
+        {
+            var keys = TaskBags.Keys.ToArray();
+            foreach (var key in keys)
+            {
+                if (TaskBags.TryRemove(key, out var obj))
+                {
+                    obj.Dispose();
+                }
+            }
+        }
 
         protected virtual Task StartWorking(CancellationToken token) => DistributeWorksAsync(token);
 

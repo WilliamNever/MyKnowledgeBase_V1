@@ -90,5 +90,13 @@ namespace Net6Test.TestGroups
             var list = new List<string>() { "aa", null, "bb" };
             var str = string.Join(",", list);
         }
+
+        public static async Task FileNames_Test()
+        {
+            var fp = @"D:\WorkSpaces\DevAzure\EMG.API\EMG.ResubmitMessagesMassSave.Infrstructure.Services\Utilities\CronUtilities.cs";
+            var dfn = Path.GetDirectoryName(fp);
+            var fn = Path.GetFileName(fp);
+            var ffp = Path.GetFullPath(fp);
+        }
     }
 }

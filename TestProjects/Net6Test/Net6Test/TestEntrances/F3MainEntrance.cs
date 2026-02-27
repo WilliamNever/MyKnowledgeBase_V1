@@ -60,10 +60,11 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
             //StringChangeTests.StringJoin_Test().Wait();
+            //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
-            //XMLSchemaTest.XDocument_Descendants().Wait();
+            XMLSchemaTest.XDocument_Descendants().Wait();
 
             //LogicShema_Tests.Test1();
 
@@ -85,7 +86,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationTokenSource_Test().Wait();
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
-            ThreadTasksTest.Task_WhenAny_Test_2().Wait();
+            //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
