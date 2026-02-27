@@ -120,8 +120,8 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             {
                 await DealOneWorkAsync(sid, token);
             }
-            catch (Exception) {
-                throw;
+            catch (Exception ex) {
+                _logger.LogError(ex, $"Failed to processed #{sid}");
             }
             finally {
                 if (TaskBags.TryRemove(sid, out var obj))
