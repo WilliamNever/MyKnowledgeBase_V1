@@ -21,12 +21,12 @@ namespace Net6Test.TestGroups
             var enc3 = Encoding.GetEncoding(Encoding.UTF8.BodyName);
             var enc4 = Encoding.GetEncoding(Encoding.UTF8.WebName);
 
-            //var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.icsm.com/icsmxml\">";
-            var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
-            xml += "<Status><Code id=\"inforId\" respcode=\"200\">SUCCESS</Code><Info><User>yyy</User></Info><User>xxx</User><Groups><Group><User>1</User></Group><Group><User>2</User></Group><Group><User>3</User></Group></Groups></Status>";
+            var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.icsm.com/icsmxml\">";
+            //var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+            xml += "<Status><Code id=\"inforId\" respcode=\"200\">SUCCESS</Code><Info><User>yyy</User></Info><User>xxx</User><Groups><Group><User name=\"Id\">1</User></Group><Group><User>2</User></Group><Group><User>3</User></Group></Groups></Status>";
             xml += "</ICSMXML>";
             var speedDoc = XDocument.Parse(xml);
-            XmlNamespaceManager manager = new XmlNamespaceManager(new System.Xml.NameTable());
+            XmlNamespaceManager manager = new XmlNamespaceManager(new NameTable());
             var attrs = speedDoc.Root.Attributes();
             XElement? node;
             if (attrs.Any(x=>x.Name.LocalName.ToEquals("xmlns")))
@@ -34,7 +34,7 @@ namespace Net6Test.TestGroups
                 var attr = attrs.First(x => x.Name.LocalName.ToEquals("xmlns"));
                 manager.AddNamespace("ns", attr.Value);
                 //node = speedDoc.XPathSelectElement($"ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User", manager);
-                node = speedDoc.XPathSelectElement($"/ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User", manager);
+                node = speedDoc.XPathSelectElement($"/ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User[@name='Id']", manager);
 
                 XNamespace ns = XNamespace.Get(attr.Value);
                 var xnm = XName.Get("User", ns.NamespaceName);
