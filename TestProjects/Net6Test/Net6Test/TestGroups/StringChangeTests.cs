@@ -93,10 +93,29 @@ namespace Net6Test.TestGroups
 
         public static async Task FileNames_Test()
         {
+            var uriCoded = "%2C%3B";
+            var uriDecoded = WebUtility.UrlDecode("/%20|+| /%o%40p-` ~!@#$%^&*(),./<>?;:\"'|\\");
+            var toUriEncode = WebUtility.UrlEncode(uriDecoded);
+            Console.WriteLine(uriDecoded);
+            Console.WriteLine();
+
+            var uriEncodedStr = "-` ~!@#$%^&*(),./<>?;:\"'|\\_=+{}[]";
+            foreach (var c in uriEncodedStr.ToArray())
+            {
+                Console.WriteLine($"{c} - {WebUtility.UrlEncode(c.ToString())}");
+            }
+
+            List<ToIDMapProvider> ToIdMapProvider = new List<ToIDMapProvider>
+            {
+                new ToIDMapProvider("akey", "avalue")
+            };
+            var nn = new ToIDMapProvider("akey", "avalue");
+            var str = Newtonsoft.Json.JsonConvert.SerializeObject(ToIdMapProvider);
             var fp = @"D:\WorkSpaces\DevAzure\EMG.API\EMG.ResubmitMessagesMassSave.Infrstructure.Services\Utilities\CronUtilities.cs";
             var dfn = Path.GetDirectoryName(fp);
             var fn = Path.GetFileName(fp);
             var ffp = Path.GetFullPath(fp);
         }
     }
+    public record ToIDMapProvider(string ToId, string Provider);
 }
