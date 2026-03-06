@@ -60,11 +60,11 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
             //StringChangeTests.StringJoin_Test().Wait();
-            StringChangeTests.FileNames_Test().Wait();
+            //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
-            //XMLSchemaTest.XDocument_Descendants().Wait();
+            XMLSchemaTest.XDocument_Descendants().Wait();
 
             //LogicShema_Tests.Test1();
 

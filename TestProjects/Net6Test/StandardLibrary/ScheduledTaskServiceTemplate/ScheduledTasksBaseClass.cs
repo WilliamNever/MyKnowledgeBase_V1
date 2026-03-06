@@ -74,7 +74,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         protected virtual async Task<bool> CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var tss = bags.Select(x => x.Value.Task).ToList();
-            if (tss.Count > 0)
+            if (tss.Any())
             {
                 var t = await Task.WhenAny(tss);
             }
