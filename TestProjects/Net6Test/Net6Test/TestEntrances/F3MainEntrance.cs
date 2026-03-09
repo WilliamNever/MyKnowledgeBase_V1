@@ -64,7 +64,7 @@ namespace Net6Test.TestEntrances
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
-            XMLSchemaTest.XDocument_Descendants().Wait();
+            //XMLSchemaTest.XDocument_Descendants().Wait();
 
             //LogicShema_Tests.Test1();
 
@@ -87,6 +87,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
+            ThreadTasksTest.ThreadPoolToken_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();

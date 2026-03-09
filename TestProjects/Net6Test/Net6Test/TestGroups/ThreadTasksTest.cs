@@ -736,5 +736,29 @@ namespace Net6Test.TestGroups
                 Console.WriteLine("Task_WhenAny_Test_2");
             }
         }
+
+        public static async Task ThreadPoolToken_Test()
+        {
+            var tksrc = new CancellationTokenSource();
+            //tksrc.Cancel();
+            var tsk = Task.Run(async () => {
+                var i = 0;
+                while (true)
+                {
+                    Console.WriteLine($"{i++}");
+                    await Task.Delay(1000, tksrc.Token);
+                }
+            }, tksrc.Token);
+            await Task.Delay(5000);
+            tksrc.Cancel();
+            try
+            {
+                await tsk;
+            }
+            catch (Exception ex)
+            {
+            }
+            await Task.Delay(5000);
+        }
     }
 }

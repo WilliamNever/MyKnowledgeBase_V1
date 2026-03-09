@@ -76,7 +76,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             var tss = bags.Select(x => x.Value.Task).ToList();
             if (tss.Any())
             {
-                var t = await Task.WhenAny(tss);
+                _ = await Task.WhenAny(tss);
             }
 
             if (bags.IsEmpty && sids.IsEmpty)
