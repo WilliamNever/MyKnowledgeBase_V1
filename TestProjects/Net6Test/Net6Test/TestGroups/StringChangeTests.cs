@@ -93,6 +93,9 @@ namespace Net6Test.TestGroups
 
         public static async Task FileNames_Test()
         {
+            string? folder = null;
+            var isExists = Directory.Exists(folder);
+
             var uriCoded = "%2C%3B";
             var uriDecoded = WebUtility.UrlDecode("/%20|+| /%o%40p-` ~!@#$%^&*(),./<>?;:\"'|\\");
             var toUriEncode = WebUtility.UrlEncode(uriDecoded);

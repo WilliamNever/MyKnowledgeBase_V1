@@ -739,6 +739,7 @@ namespace Net6Test.TestGroups
 
         public static async Task ThreadPoolToken_Test()
         {
+            var cs = new CancellationTokenSource(3 * 1000);
             var tksrc = new CancellationTokenSource();
             //tksrc.Cancel();
             var tsk = Task.Run(async () => {
