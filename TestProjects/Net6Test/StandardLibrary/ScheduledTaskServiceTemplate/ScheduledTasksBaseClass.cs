@@ -19,14 +19,14 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         public abstract string CronoExpress { get; }
         public abstract DateTime? NextRunDateTime { get; protected set; }
 
-        protected SemaphoreSlim SSlim = new SemaphoreSlim(0);
-        protected ConcurrentQueue<TKey> Sids = new ConcurrentQueue<TKey>();
-        public ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new ConcurrentDictionary<TKey, ConurrentTaskModel>();
+        protected readonly SemaphoreSlim SSlim = new SemaphoreSlim(0);
+        protected readonly ConcurrentQueue<TKey> Sids = new ConcurrentQueue<TKey>();
+        public readonly ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new ConcurrentDictionary<TKey, ConurrentTaskModel>();
         protected readonly TaskSettings _taskSettings;
 
-        protected ILogger<T> _logger;
+        protected readonly ILogger<T> _logger;
         protected TimeSpan? _taskTimeout;
-        public ScheduledTasksBaseClass(ILogger<T> logger, TaskSettings taskSettings)
+        protected ScheduledTasksBaseClass(ILogger<T> logger, TaskSettings taskSettings)
         {
             _logger = logger;
             _taskSettings = taskSettings;
@@ -34,14 +34,19 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
         public virtual async Task SetupAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
+
             StopCancellationToken = stoppingToken;
             stoppingToken.Register(ReleaseResources);
-            _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
+            ReleaseResources();
             _ = StartWorking(stoppingToken);
             await Task.CompletedTask;
         }
         public virtual void ReleaseResources()
         {
+            //Sids.Clear(); // no Clear method in Standard 2.0, using while TryDequeue instead
+            while (Sids.TryDequeue(out _)) { }
+            ;
             var keys = TaskBags.Keys.ToArray();
             foreach (var key in keys)
             {
@@ -60,9 +65,13 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             {
                 try
                 {
-                    await DistributeNewWorksAsync(Sids, TaskBags, stoppingToken);
-                    if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken))
+                    await DistributeNewWorksAsync(Sids, TaskBags, stoppingToken).ConfigureAwait(false);
+                    if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken).ConfigureAwait(false))
                         break;
+                }
+                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+                {
+                    _logger.LogError($"Exited by Operation Canceled. Sids count - {Sids.Count}, TaskBags count - {TaskBags.Count}");
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +90,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
 
             if (bags.IsEmpty && sids.IsEmpty)
             {
-                await NoInBoundDataAWaitAsync(stoppingToken);
+                await NoInBoundDataAWaitAsync(stoppingToken).ConfigureAwait(false);
             }
             return true;
         }
@@ -118,7 +127,11 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         {
             try
             {
-                await DealOneWorkAsync(sid, token);
+                await DealOneWorkAsync(sid, token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
+            {
+                _logger.LogError($"Exited manually, break to processed #{sid}");
             }
             catch (Exception ex) {
                 _logger.LogError(ex, $"Failed to processed #{sid}");
