@@ -60,6 +60,11 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
                     if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken))
                         break;
                 }
+                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+                {
+                    _logger.LogError($"Exited by Operation Canceled. Sids count - {Sids.Count}, TaskBags count - {TaskBags.Count}");
+                }
+
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, $"Failed to DistributeWorksAsync. Sids count - {Sids.Count}, TaskBags count - {TaskBags.Count}");

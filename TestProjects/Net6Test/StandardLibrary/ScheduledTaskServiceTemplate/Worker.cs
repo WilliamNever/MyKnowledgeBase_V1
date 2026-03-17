@@ -58,9 +58,9 @@ namespace ResubmitMessagesMassSave
                     {
                         await Task.Delay(_interval, stoppingToken);
                     }
-                    catch (OperationCanceledException ocex)
+                    catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
                     {
-                        _logger.LogError(ocex, $"Exited by manully stop.");
+                        _logger.LogError($"Exited by manully stop.");
                         break;
                     }
                     catch (Exception ex)
