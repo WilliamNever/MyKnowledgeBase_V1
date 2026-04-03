@@ -35,6 +35,9 @@ namespace Net6Test.TestEntrances
 
             //RecordTest.Test1Async().Wait();
             //RecordTest.Test2Async().Wait();
+            RecordTest.Test3Async().Wait();
+
+
             //Type_Reflect_Tests.RunTest();
 
             //DateTime_Tests.Test().Wait();
@@ -87,7 +90,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
-            ThreadTasksTest.ThreadPoolToken_Test().Wait();
+            //ThreadTasksTest.ThreadPoolToken_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
