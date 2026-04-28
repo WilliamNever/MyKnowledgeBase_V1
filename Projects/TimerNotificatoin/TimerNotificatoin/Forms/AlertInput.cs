@@ -169,6 +169,8 @@ namespace TimerNotificatoin.Forms
                 grpBoxLooper.Hide();
                 grpBoxLooper.Enabled = false;
             }
+            btnSkipATime.Enabled = grpBoxLooper.Enabled;
+            btnSkipATime.Visible = btnSkipATime.Enabled;
         }
 
         private void cbkHasEndDate_CheckedChanged(object sender, EventArgs e)
@@ -191,6 +193,15 @@ namespace TimerNotificatoin.Forms
 
         private void AlertInput_FormClosed(object sender, FormClosedEventArgs e)
         {
+        }
+
+        private void btnSkipATime_Click(object sender, EventArgs e)
+        {
+            var nt = GetNotification();
+            if (HOSTServices.GetTemplates().Any(x => x.Id == nt.NTemplateId))
+            {
+                dtPicker.Value = NotificationModel.GetNextRunDateTime(nt, nt.AlertDateTime) ?? DateTime.Now;
+            }
         }
     }
 }

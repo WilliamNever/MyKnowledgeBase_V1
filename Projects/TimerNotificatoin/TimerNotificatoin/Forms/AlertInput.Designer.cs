@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             pnlBackGrd = new Panel();
+            btnSkipATime = new Button();
             grpBoxLooper = new GroupBox();
             cbkUsedCronTime = new CheckBox();
             cbkHasEndDate = new CheckBox();
@@ -54,6 +55,7 @@
             // 
             // pnlBackGrd
             // 
+            pnlBackGrd.Controls.Add(btnSkipATime);
             pnlBackGrd.Controls.Add(grpBoxLooper);
             pnlBackGrd.Controls.Add(cbNType);
             pnlBackGrd.Controls.Add(label5);
@@ -72,6 +74,17 @@
             pnlBackGrd.Name = "pnlBackGrd";
             pnlBackGrd.Size = new Size(698, 436);
             pnlBackGrd.TabIndex = 0;
+            // 
+            // btnSkipATime
+            // 
+            btnSkipATime.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSkipATime.Location = new Point(117, 398);
+            btnSkipATime.Name = "btnSkipATime";
+            btnSkipATime.Size = new Size(75, 23);
+            btnSkipATime.TabIndex = 13;
+            btnSkipATime.Text = "Next alert";
+            btnSkipATime.UseVisualStyleBackColor = true;
+            btnSkipATime.Click += btnSkipATime_Click;
             // 
             // grpBoxLooper
             // 
@@ -315,5 +328,6 @@
         private Button btnShowDetails;
         private CheckBox cbkHasEndDate;
         private CheckBox cbkUsedCronTime;
+        private Button btnSkipATime;
     }
 }
