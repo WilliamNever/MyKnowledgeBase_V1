@@ -108,6 +108,24 @@ namespace TimerNotificatoin.Forms
             }
             return notificate;
         }
+        public NotificationModel GetNewInstanceNotification()
+        {
+            var nft = new NotificationModel();
+            nft.Title = txtTitle.Text;
+            nft.Description = txtDescription.Text;
+            nft.AlertDateTime = dtPicker.Value;
+            nft.ToAlert = cbAlert.Checked;
+            nft.ClassificationID = (cbNType.SelectedItem as ClassificationModel)?.ID ?? new ClassificationModel().ID;
+            nft.CurrentAlertDateTime = nft.AlertDateTime;
+
+            if ((nft.NotificationType & EnNotificationType.Loop) == EnNotificationType.Loop)
+            {
+                nft.EndDatetime = cbkHasEndDate.Checked ? dtpEndOfDate.Value : null;
+                nft.NTemplateId = (dlLoopTemplates.SelectedItem as NotificationTemplateModel)?.Id;
+                nft.UseCronTime = cbkUsedCronTime.Checked;
+            }
+            return nft;
+        }
 
         private void txtRequired_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -197,7 +215,7 @@ namespace TimerNotificatoin.Forms
 
         private void btnSkipATime_Click(object sender, EventArgs e)
         {
-            var nt = GetNotification();
+            var nt = GetNewInstanceNotification();
             if (HOSTServices.GetTemplates().Any(x => x.Id == nt.NTemplateId))
             {
                 dtPicker.Value = NotificationModel.GetNextRunDateTime(nt, nt.AlertDateTime) ?? DateTime.Now;
