@@ -88,7 +88,7 @@ namespace TimerNotificatoin
             timerServices.Start();
             WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : FormWindowState.Minimized;
             SwichWindowModel(tmiOpenOrHiden, WindowState);
-            nfyTimer.ShowBalloonTip(3000, "Star Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
+            nfyTimer.ShowBalloonTip(3000, "Start Timer", $"There are {timerServices.GetActiveNotification().Count} activity Notifications.", ToolTipIcon.Info);
             tslStatus.Text = "Timer is in running...";
             btnStart.Enabled = false;
         }
