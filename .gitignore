@@ -17,3 +17,4 @@ packages
 *.exe
 *.user
 **/Lib/StandardLibrary.dll
+**/.github/copilot-instructions.md

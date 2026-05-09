@@ -35,7 +35,7 @@ namespace Net6Test.TestEntrances
 
             //RecordTest.Test1Async().Wait();
             //RecordTest.Test2Async().Wait();
-            RecordTest.Test3Async().Wait();
+            //RecordTest.Test3Async().Wait();
 
 
             //Type_Reflect_Tests.RunTest();
@@ -105,6 +105,7 @@ namespace Net6Test.TestEntrances
             //MessTests.T1().Wait();
 
             //ConcurrentClassTests.ConcurrentDictionary_Test().Wait();
+            ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
 
             //ListTests.ListJoinTest();
 

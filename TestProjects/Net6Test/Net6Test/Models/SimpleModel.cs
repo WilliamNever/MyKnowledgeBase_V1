@@ -13,4 +13,11 @@ namespace Net6Test.Models
         public string? Description { get; set; }
         public string? Type { get; set; }
     }
+
+    public class SmpModel
+    {
+        public int Id { get; set; }
+        public string Key {  get; set; }
+        public int Attemp { get; set; } = 1;
+    }
 }
