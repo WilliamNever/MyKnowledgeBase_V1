@@ -145,3 +145,23 @@ select * from TableName where id>10
 select * from TableName where age>18
 )
 select * from result a,result2 b where a.id=b.id
+
+------------------------------------------------------------------------------------------
+
+-- 完全依靠索引进行外联查询 OUTER APPLY‌ [left join] / CROSS APPLY [inner join]
+
+;with rsl as (
+select * from Table1 t where t.id>1
+)
+select rsl.*, r.*
+from rsl
+OUTER APPLY
+(
+	select max(ea.Col) as Col from rsl sl where sl.Id = rsl.Id
+) as r
+where ....
+order by rsl.Id
+
+
+
+
