@@ -27,7 +27,7 @@ namespace Net6Test.TestEntrances
     {
         public override void MainRun()
         {
-            //Task.WaitAll(SomeTests());
+            Task.WaitAll(SomeTests());
             //Task.WaitAll(EnumConverTests());
             //Task.WaitAll(JsonSerializeTests());
             //Task.WaitAll(ReadJsonWithoutDeserializing());
@@ -37,7 +37,7 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(TestStringPointTest());
             //Task.WaitAll(MD5Encoding());
             //Task.WaitAll(SkipTakeTest());
-            Task.WaitAll(ConvertionsTest());
+            //Task.WaitAll(ConvertionsTest());
             //Task.WaitAll(ReadAttributesStringTest());
             //Task.WaitAll(BitOperationTest<Bxx1, UserException>(new Bxx1()));
             //Task.WaitAll(ListArrayTest());
@@ -379,7 +379,12 @@ namespace Net6Test.TestEntrances
 
         private async Task SomeTests()
         {
-            var imapper = provider.GetService<IMapper>();
+            var imapper = provider.GetRequiredService<IMapper>();
+            var b0 = new Base0 { Base0_Name = "xxx", Rec = 0 };
+            var b01 = imapper.Map<ExtClassModel>(b0);
+            b01.Base0_Name = "YYYYY";
+            b01.Rec = 1;
+
             ExtClassModel ecm = new ExtClassModel() { HiFiInfor = "ex HIFI", Acgx = "33xx" };
             var b2 = imapper.Map<Base2>(ecm);
             Console.WriteLine(DateTime.Now.DayOfYear);
