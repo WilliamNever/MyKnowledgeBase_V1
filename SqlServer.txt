@@ -166,7 +166,7 @@ order by rsl.Id
 ------------------------------------------------------------------------------------------
 --检查 sql index 状态，以更新或重建索引
 
-DECLARE @ObjectId INT = OBJECT_ID('[dbo].[EMGActivities]');
+DECLARE @ObjectId INT = OBJECT_ID('[dbo].[table]');
 DECLARE @IndexId INT;
 DECLARE @PageCount BIGINT;
 DECLARE @FragPercent FLOAT;
@@ -211,7 +211,7 @@ BEGIN
  
     --SET @Sql = N'
     --    ALTER INDEX Modify_Date
-    --    ON [dbo].[EMGActivities]
+    --    ON [dbo].[table]
     --    REBUILD;
     --';
     EXEC sp_executesql @Sql;
@@ -222,7 +222,7 @@ BEGIN
  
     --SET @Sql = N'
     --    ALTER INDEX Modify_Date
-    --    ON [dbo].[EMGActivities]
+    --    ON [dbo].[table]
     --    REORGANIZE;
     --';
     --EXEC sp_executesql @Sql;
@@ -232,9 +232,44 @@ BEGIN
     PRINT 'Fragmentation is low; skipping reorganize/rebuild.';
 END;
  
---PRINT 'Updating statistics on [dbo].[EMGActivities]...';
---UPDATE STATISTICS [dbo].[EMGActivities] Modify_Date;
+--PRINT 'Updating statistics on [dbo].[table]...';
+--UPDATE STATISTICS [dbo].[table] Modify_Date;
  
 PRINT 'Done.';
+
+
+
+SELECT
+    DB_NAME() AS DatabaseName,
+    OBJECT_SCHEMA_NAME(ips.object_id) AS SchemaName,
+    OBJECT_NAME(ips.object_id) AS TableName,
+    i.name AS IndexName,
+    ips.index_type_desc,
+    ips.alloc_unit_type_desc,
+    ips.page_count,
+    ips.avg_fragmentation_in_percent,
+    ips.avg_page_space_used_in_percent,
+    ips.record_count,
+    ips.fragment_count,
+    ips.avg_fragment_size_in_pages
+FROM sys.dm_db_index_physical_stats
+(
+    DB_ID(),
+    OBJECT_ID('dbo.table'),
+    NULL,
+    NULL,
+    ''
+) ips
+INNER JOIN sys.indexes i
+    ON ips.object_id = i.object_id
+   AND ips.index_id = i.index_id
+WHERE ips.object_id = OBJECT_ID('dbo.table')
+  --AND i.name = 'IX_PacketId'
+ORDER BY ips.page_count DESC;
+
+
+------------------------------------------------------------------------------------------
+
+
 
 
