@@ -44,6 +44,18 @@ namespace StandardLibrary.Services
             var cachKey = CreateCacheKey<T>(key);
             return _cache.TryGetValue(cachKey, out model);
         }
+        public void Clear()
+        {
+            /*
+                MemoryCache.Clear() method is supported from 7.0.0 in PKG "Microsoft.Extensions.Caching.Memory".
+                <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+                Please check the .net/C# version in working project when using it.
+            */
+            if (_cache is MemoryCache memCache)
+                memCache.Clear();
+            else
+                throw new Exception("Failed to clear items from Cache");
+        }
         #endregion
 
         #region Examples
