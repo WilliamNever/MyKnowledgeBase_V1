@@ -28,6 +28,7 @@ namespace Net6Test.TestEntrances
 
 
             //ConversionTest.TypeTest().Wait();
+            ConversionTest.EnumTest().Wait();
 
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();

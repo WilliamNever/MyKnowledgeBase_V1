@@ -1,4 +1,5 @@
-﻿using Net6Test.Models;
+﻿using Net6Test.Enums;
+using Net6Test.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,16 @@ namespace Net6Test.TestGroups
             var type = bss.GetType();
             object obj = bss;
             var dest = Convert.ChangeType(obj, type);
+        }
+
+        public async static Task EnumTest()
+        {
+            EnWeek? rsl = null;
+            string? str = null;
+            if (Enum.TryParse(str, true, out EnWeek re))
+            {
+                rsl = re;
+            }
         }
     }
 

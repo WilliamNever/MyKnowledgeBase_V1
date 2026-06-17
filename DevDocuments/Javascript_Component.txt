@@ -1,0 +1,126 @@
+defined params on page - 
+    <script type="text/javascript">
+        window.ApplicationsPageOptions = {
+            editApplicationUrl: '@Url.Action("EditAction", "Controller")',
+            postApplicationUrl: '@Url.Action("PostAction", "Controller")',
+            deleteApplicationUrl: '@Url.Action("DeleteAction", "Controller")',
+            gridSelector: ".mvc-grid"
+        };
+
+    </script>
+
+
+a separate Js file, the name is defined as you like -
+
+(function (window) {
+    "use strict";
+
+    function getOptions() {
+	// this is a private method.
+	// read params from the page.
+        return window.ApplicationsPageOptions || {};
+    }
+
+    function getGridSelector() {
+	// this is a private method.
+        let options = getOptions();
+        return options.gridSelector;
+    }
+
+    window.CreateOrEdit = async function (obj_source, isCreate) {
+	// this is a public method.
+    };
+
+    window.Save = async function (isNew) {
+	// this is a public method.
+    };
+
+    window.ConfirmDelete = async function (obj_source) {
+	// this is a public method.
+    };
+
+    window.Delete = async function (obj_source) {
+	// this is a public method.
+    };
+})(window);
+
+Guides - 
+
+private method cannot be visited from the pate.
+public method can be visited by the name, such as CreateOrEdit, Save, ConfirmDelete, Delete
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*
+    Packaged a js file, the js in this file will run before Dom loaded.
+    Use it with caution.
+ */
+var waitingDialog = waitingDialog || (function ($) {
+    'use strict';   // constrain the access level
+    var htmlPannel = '#progressModal';
+    var dialog = undefined;
+    return {
+        
+        show: function (message, options) {
+            this.hide();
+
+            let opt = options ? options : { backdrop: 'static', keyboard: false };
+            if (message) {
+                $(htmlPannel + ' .modal-header h3').text(message);
+            }
+            else {
+                $(htmlPannel + ' .modal-header h3').text('Loading...');
+            }
+            dialog = new bootstrap.Modal(htmlPannel, opt);
+            dialog.show();
+        },
+        /*
+         * Closes dialog
+         */
+        hide: function () {
+            if (dialog) {
+                dialog.hide();
+                if ($('div.modal-backdrop.fade.show').is('*')) {
+                    $('div.modal-backdrop.fade.show').remove();
+                }
+            }
+        },
+        getInstance: function () {
+            return dialog;
+        }
+    };
+
+})(jQuery);
+
+
+Guides - 
+
+waitingDialog is a public variable. it can be visited from the page.
+show, hide and getInstance are the public methods of the instance. they can be visited as the following - 
+waitingDialog.show('',{}); 
+waitingDialog.hide();
+waitingDialog.getInstance();
+
+the rests are the private members, such as - 
+htmlPannel
+dialog
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

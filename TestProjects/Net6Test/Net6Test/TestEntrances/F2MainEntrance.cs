@@ -27,11 +27,11 @@ namespace Net6Test.TestEntrances
     {
         public override void MainRun()
         {
-            Task.WaitAll(SomeTests());
+            //Task.WaitAll(SomeTests());
             //Task.WaitAll(EnumConverTests());
             //Task.WaitAll(JsonSerializeTests());
             //Task.WaitAll(ReadJsonWithoutDeserializing());
-            //Task.WaitAll(CachingTest());
+            Task.WaitAll(CachingTest());
             //Task.WaitAll(IEnumerableListTest());
             //Task.WaitAll(ReadonlyStatObjectTest());
             //Task.WaitAll(TestStringPointTest());
@@ -287,7 +287,12 @@ namespace Net6Test.TestEntrances
         private async Task CachingTest()
         {
             string key = "ssss";
-            var mem = provider.GetService<IMemoryCache>();
+            var mem = provider.GetRequiredService<IMemoryCache>();
+
+            mem.Set("ss1", "fsd");
+            mem.Remove("ss1");
+            mem.Remove("ss1");
+            mem.Remove("ss2");
 
             var itm = await mem.GetOrCreateAsync(key, e =>
             {
