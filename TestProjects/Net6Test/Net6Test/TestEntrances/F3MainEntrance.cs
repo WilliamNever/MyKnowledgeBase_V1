@@ -28,7 +28,7 @@ namespace Net6Test.TestEntrances
 
 
             //ConversionTest.TypeTest().Wait();
-            ConversionTest.EnumTest().Wait();
+            //ConversionTest.EnumTest().Wait();
 
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
@@ -92,6 +92,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
             //ThreadTasksTest.ThreadPoolToken_Test().Wait();
+            ThreadTasksTest.SemaphoreSlim_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();

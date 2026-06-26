@@ -7,6 +7,62 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task SemaphoreSlim_Test()
+        {
+            int totalSliCount = 1;
+            Func<int, SemaphoreSlim, Task> tsk = async (idx, sl) =>
+            {
+                Console.WriteLine($"Enter - {idx}");
+                try
+                {
+                    await sl.WaitAsync();   //5 * 1000
+                    await Task.Delay(5 * 1000);
+                }
+                catch (Exception ex) 
+                {
+                }
+                finally {
+                    try
+                    {
+                        if (sl.CurrentCount == 0)
+                        {
+                            Console.WriteLine($"Release - ");
+                            sl.Release(12);
+                        }
+                    }
+                    catch(Exception ex) 
+                    {
+                        Console.WriteLine($"Error - {idx} - {sl.CurrentCount}");
+                    }
+                    Console.WriteLine($"Exit - {idx} - {sl.CurrentCount}");
+                }
+            };
+
+
+            var sli = new SemaphoreSlim(1);  //, totalSliCount
+            try
+            {
+                if (sli.CurrentCount < totalSliCount)
+                    sli.Release();
+            }
+            catch(Exception ex) 
+            { 
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                _ = tsk(i, sli);
+            }
+            await Task.Run(async () =>
+            {
+                var ss = sli;
+                int delay = 30;
+                for (int i = 0; i < delay; i++)
+                {
+                    Console.WriteLine("In delay section");
+                    await Task.Delay(1000);
+                }
+            });
+        }
         public async static Task CancellationTokenSourceThrowException_Test()
         {
             CancellationTokenSource ts = new(10 * 1000);

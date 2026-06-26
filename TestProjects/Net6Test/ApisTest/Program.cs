@@ -4,7 +4,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers()
+builder.Services.AddAntiforgery(options =>
+{
+    /* 
+     * this is working for [ValidateAntiForgeryToken] 
+     * is called by ajax.
+     * when it is called by ajax, adding RequestVerificationToken in request header.
+     * headers: { "RequestVerificationToken": json["__RequestVerificationToken"] },
+     * */
+    options.HeaderName = "RequestVerificationToken";
+})
+    .AddControllers()
     .AddNewtonsoftJson(x =>
     {
         x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
