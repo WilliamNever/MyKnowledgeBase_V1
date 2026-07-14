@@ -92,7 +92,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
             //ThreadTasksTest.ThreadPoolToken_Test().Wait();
-            ThreadTasksTest.SemaphoreSlim_Test().Wait();
+            //ThreadTasksTest.SemaphoreSlim_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -107,11 +107,13 @@ namespace Net6Test.TestEntrances
             //MessTests.T1().Wait();
 
             //ConcurrentClassTests.ConcurrentDictionary_Test().Wait();
-            ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
+            //ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
 
             //ListTests.ListJoinTest();
 
             //Cronos_Tests.DateTimeTest();
+            Cronos_Tests.CreateDTimeTest().Wait();
+            //Cronos_Tests.DateTimeTimeZoneComparisonTest();
 
             //RegexesTestService.RegexFileNameReplace_Test();
             //CalculateService.LiquidMixedTemperature().Wait();
