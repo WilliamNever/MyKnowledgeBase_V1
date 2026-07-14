@@ -35,18 +35,18 @@ namespace Net6Test.TestGroups
             }
         }
 
-        public static DateTime? GetNextRunningDateTime(string cronoExpression, DateTime dateTime)
+        public static DateTime? GetNextRunningDateTime(string cronoExpression, DateTime dateTime, bool inclusive = false)
         {
             CronExpression expression = CronExpression.Parse(cronoExpression, CronFormat.Standard);
             //TimeZoneInfo.Local is indicated that cronoExpression is UTC time or Local time.
-            var nextRunUtc = expression.GetNextOccurrence(dateTime.ToUniversalTime(), TimeZoneInfo.Local);
+            var nextRunUtc = expression.GetNextOccurrence(dateTime.ToUniversalTime(), TimeZoneInfo.Local, inclusive);
             return nextRunUtc;
         }
-        public static DateTime? GetNextUTCRunningDateTime(string cronoExpression, DateTime dateTime)
+        public static DateTime? GetNextUTCRunningDateTime(string cronoExpression, DateTime dateTime, bool inclusive = false)
         {
             CronExpression expression = CronExpression.Parse(cronoExpression, CronFormat.Standard);
             //TimeZoneInfo.Utc is indicated that cronoExpression is UTC time or Local time.
-            var nextRunUtc = expression.GetNextOccurrence(dateTime.ToUniversalTime(), TimeZoneInfo.Utc);
+            var nextRunUtc = expression.GetNextOccurrence(dateTime.ToUniversalTime(), TimeZoneInfo.Utc, inclusive);
             return nextRunUtc;
         }
 
@@ -59,6 +59,20 @@ namespace Net6Test.TestGroups
                 Console.WriteLine($"{dt} - {dt.ToUniversalTime()}");
                 Console.WriteLine(GetNextRunningDateTime(expString, dt));
                 Console.WriteLine(GetNextUTCRunningDateTime(expString, dt));
+                await Task.Delay(1000);
+            }
+        }
+        public static async Task CreateDTimeTest_1()
+        {
+            int round = 120;
+            var tStr = "2026-07-14 16:16:00";
+            var expString = "* * * * *";
+            for (var i = 0; i < round; i++) {
+                var dt = DateTime.Parse(tStr);
+                Console.WriteLine($"{dt} - {dt.ToUniversalTime()}");
+                Console.WriteLine(GetNextRunningDateTime(expString, dt, true));
+                Console.WriteLine(GetNextUTCRunningDateTime(expString, dt));
+                Console.WriteLine();
                 await Task.Delay(1000);
             }
         }

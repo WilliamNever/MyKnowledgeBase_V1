@@ -112,7 +112,8 @@ namespace Net6Test.TestEntrances
             //ListTests.ListJoinTest();
 
             //Cronos_Tests.DateTimeTest();
-            Cronos_Tests.CreateDTimeTest().Wait();
+            //Cronos_Tests.CreateDTimeTest().Wait();
+            Cronos_Tests.CreateDTimeTest_1().Wait();
             //Cronos_Tests.DateTimeTimeZoneComparisonTest();
 
             //RegexesTestService.RegexFileNameReplace_Test();
