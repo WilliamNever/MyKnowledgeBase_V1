@@ -1,4 +1,5 @@
 ﻿using Cronos;
+using StandardLibrary.SecurityCryptography;
 
 namespace Net6Test.TestGroups
 {
@@ -64,6 +65,8 @@ namespace Net6Test.TestGroups
         }
         public static async Task CreateDTimeTest_1()
         {
+            var md5 = SecurityCryptography.GenerateMD5Hash("111111");
+
             int round = 120;
             var tStr = "2026-07-14 16:16:00";
             var expString = "* * * * *";

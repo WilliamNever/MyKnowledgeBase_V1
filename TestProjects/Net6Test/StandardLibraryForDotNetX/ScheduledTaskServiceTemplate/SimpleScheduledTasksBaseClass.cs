@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using StandardLibrary.ScheduledTaskServiceTemplate.Settings;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using StandardLibraryForDotNetX.ScheduledTaskServiceTemplate.Settings;
 
-namespace StandardLibrary.ScheduledTaskServiceTemplate
+namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
 {
     public abstract class SimpleScheduledTasksBaseClass<T>
     {
@@ -26,7 +23,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         }
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
         /// <summary>
-        /// stoppingToken is same as the token
+        /// stoppingToken is same as the token 
         /// in public abstract Task ExecuteAsync(CancellationToken stoppingToken);
         /// </summary>
         /// <param name="stoppingToken"></param>

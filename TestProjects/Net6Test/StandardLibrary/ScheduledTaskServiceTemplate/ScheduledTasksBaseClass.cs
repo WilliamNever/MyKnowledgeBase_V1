@@ -32,6 +32,12 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             _taskSettings = taskSettings;
         }
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// <summary>
+        /// stoppingToken is same as the token
+        /// in public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
         public virtual async Task SetupAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);

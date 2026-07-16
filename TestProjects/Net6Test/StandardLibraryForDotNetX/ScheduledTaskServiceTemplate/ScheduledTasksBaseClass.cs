@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using StandardLibrary.ScheduledTaskServiceTemplate.Models;
-using StandardLibrary.ScheduledTaskServiceTemplate.Settings;
+using StandardLibraryForDotNetX.ScheduledTaskServiceTemplate.Models;
+using StandardLibraryForDotNetX.ScheduledTaskServiceTemplate.Settings;
 using System.Collections.Concurrent;
 
 namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
@@ -15,9 +15,9 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
         public abstract string CronoExpress { get; }
         public abstract DateTime? NextRunDateTime { get; protected set; }
 
-        protected readonly SemaphoreSlim SSlim = new(0);
-        protected readonly ConcurrentQueue<TKey> Sids = new();
-        public readonly ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new();
+        protected readonly SemaphoreSlim SSlim = new SemaphoreSlim(0);
+        protected readonly ConcurrentQueue<TKey> Sids = new ConcurrentQueue<TKey>();
+        public readonly ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new ConcurrentDictionary<TKey, ConurrentTaskModel>();
         protected readonly TaskSettings _taskSettings;
 
         protected readonly ILogger<T> _logger;
@@ -28,6 +28,12 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
             _taskSettings = taskSettings;
         }
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// <summary>
+        /// stoppingToken is same as the token
+        /// in public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
         public virtual async Task SetupAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
