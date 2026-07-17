@@ -64,7 +64,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                 }
             }
         }
-        public void Dispose()
+        public virtual void Dispose()
         {
             _stpRegistration.Dispose();
         }
