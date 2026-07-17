@@ -13,6 +13,8 @@ namespace Net6Test.TestGroups
             CancellationTokenSource cts = new CancellationTokenSource();
             var nCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
 
+            //cts.Cancel();
+
             nCts.Cancel();
             nCts.Dispose();
 
@@ -22,7 +24,7 @@ namespace Net6Test.TestGroups
             trs = cts.Token.Register(cb);
 
             cts.Cancel();
-            cts.TryReset();
+            var isOk = cts.TryReset();
             trs = cts.Token.Register(cb);
         }
         public async static Task SemaphoreSlim_Test()
