@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace StandardLibrary.ScheduledTaskServiceTemplate
 {
-    public abstract class SimpleScheduledTasksBaseClass<T>
+    public abstract class SimpleScheduledTasksBaseClass<T> : IDisposable
     {
         /// <summary>
         /// Sync flag
         /// </summary>
-        protected object _lock = new object();
+        protected readonly object _lock = new object();
+        private CancellationTokenRegistration _stpRegistration;
         protected CancellationToken StopCancellationToken;
         public abstract string CronoExpress { get; }
         public abstract DateTime? NextRunDateTime { get; protected set; }
@@ -36,10 +37,16 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             _logger.LogInformation("SetupAsync load data at: {time}", DateTimeOffset.Now);
 
             StopCancellationToken = stoppingToken;
-            stoppingToken.Register(ReleaseResources);
-            ReleaseResources();
+            _stpRegistration.Dispose();
+            _stpRegistration = stoppingToken.Register(ReleaseResources);
+
             await Task.CompletedTask;
         }
         public abstract void ReleaseResources();
+
+        public void Dispose()
+        {
+            _stpRegistration.Dispose();
+        }
     }
 }

@@ -7,6 +7,24 @@ namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task CancellationToken_Test()
+        {
+            Action cb = () => { Console.WriteLine($"Infors"); };
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var nCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
+
+            nCts.Cancel();
+            nCts.Dispose();
+
+            var trs = cts.Token.Register(cb);
+            trs.Dispose();
+            trs = cts.Token.Register(cb);
+            trs = cts.Token.Register(cb);
+
+            cts.Cancel();
+            cts.TryReset();
+            trs = cts.Token.Register(cb);
+        }
         public async static Task SemaphoreSlim_Test()
         {
             int totalSliCount = 1;

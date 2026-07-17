@@ -93,6 +93,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
             //ThreadTasksTest.ThreadPoolToken_Test().Wait();
             //ThreadTasksTest.SemaphoreSlim_Test().Wait();
+            ThreadTasksTest.CancellationToken_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -113,7 +114,7 @@ namespace Net6Test.TestEntrances
 
             //Cronos_Tests.DateTimeTest();
             //Cronos_Tests.CreateDTimeTest().Wait();
-            Cronos_Tests.CreateDTimeTest_1().Wait();
+            //Cronos_Tests.CreateDTimeTest_1().Wait();
             //Cronos_Tests.DateTimeTimeZoneComparisonTest();
 
             //RegexesTestService.RegexFileNameReplace_Test();
