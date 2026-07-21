@@ -7,22 +7,22 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ResubmitMessagesMassSave
+namespace StandardLibrary.ScheduledTaskServiceTemplate
 {
     /// <summary>
     /// Here is the Main IHostedService to define how to invoke the tasks in template.
     /// </summary>
-    public abstract class WorkerBase : BackgroundService
+    public abstract class WorkerBase<T> : BackgroundService
     {
         /// <summary>
         /// the interval to filter out available task/s
         /// </summary>
         public const int _interval = 1 * 60 * 1000;
 
-        private readonly ILogger<WorkerBase> _logger;
+        private readonly ILogger<T> _logger;
         private IServicesFactory _serviceFactory;
         private List<IScheduledTask> _scheduledTasks;
-        public WorkerBase(ILogger<WorkerBase> logger, IServicesFactory ServiceFactory)
+        public WorkerBase(ILogger<T> logger, IServicesFactory ServiceFactory)
         {
             _logger = logger;
             _serviceFactory = ServiceFactory;
