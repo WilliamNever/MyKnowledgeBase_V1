@@ -93,7 +93,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
             //ThreadTasksTest.ThreadPoolToken_Test().Wait();
             //ThreadTasksTest.SemaphoreSlim_Test().Wait();
-            ThreadTasksTest.CancellationToken_Test().Wait();
+            //ThreadTasksTest.CancellationToken_Test().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -121,6 +121,8 @@ namespace Net6Test.TestEntrances
             //CalculateService.LiquidMixedTemperature().Wait();
 
             //UnFiddledTests.KVP_FilterTest().Wait();
+
+            SystemTextJsonSerialization_Test.SerializeDeS_Test();
         }
 
         private async Task ValueTupleTest()
