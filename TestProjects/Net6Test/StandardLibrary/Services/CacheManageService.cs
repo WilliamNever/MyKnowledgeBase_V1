@@ -54,7 +54,7 @@ namespace StandardLibrary.Services
             if (_cache is MemoryCache memCache)
                 memCache.Clear();
             else
-                throw new Exception("Failed to clear items from Cache");
+                throw new NotImplementedException("Failed to clear items from Cache");
         }
         #endregion
 
