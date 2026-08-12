@@ -1,5 +1,6 @@
 ﻿using Net6Test.Enums;
 using System;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Net6Test.TestGroups
 {
@@ -7,11 +8,35 @@ namespace Net6Test.TestGroups
     {
         public static void SerializeDeS_Test()
         {
+            bool showUnshown = true;
+            var sopt = new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+            sopt.TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                    {
+                        typeInfo =>
+                        {
+                            if (typeInfo.Type == typeof(ClassModel))
+                            {
+                                var prop = typeInfo.Properties
+                                    .FirstOrDefault(p => p.Name == nameof(ClassModel.UnShown));
+
+                                if (prop is not null)
+                                {
+                                    prop.ShouldSerialize = (_, _) => showUnshown;
+                                }
+                            }
+                        }
+                    }
+            };
+
             var cm = new ClassModel();
-            var js = System.Text.Json.JsonSerializer.Serialize(cm
-                , new System.Text.Json.JsonSerializerOptions { 
-                    WriteIndented = true
-                });
+            var js = System.Text.Json.JsonSerializer.Serialize(cm, sopt);
+
+
 
             var objModel = System.Text.Json.JsonSerializer.Deserialize<ClassModel>(js);
 
@@ -45,5 +70,8 @@ namespace Net6Test.TestGroups
         public EnOp Operations_C { get; set; } = EnOp.C | EnOp.D;
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public EnOp Operations_D { get; set; } = EnOp.B | EnOp.C | EnOp.D;
+        //[System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public string? UnShown { get; set; } = null;
     }
+
 }

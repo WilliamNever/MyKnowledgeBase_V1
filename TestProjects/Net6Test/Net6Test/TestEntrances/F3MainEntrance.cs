@@ -122,7 +122,10 @@ namespace Net6Test.TestEntrances
 
             //UnFiddledTests.KVP_FilterTest().Wait();
 
-            SystemTextJsonSerialization_Test.SerializeDeS_Test();
+            //SystemTextJsonSerialization_Test.SerializeDeS_Test();
+
+
+            NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
         }
 
         private async Task ValueTupleTest()
