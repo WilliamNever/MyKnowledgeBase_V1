@@ -52,9 +52,13 @@ namespace Net6Test.TestGroups
               ""Operations_D"": 14
             }
             ";
-            var jsOptions = new System.Text.Json.JsonSerializerOptions();
+            var jsOptions = new System.Text.Json.JsonSerializerOptions()
+            {
+                WriteIndented = true,
+            };
             jsOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
             var objModel1 = System.Text.Json.JsonSerializer.Deserialize<ClassModel>(json, jsOptions);
+            var js1 = System.Text.Json.JsonSerializer.Serialize(objModel1, jsOptions);
         }
     }
 
