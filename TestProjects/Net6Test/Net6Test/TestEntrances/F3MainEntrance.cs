@@ -43,6 +43,7 @@ namespace Net6Test.TestEntrances
 
             //DateTime_Tests.Test().Wait();
             //DateTime_Tests.Ticker_Test().Wait();
+            DateTime_Tests.DateTimeFormat_Test().Wait();
 
 
             //MemoryCache_Tests.Test();
@@ -122,7 +123,7 @@ namespace Net6Test.TestEntrances
 
             //UnFiddledTests.KVP_FilterTest().Wait();
 
-            SystemTextJsonSerialization_Test.SerializeDeS_Test();
+            //SystemTextJsonSerialization_Test.SerializeDeS_Test();
 
 
             //NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
