@@ -43,7 +43,7 @@ namespace Net6Test.TestEntrances
 
             //DateTime_Tests.Test().Wait();
             //DateTime_Tests.Ticker_Test().Wait();
-            DateTime_Tests.DateTimeFormat_Test().Wait();
+            //DateTime_Tests.DateTimeFormat_Test().Wait();
 
 
             //MemoryCache_Tests.Test();
@@ -127,6 +127,8 @@ namespace Net6Test.TestEntrances
 
 
             //NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
+
+            DisposedTest.DisposedInterfacesTest().Wait();
         }
 
         private async Task ValueTupleTest()
