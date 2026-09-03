@@ -1,4 +1,5 @@
 ﻿using Net6Test.Models;
+using Net6Test.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
@@ -836,6 +837,26 @@ namespace Net6Test.TestGroups
             {
             }
             await Task.Delay(5000);
+        }
+
+        public async static Task SemaphoreLockEntry_Test()
+        {
+            var ssl = new SemaphoreSlim(0);
+            //ssl.Dispose();
+            //ssl.Dispose();
+            //ssl.Release();
+            //ssl = new SemaphoreSlim(0);
+            var tsk = Task.Run(async () => { 
+                await Task.Delay(3_000); 
+                ssl.Dispose(); 
+                Console.WriteLine($"out delay"); 
+            });
+            bool info = ssl.Wait(10_000);
+            await tsk;
+            ssl.Wait();
+
+            var se = new SemaphoreLockEntry(3);
+            se.AddReference();
         }
     }
 }
