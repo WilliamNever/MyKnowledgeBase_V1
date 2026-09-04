@@ -9,9 +9,7 @@
             {
                 Console.WriteLine($"Begin - {DateTime.Now}");
                 var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
-                Console.WriteLine($"{sEnter} - {DateTime.Now}");
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
                 Console.WriteLine($"{sEnter} - {DateTime.Now}");
             }
             catch (Exception ex)
@@ -27,7 +25,8 @@
      */
 
     /// <summary>
-    /// References SemaphoreSlim
+    /// References SemaphoreSlim - 
+    /// *** SemaphoreLockEntry.Wait and SemaphoreLockEntry.Release must appear in pairs.
     /// </summary>
     public sealed class SemaphoreLockEntry : IDisposable
     {
@@ -53,23 +52,15 @@
             }
         }
 
-        public bool Wait(TimeSpan timeout, bool addRef = true, CancellationToken token = default)
+        public bool Wait(TimeSpan timeout, CancellationToken token = default)
         {
             lock (_lock)
             {
                 if (HasDisposed) return false;
 
-                AddReference(addRef);
+                Interlocked.Increment(ref _referenceCount);
                 return Semaphore.Wait(timeout, token);
             }
-        }
-
-        private int AddReference(bool addRef = true)
-        {
-            if (addRef)
-                return Interlocked.Increment(ref _referenceCount);
-            else
-                return _referenceCount;
         }
 
         public bool TryDispose()

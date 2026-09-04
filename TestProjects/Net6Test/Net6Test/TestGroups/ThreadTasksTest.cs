@@ -856,7 +856,6 @@ namespace Net6Test.TestGroups
             ssl.Wait();
 
             var se = new SemaphoreLockEntry(3);
-            se.AddReference();
         }
 
         public async static Task SemaphoreLockEntry_Example_Template()
@@ -867,9 +866,7 @@ namespace Net6Test.TestGroups
             {
                 Console.WriteLine($"Begin - {DateTime.Now}");
                 var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
-                Console.WriteLine($"{sEnter} - {DateTime.Now}");
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
                 Console.WriteLine($"{sEnter} - {DateTime.Now}");
             }
             catch (Exception ex)
