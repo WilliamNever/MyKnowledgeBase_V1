@@ -858,5 +858,29 @@ namespace Net6Test.TestGroups
             var se = new SemaphoreLockEntry(3);
             se.AddReference();
         }
+
+        public async static Task SemaphoreLockEntry_Example_Template()
+        {
+            var sle = new SemaphoreLockEntry(1);
+            bool sEnter = false;
+            try
+            {
+                Console.WriteLine($"Begin - {DateTime.Now}");
+                var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                sle.Release(sEnter);
+                var tdps = sle.TryDispose();
+                sle.Dispose();
+            }
+        }
     }
 }

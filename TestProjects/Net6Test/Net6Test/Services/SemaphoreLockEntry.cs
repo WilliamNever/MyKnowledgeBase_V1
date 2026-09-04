@@ -1,55 +1,97 @@
 ﻿namespace Net6Test.Services
 {
+    /*
+     * Usages - 
+    
+            var sle = new SemaphoreLockEntry(1);
+            bool sEnter = false;
+            try
+            {
+                Console.WriteLine($"Begin - {DateTime.Now}");
+                var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), true, tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                sle.Release(sEnter);
+                var tdps = sle.TryDispose();
+                sle.Dispose();
+            }
+
+     */
+
+    /// <summary>
+    /// References SemaphoreSlim
+    /// </summary>
     public sealed class SemaphoreLockEntry : IDisposable
     {
         public bool HasDisposed { get; private set; } = false;
-        public SemaphoreSlim Semaphore { get; }
+        private SemaphoreSlim Semaphore { get; }
         private int _referenceCount = 0;
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
         public SemaphoreLockEntry(int maxConcurrentRequests)
         {
             Semaphore = new SemaphoreSlim(maxConcurrentRequests, maxConcurrentRequests);
         }
 
-        public void Release()
+        public void Release(bool canRestoreEnterCount)
         {
             lock (_lock)
             {
-                if (HasDisposed)
-                    return;
-
-                if (ReleaseReference() <= 0)
-                    HasDisposed = true;
-                Semaphore.Release();
+                if (HasDisposed) return;
+                Interlocked.Decrement(ref _referenceCount);
+                if (canRestoreEnterCount)
+                    Semaphore.Release();
             }
         }
 
-        public bool Wait(TimeSpan timeout, CancellationToken token = default)
+        public bool Wait(TimeSpan timeout, bool addRef = true, CancellationToken token = default)
         {
-            AddReference();
+            AddReference(addRef);
             return Semaphore.Wait(timeout, token);
         }
 
-        public int AddReference()
+        public int AddReference(bool addRef = true)
         {
             lock (_lock)
             {
                 if (HasDisposed) throw new ObjectDisposedException(nameof(SemaphoreLockEntry));
-                return Interlocked.Increment(ref _referenceCount);
+                
+                if (addRef)
+                    return Interlocked.Increment(ref _referenceCount);
+                else 
+                    return _referenceCount;
             }
         }
 
-        private int ReleaseReference()
+        public bool TryDispose()
         {
-            return Interlocked.Decrement(ref _referenceCount);
+            lock (_lock)
+            {
+                if (HasDisposed) return true;
+                var rsl = _referenceCount < 1;
+                if (rsl) Dispose();
+                return rsl;
+            }
         }
-
         public void Dispose()
         {
-            HasDisposed = true;
-            Semaphore.Dispose();
+            lock (_lock)
+            {
+                if (!HasDisposed)
+                {
+                    HasDisposed = true;
+                    Semaphore.Dispose();
+                }
+            }
         }
         
         
