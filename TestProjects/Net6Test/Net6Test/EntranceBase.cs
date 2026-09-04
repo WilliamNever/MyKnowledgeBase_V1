@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Net6Test.ConfigurationsClasses;
 using Net6Test.Models;
 using Net6Test.Services;
@@ -18,6 +19,10 @@ namespace Net6Test
             InitServices(services);
             provider = services.BuildServiceProvider();
             ExtensionsClass.Init(provider);
+
+            //var cache = provider.GetService<IMemoryCache>();
+            //cache.Set("A", 1);
+            //cache.Set("a", 2);
         }
 
         protected virtual void InitServices(IServiceCollection services)

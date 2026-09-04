@@ -70,7 +70,7 @@
                 if (HasDisposed) return true;
 
                 var rsl = _referenceCount < 1;
-                if (rsl) Dispose();
+                if (rsl) ToDispose();
                 return rsl;
             }
         }
@@ -78,15 +78,18 @@
         {
             lock (_lock)
             {
-                if (!HasDisposed)
-                {
-                    HasDisposed = true;
-                    Semaphore.Dispose();
-                }
+                ToDispose();
             }
         }
 
-
+        private void ToDispose()
+        {
+            if (!HasDisposed)
+            {
+                HasDisposed = true;
+                Semaphore.Dispose();
+            }
+        }
 
         //public int TestAddReference(int num)
         //{
