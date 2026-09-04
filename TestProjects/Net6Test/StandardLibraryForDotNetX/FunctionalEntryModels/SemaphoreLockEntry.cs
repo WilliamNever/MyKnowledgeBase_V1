@@ -1,4 +1,4 @@
-﻿namespace Net6Test.Services
+﻿namespace StandardLibraryForDotNetX.FunctionalEntryModels
 {
     /*
      * Usages - 
@@ -26,7 +26,9 @@
 
     /// <summary>
     /// References SemaphoreSlim - 
-    /// *** SemaphoreLockEntry.Wait and SemaphoreLockEntry.Release must appear in pairs.
+    /// ************************************************************************************
+    ///     SemaphoreLockEntry.Wait and SemaphoreLockEntry.Release must appear in pairs.
+    /// ************************************************************************************
     /// </summary>
     public sealed class SemaphoreLockEntry : IDisposable
     {
@@ -46,10 +48,11 @@
             lock (_lock)
             {
                 if (HasDisposed) return;
-                Interlocked.Decrement(ref _referenceCount);
-                if (canRestoreEnterCount)
-                    Semaphore.Release();
+                _referenceCount--;
             }
+            if (canRestoreEnterCount)
+                Semaphore.Release();
+
         }
 
         public bool Wait(TimeSpan timeout, CancellationToken token = default)
@@ -57,10 +60,19 @@
             lock (_lock)
             {
                 if (HasDisposed) return false;
-
-                Interlocked.Increment(ref _referenceCount);
-                return Semaphore.Wait(timeout, token);
+                _referenceCount++;
             }
+            return Semaphore.Wait(timeout, token);
+        }
+
+        public async Task<bool> WaitAsync(TimeSpan timeout, CancellationToken token = default)
+        {
+            lock (_lock)
+            {
+                if (HasDisposed) return false;
+                _referenceCount++;
+            }
+            return await Semaphore.WaitAsync(timeout, token);
         }
 
         public bool TryDispose()

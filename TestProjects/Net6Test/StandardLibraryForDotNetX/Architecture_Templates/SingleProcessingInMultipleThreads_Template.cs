@@ -17,7 +17,7 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
         public async Task<KeyValuePair<string, string>> ProcessingToGetTokenAsync(CancellationToken token = default)
         {
             var isOK = _cacheManage.GetFromCache("CacheKey", out string _Token);
-            if (IsTokenValid(_Token))
+            if (!IsTokenValid(_Token))
             {
                 var lockTaken = false;
                 try
@@ -45,7 +45,7 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
         private async Task<string> GetNewTokenAsync(CancellationToken token)
         {
             var isOK = _cacheManage.GetFromCache("CacheKey", out string _Token);
-            if (IsTokenValid(_Token))
+            if (!IsTokenValid(_Token))
             {
                 try
                 {

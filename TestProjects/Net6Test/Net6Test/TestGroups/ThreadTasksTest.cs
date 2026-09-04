@@ -1,7 +1,5 @@
 ﻿using Net6Test.Models;
-using Net6Test.Services;
-using Newtonsoft.Json.Linq;
-using System;
+using StandardLibraryForDotNetX.FunctionalEntryModels;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
