@@ -55,21 +55,21 @@
 
         public bool Wait(TimeSpan timeout, bool addRef = true, CancellationToken token = default)
         {
-            AddReference(addRef);
-            return Semaphore.Wait(timeout, token);
-        }
-
-        public int AddReference(bool addRef = true)
-        {
             lock (_lock)
             {
-                if (HasDisposed) throw new ObjectDisposedException(nameof(SemaphoreLockEntry));
-                
-                if (addRef)
-                    return Interlocked.Increment(ref _referenceCount);
-                else 
-                    return _referenceCount;
+                if (HasDisposed) return false;
+
+                AddReference(addRef);
+                return Semaphore.Wait(timeout, token);
             }
+        }
+
+        private int AddReference(bool addRef = true)
+        {
+            if (addRef)
+                return Interlocked.Increment(ref _referenceCount);
+            else
+                return _referenceCount;
         }
 
         public bool TryDispose()
@@ -77,6 +77,7 @@
             lock (_lock)
             {
                 if (HasDisposed) return true;
+
                 var rsl = _referenceCount < 1;
                 if (rsl) Dispose();
                 return rsl;
@@ -93,9 +94,9 @@
                 }
             }
         }
-        
-        
-        
+
+
+
         //public int TestAddReference(int num)
         //{
         //    var ex = Interlocked.Exchange(ref _referenceCount, num);
