@@ -49,10 +49,10 @@
             {
                 if (HasDisposed) return;
                 _referenceCount--;
-            }
-            if (canRestoreEnterCount)
-                Semaphore.Release();
 
+                if (canRestoreEnterCount)
+                    Semaphore.Release();
+            }
         }
 
         public bool Wait(TimeSpan timeout, CancellationToken token = default)
@@ -60,9 +60,15 @@
             lock (_lock)
             {
                 if (HasDisposed) return false;
-                _referenceCount++;
             }
             return Semaphore.Wait(timeout, token);
+        }
+
+        public void AddReferenceCount()
+        {
+            lock (_lock) {
+                _referenceCount++;
+            }
         }
 
         public async Task<bool> WaitAsync(TimeSpan timeout, CancellationToken token = default)
@@ -70,7 +76,6 @@
             lock (_lock)
             {
                 if (HasDisposed) return false;
-                _referenceCount++;
             }
             return await Semaphore.WaitAsync(timeout, token);
         }

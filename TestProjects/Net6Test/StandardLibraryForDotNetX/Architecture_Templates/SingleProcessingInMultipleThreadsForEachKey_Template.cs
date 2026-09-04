@@ -35,6 +35,7 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
                 lock (_lock)
                 {
                     slim = _sslims.GetOrAdd(Tkey, _ => new SemaphoreLockEntry(EacTkeyLimit));
+                    slim.AddReferenceCount();
                 }
                 var sAccess = false;
 
@@ -61,9 +62,9 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
                 }
                 finally
                 {
-                    slim.Release(sAccess);
                     lock (_lock)
                     {
+                        slim.Release(sAccess);
                         if (slim.TryDispose())
                         {
                             _sslims.TryRemove(Tkey, out _);
