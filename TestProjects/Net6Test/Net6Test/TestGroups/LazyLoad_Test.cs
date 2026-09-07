@@ -4,7 +4,8 @@
     {
         public async static Task LazyLoad()
         {
-            var tsks = new List<Lazy<Task<int>>>();
+            var Ltsks = new List<Lazy<Task<int>>>();
+            var tsks = new List<Task<int>>();
 
             //var lzyObj = new Lazy<Task<int>>(() => LazyLoadTest(2), LazyThreadSafetyMode.ExecutionAndPublication);
             //var rsl = await lzyObj.Value;
@@ -14,13 +15,39 @@
             //Console.WriteLine(rsl);
 
 
-            for (int j = 0; j < 5; j++)
+            //for (int j = 0; j < 5; j++)
+            //{
+            //    var num = 1 << j;
+            //    tsks.Add(new Lazy<Task<int>>(() => LazyLoadTest(num), LazyThreadSafetyMode.None));
+            //}
+
+            Console.WriteLine($"Main - {Thread.CurrentThread.ManagedThreadId}");
+
+            /// testings for thread safety
+            var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.ExecutionAndPublication);
+            //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.PublicationOnly);
+            //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.None);
+
+            for (int i = 0; i < 5; i++)
             {
-                var num = 1 << j;
-                tsks.Add(new Lazy<Task<int>>(() => LazyLoadTest(num), LazyThreadSafetyMode.None));
+                tsks.Add(Task.Run(() => {
+                    var lobj = lzyClass.Value;
+                    Console.WriteLine(lobj.ToString());
+                    Console.WriteLine($"Sub - {Thread.CurrentThread.ManagedThreadId}");
+                    return Task.FromResult(lobj.ThreadId); 
+                }));
             }
 
-            var nums = await Task.WhenAll(tsks.Select(t => t.Value));
+            var nums = await Task.WhenAll(Ltsks.Select(t => t.Value));
+            int[] numsTsk;
+            try
+            {
+                numsTsk = await Task.WhenAll(tsks);
+            }
+            catch (Exception ex)
+            {
+            }
+            var lobj = lzyClass.Value;
         }
         public async static Task<int> LazyLoadTest(int LimitedNum = -1)
         {
@@ -96,10 +123,21 @@
 
     public class CtentObj
     {
+        public int ThreadId {  get; private set; }
         public string InitialDateTime {  get; set; }
         public CtentObj()
         {
             InitialDateTime = $"{DateTime.Now}";
+            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            if (ThreadId > 8)
+            {
+                Console.WriteLine($"Over 8 value - {ThreadId}");
+                throw new Exception("Threads Over limits!");
+            }
+        }
+        public override string ToString()
+        {
+            return $"ToString / {ThreadId} - {InitialDateTime}";
         }
     }
 }
