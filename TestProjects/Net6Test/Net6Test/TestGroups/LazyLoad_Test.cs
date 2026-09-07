@@ -17,6 +17,7 @@
             var lzyObj = new LazyObj(() => idx);
             var lzyClass = new Lazy<CtentObj>();
             idx = 66;
+            //_ = lzyObj.Value;
             Console.WriteLine($"Main Start Working - 5sec - {DateTime.Now}");
             await Task.Delay(5_000);
             Console.WriteLine($"Main enter delay - 5sec - {DateTime.Now}");
