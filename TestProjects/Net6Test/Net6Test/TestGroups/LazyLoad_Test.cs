@@ -23,7 +23,7 @@
 
             Console.WriteLine($"Main - {Thread.CurrentThread.ManagedThreadId}");
 
-            /// testings for thread safety
+            /// *** Please check LazyThreadSafetyMode enum to confirm the effections. Add testings for thread safety ***
             var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.ExecutionAndPublication);
             //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.PublicationOnly);
             //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.None);
