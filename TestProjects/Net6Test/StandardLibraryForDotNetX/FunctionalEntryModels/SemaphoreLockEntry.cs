@@ -35,7 +35,9 @@
         public bool HasDisposed { get; private set; } = false;
         private SemaphoreSlim Semaphore { get; }
         private int _referenceCount = 0;
-
+        /// <summary>
+        /// _lock is ensuring internally thread-safe.
+        /// </summary>
         private readonly object _lock = new object();
 
         public SemaphoreLockEntry(int maxConcurrentRequests)

@@ -96,7 +96,10 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.CancellationToken_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
-            ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+            //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+
+
+            LazyLoad_Test.LazyLoad().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
