@@ -6,12 +6,16 @@
         {
             var tsks = new List<Lazy<Task<int>>>();
 
-            //var lzyObj = new Lazy<Task<int>>(() => LazyLoadTest(2));
+            //var lzyObj = new Lazy<Task<int>>(() => LazyLoadTest(2), LazyThreadSafetyMode.ExecutionAndPublication);
             //var rsl = await lzyObj.Value;
+            //Console.WriteLine(rsl);
+            //lzyObj = new Lazy<Task<int>>(() => LazyLoadTest(4), LazyThreadSafetyMode.ExecutionAndPublication);
+            //rsl = await lzyObj.Value;
             //Console.WriteLine(rsl);
 
 
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 5; j++)
+            {
                 var num = 1 << j;
                 tsks.Add(new Lazy<Task<int>>(() => LazyLoadTest(num), LazyThreadSafetyMode.None));
             }
