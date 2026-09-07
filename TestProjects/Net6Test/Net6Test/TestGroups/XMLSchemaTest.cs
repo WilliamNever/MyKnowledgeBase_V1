@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Net6Test.StaticUtilities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StandardLibrary.Helpers;
 using System.Reflection;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace Net6Test.TestGroups
 {
@@ -12,8 +15,48 @@ namespace Net6Test.TestGroups
     {
         public static async Task XDocument_Descendants()
         {
-            var speedDoc = XDocument.Parse("<Status><Code id=\"inforId\" respcode=\"200\">SUCCESS</Code><Info><User>yyy</User></Info><User>xxx</User><Groups><Group><User>1</User></Group><Group><User>2</User></Group><Group><User>3</User></Group></Groups></Status>");
-            var users = speedDoc.Descendants("User")?.ToList();
+            var encName = Encoding.UTF8.EncodingName;
+            var enc1 = Encoding.GetEncoding("utf-8".ToUpper());
+            var enc2 = Encoding.GetEncoding(Encoding.UTF8.HeaderName);
+            var enc3 = Encoding.GetEncoding(Encoding.UTF8.BodyName);
+            var enc4 = Encoding.GetEncoding(Encoding.UTF8.WebName);
+
+            var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.icsm.com/icsmxml\">";
+            //var xml = "<ICSMXML xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+            xml += "<Status><Code id=\"inforId\" respcode=\"200\">SUCCESS</Code><Info><User>yyy</User></Info><User>xxx</User><Groups><Group><User name=\"Id\" Age=\"3\">1</User></Group><Group><User>2</User></Group><Group><User>3</User></Group></Groups></Status>";
+            xml += "</ICSMXML>";
+            var speedDoc = XDocument.Parse(xml);
+            XmlNamespaceManager manager = new XmlNamespaceManager(new NameTable());
+            var attrs = speedDoc.Root.Attributes();
+            XElement? node;
+            if (attrs.Any(x=>x.Name.LocalName.ToEquals("xmlns")))
+            {
+                var attr = attrs.First(x => x.Name.LocalName.ToEquals("xmlns"));
+                manager.AddNamespace("ns", attr.Value);
+                //node = speedDoc.XPathSelectElement($"ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User", manager);
+                node = speedDoc.XPathSelectElement($"/ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User[@name='Id']", manager);
+                XAttribute? attrTmp = node?.Attributes().FirstOrDefault(x => x.Name.LocalName.ToEquals("age"));
+                
+                XNamespace ns = XNamespace.Get(attr.Value);
+                var xnm = XName.Get("User", ns.NamespaceName);
+                var users = speedDoc.Descendants(xnm)?.ToList();//"ns:User"
+            }
+            else
+            {
+                var attr = attrs.FirstOrDefault(x => x.Name.LocalName.ToEquals("xmlns"));
+                manager.AddNamespace("ns", attr?.Value ?? "");
+                //node = speedDoc.XPathSelectElement($"ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User", manager);
+                node = speedDoc.XPathSelectElement($"/ns:ICSMXML/ns:Status/ns:Groups[1]/ns:Group/ns:User[@name='Id']", manager);
+
+
+                var node1 = speedDoc.XPathSelectElement($"ICSMXML/Status/Groups[1]/Group/User", manager);
+                var users = speedDoc.Descendants("User")?.ToList();//
+            }
+            //var node = speedDoc.XPathSelectElement($"ICSMXML/Status/Groups[1]/Group/User");
+            //var node = speedDoc.XPathSelectElement($"ICSMXML");
+            
+            node.Value = "xxx In Group";
+            var xmlStr = speedDoc.ToString();
         }
         public static async Task Test4()
         {

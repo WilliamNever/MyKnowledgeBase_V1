@@ -28,6 +28,7 @@ namespace Net6Test.TestEntrances
 
 
             //ConversionTest.TypeTest().Wait();
+            //ConversionTest.EnumTest().Wait();
 
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
@@ -35,10 +36,14 @@ namespace Net6Test.TestEntrances
 
             //RecordTest.Test1Async().Wait();
             //RecordTest.Test2Async().Wait();
+            //RecordTest.Test3Async().Wait();
+
+
             //Type_Reflect_Tests.RunTest();
 
             //DateTime_Tests.Test().Wait();
             //DateTime_Tests.Ticker_Test().Wait();
+            //DateTime_Tests.DateTimeFormat_Test().Wait();
 
 
             //MemoryCache_Tests.Test();
@@ -60,6 +65,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
             //StringChangeTests.StringJoin_Test().Wait();
+            //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
             //XMLSchemaTest.ReadXMLFile_Test().Wait();
@@ -85,7 +91,15 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationTokenSource_Test().Wait();
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
-            ThreadTasksTest.Task_WhenAny_Test_2().Wait();
+            //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
+            //ThreadTasksTest.ThreadPoolToken_Test().Wait();
+            //ThreadTasksTest.SemaphoreSlim_Test().Wait();
+            //ThreadTasksTest.CancellationToken_Test().Wait();
+            //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
+            //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+
+
+            LazyLoad_Test.LazyLoad().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -100,15 +114,26 @@ namespace Net6Test.TestEntrances
             //MessTests.T1().Wait();
 
             //ConcurrentClassTests.ConcurrentDictionary_Test().Wait();
+            //ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
 
             //ListTests.ListJoinTest();
 
             //Cronos_Tests.DateTimeTest();
+            //Cronos_Tests.CreateDTimeTest().Wait();
+            //Cronos_Tests.CreateDTimeTest_1().Wait();
+            //Cronos_Tests.DateTimeTimeZoneComparisonTest();
 
             //RegexesTestService.RegexFileNameReplace_Test();
             //CalculateService.LiquidMixedTemperature().Wait();
 
             //UnFiddledTests.KVP_FilterTest().Wait();
+
+            //SystemTextJsonSerialization_Test.SerializeDeS_Test();
+
+
+            //NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
+
+            //DisposedTest.DisposedInterfacesTest().Wait();
         }
 
         private async Task ValueTupleTest()

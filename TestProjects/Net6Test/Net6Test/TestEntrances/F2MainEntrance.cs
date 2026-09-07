@@ -31,13 +31,13 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(EnumConverTests());
             //Task.WaitAll(JsonSerializeTests());
             //Task.WaitAll(ReadJsonWithoutDeserializing());
-            //Task.WaitAll(CachingTest());
+            Task.WaitAll(CachingTest());
             //Task.WaitAll(IEnumerableListTest());
             //Task.WaitAll(ReadonlyStatObjectTest());
             //Task.WaitAll(TestStringPointTest());
             //Task.WaitAll(MD5Encoding());
             //Task.WaitAll(SkipTakeTest());
-            Task.WaitAll(ConvertionsTest());
+            //Task.WaitAll(ConvertionsTest());
             //Task.WaitAll(ReadAttributesStringTest());
             //Task.WaitAll(BitOperationTest<Bxx1, UserException>(new Bxx1()));
             //Task.WaitAll(ListArrayTest());
@@ -287,7 +287,12 @@ namespace Net6Test.TestEntrances
         private async Task CachingTest()
         {
             string key = "ssss";
-            var mem = provider.GetService<IMemoryCache>();
+            var mem = provider.GetRequiredService<IMemoryCache>();
+
+            mem.Set("ss1", "fsd");
+            mem.Remove("ss1");
+            mem.Remove("ss1");
+            mem.Remove("ss2");
 
             var itm = await mem.GetOrCreateAsync(key, e =>
             {
@@ -379,7 +384,12 @@ namespace Net6Test.TestEntrances
 
         private async Task SomeTests()
         {
-            var imapper = provider.GetService<IMapper>();
+            var imapper = provider.GetRequiredService<IMapper>();
+            var b0 = new Base0 { Base0_Name = "xxx", Rec = 0 };
+            var b01 = imapper.Map<ExtClassModel>(b0);
+            b01.Base0_Name = "YYYYY";
+            b01.Rec = 1;
+
             ExtClassModel ecm = new ExtClassModel() { HiFiInfor = "ex HIFI", Acgx = "33xx" };
             var b2 = imapper.Map<Base2>(ecm);
             Console.WriteLine(DateTime.Now.DayOfYear);

@@ -25,6 +25,6 @@
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StandardLibrary\StandardLibrary.csproj" />
+    <ProjectReference Include="..\StandardLibraryForDotNetX\StandardLibraryForDotNetX.csproj" />
   </ItemGroup>
 </Project>

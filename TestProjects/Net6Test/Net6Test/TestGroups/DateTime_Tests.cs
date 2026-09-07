@@ -36,5 +36,13 @@ namespace Net6Test.TestGroups
                 removeDateTime = removeDateTime.AddDays(1d);
             }
         }
+
+        public static async Task DateTimeFormat_Test()
+        {
+            var udtc = DateTime.Now;
+            Console.WriteLine($"{udtc:yyyy-MM-ddTHH:mm:sszzz}");
+            Console.WriteLine($"{udtc:o}");
+            Console.WriteLine(udtc.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+        }
     }
 }

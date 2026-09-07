@@ -145,3 +145,131 @@ select * from TableName where id>10
 select * from TableName where age>18
 )
 select * from result a,result2 b where a.id=b.id
+
+------------------------------------------------------------------------------------------
+
+-- 完全依靠索引进行外联查询 OUTER APPLY‌ [left join] / CROSS APPLY [inner join]
+
+;with rsl as (
+select * from Table1 t where t.id>1
+)
+select rsl.*, r.*
+from rsl
+OUTER APPLY
+(
+	select max(ea.Col) as Col from rsl sl where sl.Id = rsl.Id
+) as r
+where ....
+order by rsl.Id
+
+
+------------------------------------------------------------------------------------------
+--检查 sql index 状态，以更新或重建索引
+
+DECLARE @ObjectId INT = OBJECT_ID('[dbo].[table]');
+DECLARE @IndexId INT;
+DECLARE @PageCount BIGINT;
+DECLARE @FragPercent FLOAT;
+DECLARE @Sql NVARCHAR(MAX);
+ 
+SELECT @IndexId = index_id
+FROM sys.indexes
+WHERE object_id = @ObjectId
+  AND name = 'Modify_Date'--'IX_Packet_SubmitDate_PacketId'
+  ;
+ 
+IF @IndexId IS NULL
+BEGIN
+    RAISERROR('Index Modify_Date was not found on dbo.Packet.', 16, 1);
+    RETURN;
+END;
+ 
+SELECT
+    @PageCount = ips.page_count,
+    @FragPercent = ips.avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats
+(
+    DB_ID(),
+    @ObjectId,
+    @IndexId,
+    NULL,
+    ''
+) ips
+WHERE ips.index_level = 0;
+ 
+PRINT 'Index: Modify_Date';
+PRINT 'PageCount = ' + CAST(ISNULL(@PageCount, 0) AS VARCHAR(30));
+PRINT 'Fragmentation % = ' + CAST(ISNULL(@FragPercent, 0) AS VARCHAR(30));
+ 
+IF ISNULL(@PageCount, 0) < 1000
+BEGIN
+    PRINT 'Page count is small; skipping reorganize/rebuild.';
+END
+ELSE IF @FragPercent >= 30
+BEGIN
+    PRINT 'Rebuilding index Modify_Date...';
+ 
+    --SET @Sql = N'
+    --    ALTER INDEX Modify_Date
+    --    ON [dbo].[table]
+    --    REBUILD;
+    --';
+    EXEC sp_executesql @Sql;
+END
+ELSE IF @FragPercent >= 10
+BEGIN
+    PRINT 'Reorganizing index Modify_Date...';
+ 
+    --SET @Sql = N'
+    --    ALTER INDEX Modify_Date
+    --    ON [dbo].[table]
+    --    REORGANIZE;
+    --';
+    --EXEC sp_executesql @Sql;
+END
+ELSE
+BEGIN
+    PRINT 'Fragmentation is low; skipping reorganize/rebuild.';
+END;
+ 
+--PRINT 'Updating statistics on [dbo].[table]...';
+--UPDATE STATISTICS [dbo].[table] Modify_Date;
+ 
+PRINT 'Done.';
+
+
+
+SELECT
+    DB_NAME() AS DatabaseName,
+    OBJECT_SCHEMA_NAME(ips.object_id) AS SchemaName,
+    OBJECT_NAME(ips.object_id) AS TableName,
+    i.name AS IndexName,
+    ips.index_type_desc,
+    ips.alloc_unit_type_desc,
+    ips.page_count,
+    ips.avg_fragmentation_in_percent,
+    ips.avg_page_space_used_in_percent,
+    ips.record_count,
+    ips.fragment_count,
+    ips.avg_fragment_size_in_pages
+FROM sys.dm_db_index_physical_stats
+(
+    DB_ID(),
+    OBJECT_ID('dbo.table'),
+    NULL,
+    NULL,
+    ''
+) ips
+INNER JOIN sys.indexes i
+    ON ips.object_id = i.object_id
+   AND ips.index_id = i.index_id
+WHERE ips.object_id = OBJECT_ID('dbo.table')
+  --AND i.name = 'IX_PacketId'
+ORDER BY ips.page_count DESC;
+
+
+------------------------------------------------------------------------------------------
+
+
+
+

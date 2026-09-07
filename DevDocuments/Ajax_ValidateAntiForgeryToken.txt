@@ -1,0 +1,113 @@
+You can use ValidateAntiForgeryToken with AJAX in ASP.NET Core, but you must send the anti-forgery token along with the request (and you generally can’t combine it with a pure JSON body + [FromBody] without additional work).
+Below is how the pieces fit together, plus working configurations and examples.
+1) What ValidateAntiForgeryToken actually validates
+•	ASP.NET Core antiforgery expects two values that match:
+1.	an antiforgery cookie (set by the app)
+2.	a request token sent back by the client (usually in a form field __RequestVerificationToken, or in a header)
+[ValidateAntiForgeryToken] enforces that on unsafe HTTP methods (POST/PUT/PATCH/DELETE). If the token is missing/invalid you’ll get 400.
+2) Traditional MVC form post vs AJAX post
+A) Standard form post (easy)
+•	Razor renders @Html.AntiForgeryToken() → hidden input __RequestVerificationToken
+•	Browser posts the form → token is included automatically
+•	[ValidateAntiForgeryToken] succeeds
+B) AJAX post (you must include the token yourself)
+You have two common approaches:
+Approach 1 (recommended): send token via header
+•	Render the token somewhere in HTML (hidden field or meta tag)
+•	JS reads it and sends header RequestVerificationToken: <token>
+Approach 2: send as form field
+•	Send __RequestVerificationToken in POST form data (works well if you’re using FormData / x-www-form-urlencoded)
+3) Important detail for your action: [FromBody] ModelClass model
+In your controller you currently have:
+•	Update([FromBody] ModelClass model) and [ValidateAntiForgeryToken]
+This combination frequently breaks because:
+•	The antiforgery token is not in the JSON body unless you include it manually.
+•	If you post JSON and don’t send the header token, validation fails.
+•	If you try to send form-urlencoded to include __RequestVerificationToken, then [FromBody] won’t bind as JSON.
+So you must choose one:
+1.	Keep [FromBody] + send token in header (most common for JSON AJAX), or
+2.	Switch to normal form post (remove [FromBody] and bind from form), or
+3.	Implement a custom antiforgery strategy for SPA-style APIs (more advanced).
+4) Configuration (ASP.NET Core)
+A) Ensure antiforgery services are available
+In .NET 6 MVC apps this is typically already there via MVC, but you can configure options:
+•	In Program.cs:
+•	services.AddAntiforgery(...) options you can set:
+•	HeaderName (default commonly RequestVerificationToken in examples)
+•	Cookie options, etc.
+In your Program.cs you have:
+•	builder.Services.AddAntiforgery(options => { options.HeaderName = "RequestVerificationToken"; });
+That means ASP.NET Core will accept the request token via this header:
+•	RequestVerificationToken: <token>
+So your JS should send that header on every unsafe request (POST/PUT/PATCH/DELETE) that hits an action decorated with [ValidateAntiForgeryToken].
+Example configuration:
+•	HeaderName = "RequestVerificationToken"
+B) Auto-validation globally (optional)
+Instead of decorating every action, you can add:
+•	AutoValidateAntiforgeryTokenAttribute This validates for unsafe methods automatically, but skips GET/HEAD/OPTIONS/TRACE.
+5) Example: Razor view + jQuery AJAX (JSON) + header token
+View (.cshtml)
+Include an antiforgery token somewhere on the page:
+•	@Html.AntiForgeryToken()
+This renders a hidden input with name __RequestVerificationToken.
+JavaScript (jQuery)
+Read token from the hidden input and send as header:
+•	headers: { 'RequestVerificationToken': token }
+•	contentType: 'application/json'
+•	data: JSON.stringify(model)
+This matches your [FromBody] ModelClass model.
+6) Example: Fetch API (JSON) + header token
+Same as above, but:
+•	headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token }
+7) Example: FormData approach (if you don’t want JSON)
+If you post a form (or FormData), include:
+•	__RequestVerificationToken field Then your action should typically be:
+•	Update(ModelClass model) (remove [FromBody])
+8) Common gotchas
+•	Token not present on page: If you call AJAX from a page that never rendered @Html.AntiForgeryToken(), there may be no cookie/token pair yet.
+•	Cross-site requests: antiforgery cookie is tied to same-site behavior (CSRF mitigation). Don’t try to use it as general auth.
+•	APIs vs MVC: For pure APIs (no cookies, no Razor), antiforgery isn’t usually the mechanism; use proper auth (JWT/Bearer) + CORS, etc.
+•	Return codes: antiforgery failure is typically 400 in ASP.NET Core. Handle that in your AJAX error callbacks.
+
+9) Common patterns + examples
+Pattern A (recommended): AJAX JSON body + header token
+Use when you have [FromBody] models (like your Update([FromBody] ModelClass model)).
+Razor
+•	Put @Html.AntiForgeryToken() somewhere in the DOM (form or layout)
+jQuery
+•	Read token from __RequestVerificationToken
+•	Send it in header RequestVerificationToken
+Example (similar to your code):
+•	contentType: 'application/json'
+•	headers: { RequestVerificationToken: token }
+Pattern B: AJAX form post (no JSON) + __RequestVerificationToken field
+Use when you want classic MVC model binding (no [FromBody]).
+Action
+•	Update(ModelClass model) (no [FromBody])
+AJAX
+•	Send application/x-www-form-urlencoded or FormData
+•	Include __RequestVerificationToken in the body
+
+
+
+Code Example - 
+
+$.ajax({
+	url: '......',
+	type: 'POST',
+	headers:{'RequestVerificationToken':rvToken},
+	data: JSON.stringify(dataModel),
+	dataType: 'json',
+	contentType: 'application/json; charset=utf-8',
+	processData: false
+	......
+});
+
+In Program.cs - 
+
+builder.Services.AddAntiforgery(options =>
+{
+    // This is the header your JS will send
+    options.HeaderName = "RequestVerificationToken";
+});
+

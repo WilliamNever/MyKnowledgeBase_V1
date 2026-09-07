@@ -9,39 +9,65 @@ using System.Threading.Tasks;
 
 namespace StandardLibrary.ScheduledTaskServiceTemplate
 {
-    public abstract class ScheduledTasksBaseClass<T, TKey> //where TKey : notnull
+    public abstract class ScheduledTasksBaseClass<T, TKey> : IDisposable //where TKey : notnull
     {
         /// <summary>
         /// Sync flag
         /// </summary>
-        protected object _lock = new object();
+        protected readonly object _lock = new object();
+        private CancellationTokenRegistration _stpRegistration;
         protected CancellationToken StopCancellationToken;
         public abstract string CronoExpress { get; }
         public abstract DateTime? NextRunDateTime { get; protected set; }
 
-        protected SemaphoreSlim SSlim = new SemaphoreSlim(0);
-        protected ConcurrentQueue<TKey> Sids = new ConcurrentQueue<TKey>();
-        public ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new ConcurrentDictionary<TKey, ConurrentTaskModel>();
+        protected readonly SemaphoreSlim SSlim = new SemaphoreSlim(0);
+        protected readonly ConcurrentQueue<TKey> Sids = new ConcurrentQueue<TKey>();
+        public readonly ConcurrentDictionary<TKey, ConurrentTaskModel> TaskBags = new ConcurrentDictionary<TKey, ConurrentTaskModel>();
         protected readonly TaskSettings _taskSettings;
 
-        protected ILogger<T> _logger;
+        protected readonly ILogger<T> _logger;
         protected TimeSpan? _taskTimeout;
-        public ScheduledTasksBaseClass(ILogger<T> logger, TaskSettings taskSettings)
+        protected ScheduledTasksBaseClass(ILogger<T> logger, TaskSettings taskSettings)
         {
             _logger = logger;
             _taskSettings = taskSettings;
         }
         public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// <summary>
+        /// stoppingToken is same as the token
+        /// in public abstract Task ExecuteAsync(CancellationToken stoppingToken);
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
         public virtual async Task SetupAsync(CancellationToken stoppingToken)
         {
-            StopCancellationToken = stoppingToken;
-            stoppingToken.Register(ReleaseResources);
             _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
+
+            StopCancellationToken = stoppingToken;
+            _stpRegistration.Dispose();
+            _stpRegistration = stoppingToken.Register(ReleaseResources);
             _ = StartWorking(stoppingToken);
+
             await Task.CompletedTask;
         }
-        public abstract void ReleaseResources();
-
+        public virtual void ReleaseResources()
+        {
+            //Sids.Clear(); // no Clear method in Standard 2.0, using while TryDequeue instead
+            while (Sids.TryDequeue(out _)) { }
+            ;
+            var keys = TaskBags.Keys.ToArray();
+            foreach (var key in keys)
+            {
+                if (TaskBags.TryRemove(key, out var obj))
+                {
+                    obj.Dispose();
+                }
+            }
+        }
+        public virtual void Dispose()
+        {
+            _stpRegistration.Dispose();
+        }
         protected virtual Task StartWorking(CancellationToken token) => DistributeWorksAsync(token);
 
         private async Task DistributeWorksAsync(CancellationToken stoppingToken)
@@ -50,9 +76,13 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             {
                 try
                 {
-                    await DistributeNewWorksAsync(Sids, TaskBags, stoppingToken);
-                    if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken))
+                    await DistributeNewWorksAsync(Sids, TaskBags, stoppingToken).ConfigureAwait(false);
+                    if (!await CheckWorkingResultAsync(Sids, TaskBags, stoppingToken).ConfigureAwait(false))
                         break;
+                }
+                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+                {
+                    _logger.LogError($"Exited by Operation Canceled. Sids count - {Sids.Count}, TaskBags count - {TaskBags.Count}");
                 }
                 catch (Exception ex)
                 {
@@ -64,14 +94,14 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         protected virtual async Task<bool> CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var tss = bags.Select(x => x.Value.Task).ToList();
-            if (tss.Count > 0)
+            if (tss.Any())
             {
-                var t = await Task.WhenAny(tss);
+                _ = await Task.WhenAny(tss);
             }
 
             if (bags.IsEmpty && sids.IsEmpty)
             {
-                await NoInBoundDataAWaitAsync(stoppingToken);
+                await NoInBoundDataAWaitAsync(stoppingToken).ConfigureAwait(false);
             }
             return true;
         }
@@ -108,10 +138,14 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
         {
             try
             {
-                await DealOneWorkAsync(sid, token);
+                await DealOneWorkAsync(sid, token).ConfigureAwait(false);
             }
-            catch (Exception) {
-                throw;
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
+            {
+                _logger.LogError($"Exited manually, break to processed #{sid}");
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, $"Failed to processed #{sid}");
             }
             finally {
                 if (TaskBags.TryRemove(sid, out var obj))

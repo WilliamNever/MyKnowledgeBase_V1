@@ -1,12 +1,87 @@
 ﻿using Net6Test.Models;
-using Newtonsoft.Json.Linq;
-using System;
+using StandardLibraryForDotNetX.FunctionalEntryModels;
 using System.Collections.Concurrent;
 
 namespace Net6Test.TestGroups
 {
     public class ThreadTasksTest
     {
+        public async static Task CancellationToken_Test()
+        {
+            Action cb = () => { Console.WriteLine($"Infors"); };
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var nCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
+
+            //cts.Cancel();
+
+            nCts.Cancel();
+            nCts.Dispose();
+
+            var trs = cts.Token.Register(cb);
+            trs.Dispose();
+            trs = cts.Token.Register(cb);
+            trs = cts.Token.Register(cb);
+
+            cts.Cancel();
+            var isOk = cts.TryReset();
+            trs = cts.Token.Register(cb);
+        }
+        public async static Task SemaphoreSlim_Test()
+        {
+            int totalSliCount = 1;
+            Func<int, SemaphoreSlim, Task> tsk = async (idx, sl) =>
+            {
+                Console.WriteLine($"Enter - {idx}");
+                try
+                {
+                    await sl.WaitAsync();   //5 * 1000
+                    await Task.Delay(5 * 1000);
+                }
+                catch (Exception ex) 
+                {
+                }
+                finally {
+                    try
+                    {
+                        if (sl.CurrentCount == 0)
+                        {
+                            Console.WriteLine($"Release - ");
+                            sl.Release(12);
+                        }
+                    }
+                    catch(Exception ex) 
+                    {
+                        Console.WriteLine($"Error - {idx} - {sl.CurrentCount}");
+                    }
+                    Console.WriteLine($"Exit - {idx} - {sl.CurrentCount}");
+                }
+            };
+
+
+            var sli = new SemaphoreSlim(1);  //, totalSliCount
+            try
+            {
+                if (sli.CurrentCount < totalSliCount)
+                    sli.Release();
+            }
+            catch(Exception ex) 
+            { 
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                _ = tsk(i, sli);
+            }
+            await Task.Run(async () =>
+            {
+                var ss = sli;
+                int delay = 30;
+                for (int i = 0; i < delay; i++)
+                {
+                    Console.WriteLine("In delay section");
+                    await Task.Delay(1000);
+                }
+            });
+        }
         public async static Task CancellationTokenSourceThrowException_Test()
         {
             CancellationTokenSource ts = new(10 * 1000);
@@ -734,6 +809,72 @@ namespace Net6Test.TestGroups
             finally
             {
                 Console.WriteLine("Task_WhenAny_Test_2");
+            }
+        }
+
+        public static async Task ThreadPoolToken_Test()
+        {
+            var cs = new CancellationTokenSource(3 * 1000);
+            var tksrc = new CancellationTokenSource();
+            //tksrc.Cancel();
+            var tsk = Task.Run(async () => {
+                var i = 0;
+                while (true)
+                {
+                    Console.WriteLine($"{i++}");
+                    await Task.Delay(1000, tksrc.Token);
+                }
+            }, tksrc.Token);
+            await Task.Delay(5000);
+            tksrc.Cancel();
+            try
+            {
+                await tsk;
+            }
+            catch (Exception ex)
+            {
+            }
+            await Task.Delay(5000);
+        }
+
+        public async static Task SemaphoreLockEntry_Test()
+        {
+            var ssl = new SemaphoreSlim(0);
+            //ssl.Dispose();
+            //ssl.Dispose();
+            //ssl.Release();
+            //ssl = new SemaphoreSlim(0);
+            var tsk = Task.Run(async () => { 
+                await Task.Delay(3_000); 
+                ssl.Dispose(); 
+                Console.WriteLine($"out delay"); 
+            });
+            bool info = ssl.Wait(10_000);
+            await tsk;
+            ssl.Wait();
+
+            var se = new SemaphoreLockEntry(3);
+        }
+
+        public async static Task SemaphoreLockEntry_Example_Template()
+        {
+            var sle = new SemaphoreLockEntry(1);
+            bool sEnter = false;
+            try
+            {
+                Console.WriteLine($"Begin - {DateTime.Now}");
+                var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                sle.Release(sEnter);
+                var tdps = sle.TryDispose();
+                sle.Dispose();
             }
         }
     }
