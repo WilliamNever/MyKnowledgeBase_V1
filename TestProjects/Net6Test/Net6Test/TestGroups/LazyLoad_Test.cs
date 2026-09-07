@@ -28,6 +28,10 @@
             //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.PublicationOnly);
             //var lzyClass = new Lazy<CtentObj>(LazyThreadSafetyMode.None);
 
+            //var lzyClass = new Lazy<CtentObj>(() => new(), LazyThreadSafetyMode.ExecutionAndPublication);
+            //var lzyClass = new Lazy<CtentObj>(() => new(), LazyThreadSafetyMode.PublicationOnly);
+            //var lzyClass = new Lazy<CtentObj>(() => new(), LazyThreadSafetyMode.None);
+
             for (int i = 0; i < 5; i++)
             {
                 tsks.Add(Task.Run(() => {
@@ -129,7 +133,7 @@
         {
             InitialDateTime = $"{DateTime.Now}";
             ThreadId = Thread.CurrentThread.ManagedThreadId;
-            if (ThreadId > 8)
+            if (ThreadId < 8)
             {
                 Console.WriteLine($"Over 8 value - {ThreadId}");
                 throw new Exception("Threads Over limits!");
