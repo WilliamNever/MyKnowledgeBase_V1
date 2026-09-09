@@ -859,13 +859,28 @@ namespace Net6Test.TestGroups
         public async static Task SemaphoreLockEntry_Example_Template()
         {
             var sle = new SemaphoreLockEntry(1);
+            await sle.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
+            //await sle.AWaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
+
+            var tsk = Task.Run(async () => {
+                Console.WriteLine($"Enter Sub Task OutPut - {DateTime.Now}");
+                await sle.WaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
+                //await sle.AWaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
+                Console.WriteLine($"Exit Sub Task OutPut - {DateTime.Now}");
+            });
+
             bool sEnter = false;
             try
             {
                 Console.WriteLine($"Begin - {DateTime.Now}");
                 var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
+                sEnter = await sle.WaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                //sEnter = await sle.AWaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
                 Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                sEnter = await sle.WaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                //sEnter = await sle.AWaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                await tsk;
             }
             catch (Exception ex)
             {

@@ -82,8 +82,8 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
             {
                 try
                 {
-                    _Token = await ProcessingAsync(token);
-                    if (!string.IsNullOrEmpty(_Token?.Trim()))
+                    _Token = (await ProcessingAsync(token))?.Trim();
+                    if (!string.IsNullOrEmpty(_Token))
                     {
                         _cacheManage.CacheAPIToken("CacheKey", _Token);
                     }

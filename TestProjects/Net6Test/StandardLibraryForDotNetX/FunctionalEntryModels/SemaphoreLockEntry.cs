@@ -1,34 +1,10 @@
 ﻿namespace StandardLibraryForDotNetX.FunctionalEntryModels
 {
-    /*
-     * Usages - 
-    
-            var sle = new SemaphoreLockEntry(1);
-            bool sEnter = false;
-            try
-            {
-                Console.WriteLine($"Begin - {DateTime.Now}");
-                var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
-                Console.WriteLine($"{sEnter} - {DateTime.Now}");
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                sle.Release(sEnter);
-                var tdps = sle.TryDispose();
-                sle.Dispose();
-            }
-
-     */
-
     /// <summary>
     /// References SemaphoreSlim - 
-    /// ************************************************************************************
-    ///     SemaphoreLockEntry.Wait and SemaphoreLockEntry.Release must appear in pairs.
-    /// ************************************************************************************
+    /// **********************************************************************************************
+    ///     SemaphoreLockEntry.WaitAsync and SemaphoreLockEntry.Release must appear in pairs.
+    /// **********************************************************************************************
     /// </summary>
     public sealed class SemaphoreLockEntry : IDisposable
     {
@@ -57,29 +33,49 @@
             }
         }
 
-        public bool Wait(TimeSpan timeout, CancellationToken token = default)
+        public void AddReferenceCount()
         {
             lock (_lock)
             {
-                if (HasDisposed) return false;
-            }
-            return Semaphore.Wait(timeout, token);
-        }
-
-        public void AddReferenceCount()
-        {
-            lock (_lock) {
                 _referenceCount++;
             }
         }
 
-        public async Task<bool> WaitAsync(TimeSpan timeout, CancellationToken token = default)
+        public Task<bool> WaitAsync(TimeSpan timeout, CancellationToken token = default)
         {
             lock (_lock)
             {
-                if (HasDisposed) return false;
+                if (HasDisposed)
+                    return Task.FromResult(false);
+                else
+                    return Semaphore.WaitAsync(timeout, token);
             }
-            return await Semaphore.WaitAsync(timeout, token);
+        }
+
+        [Obsolete("Using WaitAsync method instead! This method is Only for Testing! " +
+            "This method can cause deadlock!!!", true)]
+        private async Task<bool> AWaitAsync(TimeSpan timeout, CancellationToken token = default)
+        {
+            lock (_lock)
+            {
+                if (HasDisposed)
+                    return false;
+                else
+                    return Semaphore.WaitAsync(timeout, token).Result;
+            }
+        }
+
+        [Obsolete("Using WaitAsync method instead! This method is Only for Testing! " +
+            "This method can cause deadlock!!!", true)]
+        private bool Wait(TimeSpan timeout, CancellationToken token = default)
+        {
+            lock (_lock)
+            {
+                if (HasDisposed)
+                    return false;
+                else
+                    return Semaphore.Wait(timeout, token);
+            }
         }
 
         public bool TryDispose()
@@ -109,15 +105,14 @@
                 Semaphore.Dispose();
             }
         }
-
-        //public int TestAddReference(int num)
-        //{
-        //    var ex = Interlocked.Exchange(ref _referenceCount, num);
-        //    //var ends = Interlocked.Or(ref _referenceCount, 2);
-        //    //ends = Interlocked.Or(ref _referenceCount, 2);
-        //    return Interlocked.Add(ref _referenceCount, num);
-        //    Interlocked.Decrement(ref _referenceCount);
-        //}
-
     }
+
+    //public int TestAddReference(int num)
+    //{
+    //    var ex = Interlocked.Exchange(ref _referenceCount, num);
+    //    //var ends = Interlocked.Or(ref _referenceCount, 2);
+    //    //ends = Interlocked.Or(ref _referenceCount, 2);
+    //    return Interlocked.Add(ref _referenceCount, num);
+    //    Interlocked.Decrement(ref _referenceCount);
+    //}
 }
