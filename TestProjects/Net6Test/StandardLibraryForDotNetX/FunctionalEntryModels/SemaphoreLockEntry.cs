@@ -33,11 +33,18 @@
             }
         }
 
-        public void AddReferenceCount()
+        /// <summary>
+        /// If this class has been disposed, then return false.
+        /// Else return true.
+        /// </summary>
+        /// <returns></returns>
+        public bool AddReferenceCount()
         {
             lock (_lock)
             {
+                if (HasDisposed) return false;
                 _referenceCount++;
+                return true;
             }
         }
 
