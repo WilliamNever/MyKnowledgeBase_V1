@@ -119,7 +119,21 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
                             tkSource = new CancellationTokenSource();
                         }
                         bags[sid].CancellationTokenSource = tkSource;
+
+                        // According to https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.run?view=net-6.0,
+                        // Task.Run will be good for ThreadPool. Thread pool will in use here.
                         bags[sid].Task = Task.Run(() => DealOneWorkOutLineAsync(sid, tkSource.Token), tkSource.Token);
+
+                        // the following methods, which init tasks in thread pool, will be the options for Task.Run.
+                        // when selecting, please carefully examine the differences.
+                        // the first one is almost equivalent to Task.Run.
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token)
+                        //, tkSource.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token), tkSource.Token);
+                        // the following one maks the thread pool more inclined to create independent threads
+                        // to avoid dragging down the thread pool. 
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token)
+                        //, tkSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
                     }
                 }
             }
