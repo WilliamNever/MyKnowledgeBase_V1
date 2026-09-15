@@ -787,7 +787,7 @@ namespace Net6Test.TestGroups
                 var tsk = Task.Run(async () =>
                 {
                     var lz = new Lazy<Task<int>>(Task.FromResult(i));
-                    _ = lz.Value;
+                    _ = await lz.Value;
                     lock (Lazies)
                     {
                         Lazies.Add(lz);
