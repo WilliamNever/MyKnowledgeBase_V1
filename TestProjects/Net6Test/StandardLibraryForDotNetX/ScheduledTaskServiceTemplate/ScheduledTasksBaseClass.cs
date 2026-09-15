@@ -86,7 +86,7 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
         protected virtual async Task<bool> CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var tss = bags.Select(x => x.Value.Task).ToList();
-            if (tss.Any())
+            if ((sids.IsEmpty && tss.Any()) || tss.Count >= _taskSettings.WorkingTasks)
             {
                 _ = await Task.WhenAny(tss);
             }
@@ -98,7 +98,29 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
             return true;
         }
 
-        protected abstract Task NoInBoundDataAWaitAsync(CancellationToken stoppingToken);
+        protected virtual async Task NoInBoundDataAWaitAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogTrace("Enter NoInBoundDataAWaitAsync at: {time}", DateTimeOffset.Now);
+            try
+            {
+                await ToResetSidsAsync(stoppingToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            if (Sids.IsEmpty)
+            {
+                await SSlim.WaitAsync(stoppingToken);
+            }
+            else
+            {
+                await SSlim.WaitAsync(5 * 1000, stoppingToken);
+            }
+            _logger.LogTrace("Exit NoInBoundDataAWaitAsync at: {time}", DateTimeOffset.Now);
+        }
+
+        protected abstract Task ToResetSidsAsync(CancellationToken stoppingToken);
 
         protected virtual async Task DistributeNewWorksAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
