@@ -781,11 +781,25 @@ namespace Net6Test.TestGroups
         public static async Task Task_WhenAny_Test_1()
         {
             var tsks = new List<Task<int>>();
+            var Lazies = new List<Lazy<Task<int>>>();
             for (int i = 0; i < 10; i++)
             {
-                tsks.Add(Task.Run(() => i));
+                var tsk = Task.Run(async () =>
+                {
+                    var lz = new Lazy<Task<int>>(Task.FromResult(i));
+                    _ = lz.Value;
+                    lock (Lazies)
+                    {
+                        Lazies.Add(lz);
+                    }
+                    await Task.Delay(3000);
+                    return i;
+                });
+                tsks.Add(tsk);
+                //await tsk;
             }
             var rs = await await Task.WhenAny(tsks);
+            var rs1 = await await Task.WhenAny(tsks);
             var rsAll = await Task.WhenAll(tsks);
             for (int i = 0; i < 10; i++)
             {
