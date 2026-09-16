@@ -138,6 +138,11 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                 var left = _taskSettings.WorkingTasks - ccout;
                 for (int i = 0; i < left; i++)
                 {
+                    /*
+                     * There is no race issue to add ConurrentTaskModel with a null task.
+                     * DistributeNewWorksAsync and CheckWorkingResultAsync are in main control thread/task.
+                     * They can only run step by step at a time.
+                     */
                     if (sids.TryDequeue(out var sid) && bags.TryAdd(sid, new ConurrentTaskModel()))
                     {
                         CancellationTokenSource tkSource;

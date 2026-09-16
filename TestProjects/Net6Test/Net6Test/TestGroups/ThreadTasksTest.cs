@@ -906,5 +906,27 @@ namespace Net6Test.TestGroups
                 sle.Dispose();
             }
         }
+        public async static Task TaskCompletionSource_Text()
+        {
+            /*
+             * There are some differences from the options of TaskCreationOptions.
+             * Please choose the right one in using.
+             */
+            var startSignal = new TaskCompletionSource<bool>(
+                TaskCreationOptions.RunContinuationsAsynchronously
+                //TaskCreationOptions.None
+                //TaskCreationOptions.AttachedToParent
+                );
+
+            _ = Task.Run(async () => {
+                Console.WriteLine($"Enter delay - {DateTime.Now}");
+                await Task.Delay(3000); 
+                Console.WriteLine($"Exit delay - {DateTime.Now}");
+                startSignal.TrySetResult(false);
+                Console.WriteLine($"Exit delay - 1 - {DateTime.Now}");
+            });
+            var shouldRun = await startSignal.Task.ConfigureAwait(false);
+            Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
+        }
     }
 }

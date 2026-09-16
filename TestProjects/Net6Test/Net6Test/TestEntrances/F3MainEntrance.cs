@@ -90,13 +90,14 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.Task_SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.CancellationTokenSource_Test().Wait();
             //ThreadTasksTest.CancellationTokenSourceThrowException_Test().Wait();
-            ThreadTasksTest.Task_WhenAny_Test_1().Wait();
+            //ThreadTasksTest.Task_WhenAny_Test_1().Wait();
             //ThreadTasksTest.Task_WhenAny_Test_2().Wait();
             //ThreadTasksTest.ThreadPoolToken_Test().Wait();
             //ThreadTasksTest.SemaphoreSlim_Test().Wait();
             //ThreadTasksTest.CancellationToken_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+            ThreadTasksTest.TaskCompletionSource_Text().Wait();
 
 
             //LazyLoad_Test.LazyLoad().Wait();
