@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32328.378
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12201.205 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6Test", "Net6Test\Net6Test.csproj", "{1CBE2A80-9B00-4023-A570-2E5F41928C77}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net8Test", "Net8Test\Net8Test.csproj", "{1E414E90-E8C5-492E-959B-B771A4EC8697}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net8Library", "Net8Library\Net8Library.csproj", "{1241F503-8E84-451E-A69A-EF150118ABDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net10Tests", "Net10Tests\Net10Tests.csproj", "{9F274853-10DB-4957-A417-7346628535CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{1241F503-8E84-451E-A69A-EF150118ABDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1241F503-8E84-451E-A69A-EF150118ABDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1241F503-8E84-451E-A69A-EF150118ABDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F274853-10DB-4957-A417-7346628535CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F274853-10DB-4957-A417-7346628535CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F274853-10DB-4957-A417-7346628535CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F274853-10DB-4957-A417-7346628535CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
