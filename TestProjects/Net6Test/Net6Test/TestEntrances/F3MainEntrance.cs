@@ -97,9 +97,10 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationToken_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+            ThreadTasksTest.TaskCompletionSource_Text().Wait();
 
 
-            LazyLoad_Test.LazyLoad().Wait();
+            //LazyLoad_Test.LazyLoad().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -117,6 +118,7 @@ namespace Net6Test.TestEntrances
             //ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
 
             //ListTests.ListJoinTest();
+            //ListTests.ListForEachTest().Wait();
 
             //Cronos_Tests.DateTimeTest();
             //Cronos_Tests.CreateDTimeTest().Wait();

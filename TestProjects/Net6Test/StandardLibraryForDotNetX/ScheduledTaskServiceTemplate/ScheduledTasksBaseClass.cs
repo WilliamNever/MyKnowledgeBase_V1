@@ -86,7 +86,7 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
         protected virtual async Task<bool> CheckWorkingResultAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
             var tss = bags.Select(x => x.Value.Task).ToList();
-            if (tss.Any())
+            if ((sids.IsEmpty && tss.Any()) || tss.Count >= _taskSettings.WorkingTasks)
             {
                 _ = await Task.WhenAny(tss);
             }
@@ -98,7 +98,29 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
             return true;
         }
 
-        protected abstract Task NoInBoundDataAWaitAsync(CancellationToken stoppingToken);
+        protected virtual async Task NoInBoundDataAWaitAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogTrace("Enter NoInBoundDataAWaitAsync at: {time}", DateTimeOffset.Now);
+            try
+            {
+                await ToResetSidsAsync(stoppingToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            if (Sids.IsEmpty)
+            {
+                await SSlim.WaitAsync(stoppingToken);
+            }
+            else
+            {
+                await SSlim.WaitAsync(5 * 1000, stoppingToken);
+            }
+            _logger.LogTrace("Exit NoInBoundDataAWaitAsync at: {time}", DateTimeOffset.Now);
+        }
+
+        protected abstract Task ToResetSidsAsync(CancellationToken stoppingToken);
 
         protected virtual async Task DistributeNewWorksAsync(ConcurrentQueue<TKey> sids, ConcurrentDictionary<TKey, ConurrentTaskModel> bags, CancellationToken stoppingToken)
         {
@@ -108,6 +130,11 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
                 var left = _taskSettings.WorkingTasks - ccout;
                 for (int i = 0; i < left; i++)
                 {
+                    /*
+                     * There is no race issue to add ConurrentTaskModel with a null task.
+                     * DistributeNewWorksAsync and CheckWorkingResultAsync are in main control thread/task.
+                     * They can only run step by step at a time.
+                     */
                     if (sids.TryDequeue(out var sid) && bags.TryAdd(sid, new ConurrentTaskModel()))
                     {
                         CancellationTokenSource tkSource;
@@ -119,7 +146,21 @@ namespace StandardLibraryForDotNetX.ScheduledTaskServiceTemplate
                             tkSource = new CancellationTokenSource();
                         }
                         bags[sid].CancellationTokenSource = tkSource;
+
+                        // According to https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.run?view=net-6.0,
+                        // Task.Run will be good for ThreadPool. Thread pool is in use here.
                         bags[sid].Task = Task.Run(() => DealOneWorkOutLineAsync(sid, tkSource.Token), tkSource.Token);
+
+                        // the following methods, which init tasks in thread pool, will be the options for Task.Run.
+                        // when selecting, please carefully examine the differences.
+                        // the first one is almost equivalent to Task.Run.
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token)
+                        //, tkSource.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token), tkSource.Token);
+                        // the following one makes the thread pool more inclined to create independent threads
+                        // to avoid dragging down the thread pool. 
+                        //bags[sid].Task = Task.Factory.StartNew(() => DealOneWorkOutLineAsync(sid, tkSource.Token)
+                        //, tkSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
                     }
                 }
             }

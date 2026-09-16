@@ -781,11 +781,25 @@ namespace Net6Test.TestGroups
         public static async Task Task_WhenAny_Test_1()
         {
             var tsks = new List<Task<int>>();
+            var Lazies = new List<Lazy<Task<int>>>();
             for (int i = 0; i < 10; i++)
             {
-                tsks.Add(Task.Run(() => i));
+                var tsk = Task.Run(async () =>
+                {
+                    var lz = new Lazy<Task<int>>(Task.FromResult(i));
+                    _ = await lz.Value;
+                    lock (Lazies)
+                    {
+                        Lazies.Add(lz);
+                    }
+                    await Task.Delay(3000);
+                    return i;
+                });
+                tsks.Add(tsk);
+                //await tsk;
             }
             var rs = await await Task.WhenAny(tsks);
+            var rs1 = await await Task.WhenAny(tsks);
             var rsAll = await Task.WhenAll(tsks);
             for (int i = 0; i < 10; i++)
             {
@@ -859,13 +873,28 @@ namespace Net6Test.TestGroups
         public async static Task SemaphoreLockEntry_Example_Template()
         {
             var sle = new SemaphoreLockEntry(1);
+            await sle.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
+            //await sle.AWaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
+
+            var tsk = Task.Run(async () => {
+                Console.WriteLine($"Enter Sub Task OutPut - {DateTime.Now}");
+                await sle.WaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
+                //await sle.AWaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
+                Console.WriteLine($"Exit Sub Task OutPut - {DateTime.Now}");
+            });
+
             bool sEnter = false;
             try
             {
                 Console.WriteLine($"Begin - {DateTime.Now}");
                 var tsrc = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                sEnter = sle.Wait(TimeSpan.FromSeconds(5), tsrc.Token);
+                sEnter = await sle.WaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                //sEnter = await sle.AWaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
                 Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                sEnter = await sle.WaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                //sEnter = await sle.AWaitAsync(TimeSpan.FromSeconds(5), tsrc.Token);
+                Console.WriteLine($"{sEnter} - {DateTime.Now}");
+                await tsk;
             }
             catch (Exception ex)
             {
@@ -876,6 +905,28 @@ namespace Net6Test.TestGroups
                 var tdps = sle.TryDispose();
                 sle.Dispose();
             }
+        }
+        public async static Task TaskCompletionSource_Text()
+        {
+            /*
+             * There are some differences from the options of TaskCreationOptions.
+             * Please choose the right one in using.
+             */
+            var startSignal = new TaskCompletionSource<bool>(
+                TaskCreationOptions.RunContinuationsAsynchronously
+                //TaskCreationOptions.None
+                //TaskCreationOptions.AttachedToParent
+                );
+
+            _ = Task.Run(async () => {
+                Console.WriteLine($"Enter delay - {DateTime.Now}");
+                await Task.Delay(3000); 
+                Console.WriteLine($"Exit delay - {DateTime.Now}");
+                startSignal.TrySetResult(false);
+                Console.WriteLine($"Exit delay - 1 - {DateTime.Now}");
+            });
+            var shouldRun = await startSignal.Task.ConfigureAwait(false);
+            Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
         }
     }
 }
