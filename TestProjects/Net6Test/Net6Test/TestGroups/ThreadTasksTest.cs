@@ -928,5 +928,24 @@ namespace Net6Test.TestGroups
             var shouldRun = await startSignal.Task.ConfigureAwait(false);
             Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
         }
+
+        public static async Task TaskCancellationTokenRegistration_Test()
+        {
+            CancellationTokenRegistration rgis = new CancellationTokenRegistration();
+            var act = () => { Console.WriteLine($"Cancel called."); rgis.Dispose(); };
+            var act1 = () => { Console.WriteLine($"Cancel called 1."); rgis.Dispose(); };
+            var tks = new CancellationTokenSource();
+            
+            rgis = tks.Token.Register(act);
+            rgis = tks.Token.Register(act);
+            Console.WriteLine($"Cancel is in calling.");
+            tks.Cancel();
+            //rgis.Dispose();
+            //rgis.Dispose();
+            var tks1 = new CancellationTokenSource();
+            rgis = tks.Token.Register(act1);
+            tks1.Cancel();
+            //rgis.Dispose();
+        }
     }
 }

@@ -37,12 +37,14 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             _logger.LogInformation("SetupAsync load data at: {time}", DateTimeOffset.Now);
 
             StopCancellationToken = stoppingToken;
-            _stpRegistration.Dispose();
             _stpRegistration = stoppingToken.Register(ReleaseResources);
 
             await Task.CompletedTask;
         }
-        public abstract void ReleaseResources();
+        public virtual void ReleaseResources()
+        {
+            _stpRegistration.Dispose();
+        }
 
         public virtual void Dispose()
         {

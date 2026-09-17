@@ -44,7 +44,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
             _logger.LogInformation("ScheduledTasksBaseClass.SetupAsync load data at: {time}", DateTimeOffset.Now);
 
             StopCancellationToken = stoppingToken;
-            _stpRegistration.Dispose();
+            
             _stpRegistration = stoppingToken.Register(ReleaseResources);
             _ = StartWorking(stoppingToken);
 
@@ -63,6 +63,7 @@ namespace StandardLibrary.ScheduledTaskServiceTemplate
                     obj.Dispose();
                 }
             }
+            _stpRegistration.Dispose();
         }
         public virtual void Dispose()
         {
