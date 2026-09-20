@@ -929,21 +929,24 @@ namespace Net6Test.TestGroups
             Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
         }
 
+        
         public static async Task TaskCancellationTokenRegistration_Test()
         {
+            CancellationTokenRegistration rgis1;
             CancellationTokenRegistration rgis = new CancellationTokenRegistration();
             var act = () => { Console.WriteLine($"Cancel called."); rgis.Dispose(); };
             var act1 = () => { Console.WriteLine($"Cancel called 1."); rgis.Dispose(); };
             var tks = new CancellationTokenSource();
-            
+
             rgis = tks.Token.Register(act);
-            rgis = tks.Token.Register(act);
+            rgis1 = tks.Token.Register(act);
             Console.WriteLine($"Cancel is in calling.");
             tks.Cancel();
-            //rgis.Dispose();
-            //rgis.Dispose();
+            var unReg = rgis.Unregister();
+            var unReg1 = rgis.Unregister();
+            rgis.Dispose();
             var tks1 = new CancellationTokenSource();
-            rgis = tks.Token.Register(act1);
+            rgis = tks1.Token.Register(act1);
             tks1.Cancel();
             //rgis.Dispose();
         }
