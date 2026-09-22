@@ -98,7 +98,7 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
             //ThreadTasksTest.TaskCompletionSource_Text().Wait();
-            ThreadTasksTest.TaskCancellationTokenRegistration_Test().Wait();
+            //ThreadTasksTest.TaskCancellationTokenRegistration_Test().Wait();
 
 
             //LazyLoad_Test.LazyLoad().Wait();
@@ -137,6 +137,8 @@ namespace Net6Test.TestEntrances
             //NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
 
             //DisposedTest.DisposedInterfacesTest().Wait();
+
+            ValidationAttributeTestGroup.AnnotationAttributeTest1().Wait();
         }
 
         private async Task ValueTupleTest()
