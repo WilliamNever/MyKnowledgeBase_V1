@@ -64,7 +64,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.PathCombine();
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
-            //StringChangeTests.StringJoin_Test().Wait();
+            StringChangeTests.StringJoin_Test().Wait();
             //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
@@ -138,7 +138,7 @@ namespace Net6Test.TestEntrances
 
             //DisposedTest.DisposedInterfacesTest().Wait();
 
-            ValidationAttributeTestGroup.AnnotationAttributeTest1().Wait();
+            //ValidationAttributeTestGroup.AnnotationAttributeTest1().Wait();
         }
 
         private async Task ValueTupleTest()
