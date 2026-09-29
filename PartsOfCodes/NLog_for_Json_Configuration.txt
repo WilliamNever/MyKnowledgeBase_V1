@@ -1,0 +1,102 @@
+/*
+Reference -
+. https://github.com/NLog/NLog.Extensions.Logging/wiki/NLog-configuration-with-appsettings.json
+. https://github.com/NLog/NLog/wiki/File-target
+. https://github.com/NLog/NLog/wiki/Mail-target
+**/
+
+
+{
+  "NLog": {
+    "autoReload": true,
+    "throwExceptions": true,
+    "internalLogLevel": "Error",
+    "internalLogFile": "logs/internal-nlog.txt",
+
+    "extensions": [
+      { "assembly": "NLog.Web.AspNetCore" },
+      { "assembly": "NLog.Database" }
+    ],
+
+    "targets": {
+      "blackhole": {
+        "type": "Null"
+      },
+
+      "logconsole": {
+        "type": "Console",
+        "layout": "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:${newline}${exception:format=tostring}}"
+      },
+
+      "logfile": {
+        "type": "File",
+        "fileName": "Logs/log-${shortdate}.txt",
+        "layout": "${longdate}  ${level:uppercase=true}  ${logger}  ${message}${onexception:${newline}${exception:format=tostring}}",
+        "archiveOldFileOnStartup": true,
+        "archiveFileName": "Logs/log.{#}.txt",
+        "archiveNumbering": "Date",
+        "archiveEvery": "Day",
+        "archiveDateFormat": "yyyyMMdd",
+        "maxArchiveFiles": 45,
+        "keepFileOpen": true,
+        "encoding": "utf-8"
+      },
+
+      "logEntries": {
+        "type": "Database",
+        "connectionString": "${configsetting:item=ConnectionStrings.Default}",
+        "commandText": "INSERT INTO [dbo].[LogEntries]\n([Host]\n,[Level]\n,[Logger]\n,[Message]\n,[TimeStampUTC])\nVALUES\n(@hst\n,@lvl\n,@log\n,@msg\n,getutcdate())",
+        "parameters": [
+          {
+            "name": "@hst",
+            "layout": "${machinename}"
+          },
+          {
+            "name": "@lvl",
+            "layout": "${level}"
+          },
+          {
+            "name": "@log",
+            "layout": "${logger}"
+          },
+          {
+            "name": "@msg",
+            "layout": "${message}${newline}${exception:format=tostring}"
+          }
+        ]
+      }
+
+      /* Email target intentionally left commented out */
+    },
+
+    "rules": [
+      {
+        "logger": "Microsoft.*",
+        "minLevel": "Trace",
+        "writeTo": "blackhole",
+        "final": true
+      },
+      {
+        "logger": "IdentityServer4.*",
+        "minLevel": "Trace",
+        "writeTo": "blackhole",
+        "final": true
+      },
+      {
+        "logger": "*",
+        "minLevel": "Info",
+        "writeTo": "logconsole"
+      },
+      {
+        "logger": "*",
+        "minLevel": "Info",
+        "writeTo": "logEntries"
+      },
+      {
+        "logger": "*",
+        "minLevel": "Info",
+        "writeTo": "logfile"
+      }
+    ]
+  }
+}
