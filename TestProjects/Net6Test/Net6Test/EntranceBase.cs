@@ -29,6 +29,15 @@ namespace Net6Test
         {
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddAutoMapper(typeof(MappingProfile1));
+
+            #region for inject automapper without AutoMapper.Extensions.Microsoft.DependencyInjection
+
+            // There are more pkgs in the higher versions, pay attention to the sub-pkgs in the version.
+            //services.AddAutoMapper(cfg => cfg.AddMaps(typeof(MappingProfile)));
+            //services.AddAutoMapper(cfg => cfg.AddMaps(typeof(MappingProfile1)));
+
+            #endregion
+
             services.AddMemoryCache(x => { });
             services.AddTransient<Func<string, string, string>>(_ => (x, y) => ExtensionsClass.GetName(x, y));
             services.AddHttpClient("PostClientXy");

@@ -87,8 +87,11 @@ namespace Net6Test.TestGroups
 
         public static async Task StringJoin_Test()
         {
-            var list = new List<string>() { "aa", null, "bb" };
-            var str = string.Join(",", list);
+            var list = new List<string>() { "a1", null, "b2" };
+            var str = string.Join(",", list.ToArray());
+            //str = null;
+            var subStr = str?[..3];
+            var subStr1 = str?[0..3];
         }
 
         public static async Task FileNames_Test()

@@ -64,7 +64,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.PathCombine();
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
-            //StringChangeTests.StringJoin_Test().Wait();
+            StringChangeTests.StringJoin_Test().Wait();
             //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
@@ -97,9 +97,11 @@ namespace Net6Test.TestEntrances
             //ThreadTasksTest.CancellationToken_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Test().Wait();
             //ThreadTasksTest.SemaphoreLockEntry_Example_Template().Wait();
+            //ThreadTasksTest.TaskCompletionSource_Text().Wait();
+            //ThreadTasksTest.TaskCancellationTokenRegistration_Test().Wait();
 
 
-            LazyLoad_Test.LazyLoad().Wait();
+            //LazyLoad_Test.LazyLoad().Wait();
 
 
             //DelegateFuncAction_Tests.DelegateGrpTest().Wait();
@@ -117,6 +119,7 @@ namespace Net6Test.TestEntrances
             //ConcurrentClassTests.ConcurrentDictionary1_Test().Wait();
 
             //ListTests.ListJoinTest();
+            //ListTests.ListForEachTest().Wait();
 
             //Cronos_Tests.DateTimeTest();
             //Cronos_Tests.CreateDTimeTest().Wait();
@@ -134,6 +137,8 @@ namespace Net6Test.TestEntrances
             //NewtonsoftJsonSerialization_Test.OptionalPropertySerialization_Test();
 
             //DisposedTest.DisposedInterfacesTest().Wait();
+
+            //ValidationAttributeTestGroup.AnnotationAttributeTest1().Wait();
         }
 
         private async Task ValueTupleTest()

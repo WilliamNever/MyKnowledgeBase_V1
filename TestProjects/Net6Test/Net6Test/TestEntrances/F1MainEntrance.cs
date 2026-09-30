@@ -31,7 +31,7 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(TestCutFileNameFromUrl());
             //Task.WaitAll(DateTimeFormatString());
             //Task.WaitAll(XMLSerializeTest());
-            //Task.WaitAll(AutoMapperTest());
+            Task.WaitAll(AutoMapperTest());
             //Task.WaitAll(JsonSerializerDeserializerTest());
             //Task.WaitAll(RelectClassAttribute());
             //Task.WaitAll(RelectReadingValuesTest());
@@ -48,7 +48,7 @@ namespace Net6Test.TestEntrances
             //Task.WaitAll(NumberCalculate());
             //Task.WaitAll(HttpResponseMessage_Test());
             //Task.WaitAll(StringFormat_Test());
-            Task.WaitAll(RegexesTestService_Test());
+            //Task.WaitAll(RegexesTestService_Test());
             //Task.WaitAll(Encryption_Test());
             //Task.WaitAll(Parallel_ForEach_Test());
             //Task.WaitAll(String_Test());

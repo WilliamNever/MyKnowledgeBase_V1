@@ -1,0 +1,2 @@
+﻿Each file is a group of tests that are related to a specific feature or functionality. 
+The tests in this group are designed to validate the behavior of the code under test and ensure that it meets the expected requirements.
