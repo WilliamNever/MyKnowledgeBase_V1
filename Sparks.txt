@@ -53,3 +53,21 @@ sqllocaldb -?	// for the command parameters
 the result of the shared instance is (localdb)\.\mylocaldb
 
 
+---------------------------------------------------------------------------------------------------------------
+
+IClaimsTransformation - the interface to transform the claim values
+
+Usages - 
+
+To inject the interface and its implement.
+services.AddTransient<IClaimsTransformation, ClaimsTransformationHelper>();	// ClaimsTransformationHelper : IClaimsTransformation
+
+---------------------------------------------------------------------------------------------------------------
+
+IHttpContextAccessor - an internal interface to read Http access information
+
+Usages -
+
+To inject the interface
+services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+

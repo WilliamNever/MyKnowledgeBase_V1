@@ -90,7 +90,9 @@ namespace Net6Test.TestGroups
             var list = new List<string>() { "a1", null, "b2" };
             var str = string.Join(",", list.ToArray());
             //str = null;
-            var subStr = str?[..3];
+
+            var substringLength = 3;
+            var subStr = (str?.Length ?? 0) > substringLength ? str?[..substringLength] : str;
             var subStr1 = str?[0..3];
         }
 
