@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Net6Test.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net6Test.TestGroups
 {
     public class CollectionListTest
     {
+        public static void DictionaryTest()
+        {
+            var dic = new Dictionary<string, string>();
+        }
         public static async Task ArrayList_Test()
         {
             var lst = new List<BaseStringIndex> {

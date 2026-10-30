@@ -32,6 +32,7 @@ namespace Net6Test.TestEntrances
 
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
+            CollectionListTest.DictionaryTest();
 
 
             //RecordTest.Test1Async().Wait();
@@ -64,7 +65,7 @@ namespace Net6Test.TestEntrances
             //StringChangeTests.PathCombine();
             //StringChangeTests.StringTrimTest();
             //StringChangeTests.Regex_Replace_Test().Wait();
-            StringChangeTests.StringJoin_Test().Wait();
+            //StringChangeTests.StringJoin_Test().Wait();
             //StringChangeTests.FileNames_Test().Wait();
 
             //XMLSchemaTest.Test1().Wait();
