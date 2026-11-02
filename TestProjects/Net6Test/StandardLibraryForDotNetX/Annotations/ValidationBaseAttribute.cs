@@ -20,19 +20,20 @@ namespace StandardLibraryForDotNetX.Annotations
             if (string.IsNullOrEmpty(memberName?.Trim()))
                 return null;
 
+            var member =
+                GetMemberInfos(validationContext.ObjectType, memberName, MemberTypes.Property | MemberTypes.Field
+                , BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.FirstOrDefault();
 
-            var members = validationContext.ObjectType.GetMember(
-                memberName, MemberTypes.Property | MemberTypes.Field,
-                BindingFlags.Public
-                | BindingFlags.NonPublic
-                | BindingFlags.Instance);
-
-            var infoNameAttr = members?.FirstOrDefault()?
+            var infoNameAttr = member?
                 .GetCustomAttributes(typeof(InforNameAttribute), false)?
                 .FirstOrDefault() as InforNameAttribute;
 
             return infoNameAttr?.Name?.Trim();
         }
+
+        private static MemberInfo[] GetMemberInfos(
+            Type type, string memberName, MemberTypes memberTypes, BindingFlags bindingFlags) =>
+            type.GetMember(memberName, memberTypes, bindingFlags);
 
         /// <summary>
         /// get the value from a Property or Field member 
@@ -42,11 +43,9 @@ namespace StandardLibraryForDotNetX.Annotations
         /// <returns></returns>
         protected static string? GetMemberValue(string memberName, ValidationContext validationContext)
         {
-            var member = validationContext.ObjectType.GetMember(
-                memberName, MemberTypes.Property | MemberTypes.Field,
-                BindingFlags.Public
-                | BindingFlags.NonPublic
-                | BindingFlags.Instance)?.FirstOrDefault();
+            var member =
+                GetMemberInfos(validationContext.ObjectType, memberName, MemberTypes.Property | MemberTypes.Field
+                , BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.FirstOrDefault();
 
             string? dvl = null;
             if (member is null) return dvl?.Trim();
