@@ -1,10 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Reflection;
 
 namespace StandardLibraryForDotNetX.Annotations
 {
     public class ValidationBaseAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// get the value of InfoName attribute from a Property or Field
+        /// </summary>
+        /// <param name="validationContext"></param>
+        /// <param name="memberName"></param>
+        /// <returns></returns>
         protected static string? GetInfoNameIfExists(ValidationContext validationContext, string? memberName = null)
         {
             if (string.IsNullOrEmpty(memberName?.Trim()))
@@ -14,32 +21,41 @@ namespace StandardLibraryForDotNetX.Annotations
                 return null;
 
 
-            var member = validationContext.ObjectType.GetMember(
-                memberName,
-                System.Reflection.BindingFlags.Public
-                | System.Reflection.BindingFlags.NonPublic
-                | System.Reflection.BindingFlags.Instance);
+            var members = validationContext.ObjectType.GetMember(
+                memberName, MemberTypes.Property | MemberTypes.Field,
+                BindingFlags.Public
+                | BindingFlags.NonPublic
+                | BindingFlags.Instance);
 
-            var infoNameAttr = member?.FirstOrDefault()?
+            var infoNameAttr = members?.FirstOrDefault()?
                 .GetCustomAttributes(typeof(InforNameAttribute), false)?
                 .FirstOrDefault() as InforNameAttribute;
 
             return infoNameAttr?.Name?.Trim();
         }
 
+        /// <summary>
+        /// get the value from a Property or Field member 
+        /// </summary>
+        /// <param name="memberName"></param>
+        /// <param name="validationContext"></param>
+        /// <returns></returns>
         protected static string? GetMemberValue(string memberName, ValidationContext validationContext)
         {
-            var property = validationContext.ObjectType.GetProperty(memberName, System.Reflection.BindingFlags.Instance
-                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-            var field = validationContext.ObjectType.GetField(memberName, System.Reflection.BindingFlags.Instance
-                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var member = validationContext.ObjectType.GetMember(
+                memberName, MemberTypes.Property | MemberTypes.Field,
+                BindingFlags.Public
+                | BindingFlags.NonPublic
+                | BindingFlags.Instance)?.FirstOrDefault();
 
             string? dvl = null;
-            if (property != null)
+            if (member is null) return dvl?.Trim();
+
+            if (member is PropertyInfo property)
             {
                 dvl = property?.GetValue(validationContext.ObjectInstance)?.ToString();
             }
-            else if (field != null)
+            else if (member is FieldInfo field)
             {
                 dvl = field?.GetValue(validationContext.ObjectInstance)?.ToString();
             }
