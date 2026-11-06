@@ -1,0 +1,83 @@
+<html>
+<head>
+<link rel="stylesheet" data-for="result" href="BDCss.css">
+</head>
+<body>
+<div class="cosd-markdown-content cosd-markdown-content-typingall" style="height: auto;"><div class="marklang">
+                    <p class="marklang-paragraph"><mark class="flexible-marker flexible-marker-default">‌<strong>ActionFilterAttribute 是 ASP.NET MVC 和 ASP.NET Core 中用于在控制器动作（Action）执行前后插入自定义逻辑的特性类</strong>‌</mark>，常用于日志记录、参数校验、权限验证、性能统计等横切关注点。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3682--><span class="cos-tooltip"><!--3685--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3686--><!--3685--></span><!--3683--><!--3688--><!--3688--><!--3682--></span></span></p>
+<h3>🧩 核心机制</h3>
+<p class="marklang-paragraph">继承该类并重写四个生命周期方法，框架会在对应阶段自动调用：‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3690--><span class="cos-tooltip"><!--3693--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3694--><!--3693--></span><!--3691--><!--3696--><!--3696--><!--3690--></span></span></p>
+<ol>
+<li>‌<strong>OnActionExecuting</strong>‌：Action 执行前调用，可做参数校验、权限检查，通过设置 <code>context.Result</code> 直接短路请求。</li>
+<li>‌<strong>OnActionExecuted</strong>‌：Action 执行后调用，可记录耗时、处理返回值或异常。</li>
+<li>‌<strong>OnResultExecuting</strong>‌：ActionResult 执行前调用，可修改响应头或替换结果。</li>
+<li>‌<strong>OnResultExecuted</strong>‌：ActionResult 执行后调用。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3698--><span class="cos-tooltip"><!--3701--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3702--><!--3701--></span><!--3699--><!--3704--><!--3704--><!--3698--></span></span></li>
+</ol>
+<h3>📦 基础用法示例</h3>
+<pre><div class="code-header"><span class="code-header-left">csharp</span><span class="code-header-right"><i class="cos-icon cos-icon-copy"></i></span></div><div class="code-wrapper"><div class="code-left"><div data-line-number="1" class="code-number"></div><div data-line-number="2" class="code-number"></div><div data-line-number="3" class="code-number"></div><div data-line-number="4" class="code-number"></div><div data-line-number="5" class="code-number"></div><div data-line-number="6" class="code-number"></div><div data-line-number="7" class="code-number"></div><div data-line-number="8" class="code-number"></div><div data-line-number="9" class="code-number"></div><div data-line-number="10" class="code-number"></div><div data-line-number="11" class="code-number"></div><div data-line-number="12" class="code-number"></div><div data-line-number="13" class="code-number"></div><div data-line-number="14" class="code-number"></div></div><div class="code-right"><code class="hljs language-csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">LogActionFilter</span> : <span class="hljs-title">ActionFilterAttribute</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnActionExecuting</span>(<span class="hljs-params">ActionExecutingContext context</span>)</span>
+    {
+        <span class="hljs-comment">// Action 执行前</span>
+        Debug.WriteLine(<span class="hljs-string">$"Executing: <span class="hljs-subst">{context.ActionDescriptor.DisplayName}</span>"</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnActionExecuted</span>(<span class="hljs-params">ActionExecutedContext context</span>)</span>
+    {
+        <span class="hljs-comment">// Action 执行后</span>
+        Debug.WriteLine(<span class="hljs-string">$"Executed: <span class="hljs-subst">{context.ActionDescriptor.DisplayName}</span>"</span>);
+    }
+}
+</code></div></div></pre>
+<p class="marklang-paragraph">使用方式：在控制器或 Action 上打 <code>[LogActionFilter]</code> 标签，或在 <code>Startup.cs</code> 中全局注册 <code>options.Filters.Add&lt;LogActionFilter&gt;();</code>。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3706--><span class="cos-tooltip"><!--3709--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3710--><!--3709--></span><!--3707--><!--3712--><!--3712--><!--3706--></span></span></p>
+<h3>⚠️ 常见踩坑点</h3>
+<ul>
+<li>‌<strong>注册问题</strong>‌：直接实现 <code>IActionFilter</code> 接口必须手动注册到 DI 容器，否则静默失效；继承 <code>ActionFilterAttribute</code> 相对省心，但类必须是 <code>public</code> 且需有无参构造函数。</li>
+<li>‌<strong>构造函数注入</strong>‌：不要注入 <code>HttpContext</code> 或 Scoped 生命周期的服务，过滤器实例可能在请求外创建。用 <code>context.HttpContext.RequestServices.GetService&lt;T&gt;()</code> 按需解析。</li>
+<li>‌<strong>执行顺序</strong>‌：<code>Order</code> 属性控制同类型过滤器的执行顺序，未显式设置时默认为 0，后添加的反而先执行；<code>IAuthorizationFilter</code> 永远早于 <code>IActionFilter</code> 执行。</li>
+<li>‌<strong>读取请求体</strong>‌：<code>Request.Body</code> 是单次可读流，被模型绑定或上游中间件读取后无法再次读取。安全做法是读取 <code>context.ActionArguments</code>（已绑定完成的参数值），或先启用 <code>EnableBuffering()</code> 再手动重置流位置。</li>
+<li>‌<strong>异步读取响应</strong>‌：在 <code>OnActionExecuted</code> 中不要用 <code>.Result</code> 同步读取响应内容，会导致死锁，应使用 <code>await</code>。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3714--><span class="cos-tooltip"><!--3717--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3718--><!--3717--></span><!--3715--><!--3720--><!--3720--><!--3714--></span></span></li>
+</ul>
+<h3>🎯 典型应用场景</h3>
+<ul>
+<li>‌<strong>接口鉴权</strong>‌：在 <code>OnActionExecuting</code> 中校验 Token 或签名，失败时设置 <code>context.Result</code> 返回 401。</li>
+<li>‌<strong>参数验证</strong>‌：检查 <code>context.ModelState.IsValid</code>，无效时返回 <code>BadRequestObjectResult</code>，避免每个 Action 重复写验证代码。</li>
+<li>‌<strong>操作日志</strong>‌：记录请求参数、响应结果、执行耗时和当前用户。</li>
+<li>‌<strong>响应处理</strong>‌：在 <code>OnResultExecuting</code> 中统一加响应头或替换返回结果。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3722--><span class="cos-tooltip"><!--3725--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3726--><!--3725--></span><!--3723--><!--3728--><!--3728--><!--3722--></span></span></li>
+</ul>
+<blockquote>
+<p class="marklang-paragraph">注意：过滤器执行时机与 MVC 管道阶段强绑定，资源过滤器的 <code>OnResourceExecuting</code> 在模型绑定前执行，此时 <code>ActionArguments</code> 还是空的；而动作过滤器的 <code>OnActionExecuting</code> 里才能看到绑定后的参数。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3730--><span class="cos-tooltip"><!--3733--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3734--><!--3733--></span><!--3731--><!--3736--><!--3736--><!--3730--></span></span></p>
+</blockquote>
+                </div></div>
+
+<hr/>
+
+<div class="cosd-markdown-content cosd-markdown-content-typingall" style="height: auto;"><div class="marklang">
+                    <p class="marklang-paragraph"><mark class="flexible-marker flexible-marker-default">‌<strong>ServiceFilter 是 ASP.NET Core 中用来给控制器或 Action 局部应用过滤器的特性，它的核心特点是支持从依赖注入（DI）容器解析过滤器实例。</strong>‌</mark> 也就是说，过滤器里的构造函数依赖（比如日志服务、数据库上下文）都能自动注入，不用自己手动 new。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3608--><span class="cos-tooltip"><!--3611--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3612--><!--3611--></span><!--3609--><!--3614--><!--3614--><!--3608--></span></span></p>
+<h3>🔧 基本用法</h3>
+<ol>
+<li>‌<strong>先写过滤器类</strong>‌：继承 <code>ActionFilterAttribute</code> 或实现 <code>IActionFilter</code> 等接口，构造函数里声明需要的依赖。</li>
+<li>‌<strong>注册到 DI 容器</strong>‌：在 <code>Program.cs</code> 里显式注册，比如 <code>builder.Services.AddScoped&lt;MyFilter&gt;();</code>。</li>
+<li>‌<strong>用 <code>[ServiceFilter]</code> 标记</strong>‌：在控制器或 Action 上加 <code>[ServiceFilter(typeof(MyFilter))]</code>。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3616--><span class="cos-tooltip"><!--3619--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3620--><!--3619--></span><!--3617--><!--3622--><!--3622--><!--3616--></span></span></li>
+</ol>
+<h3>⚠️ 关键注意点</h3>
+<ul>
+<li>‌<strong>必须注册</strong>‌：<code>ServiceFilter</code> 要求目标类型已注册到 DI 容器，否则运行时会报 <code>InvalidOperationException: No service for type 'MyFilter' has been registered.</code>。</li>
+<li>‌<strong>构造函数参数限制</strong>‌：<code>[ServiceFilter]</code> 不支持传非服务参数。想传固定值（比如字符串），改用 <code>[TypeFilter(typeof(MyFilter), Arguments = new object[] { "abc" })]</code>。</li>
+<li>‌<strong>生命周期跟随注册方式</strong>‌：过滤器实例的生命周期由注册方式决定（<code>Scoped</code>/<code>Transient</code>/<code>Singleton</code>）。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3624--><span class="cos-tooltip"><!--3627--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3628--><!--3627--></span><!--3625--><!--3630--><!--3630--><!--3624--></span></span></li>
+</ul>
+<h3>🔍 ServiceFilter vs TypeFilter</h3>
+<p class="marklang-paragraph">两者都能实现过滤器依赖注入，区别在于实例来源：‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3632--><span class="cos-tooltip"><!--3635--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3636--><!--3635--></span><!--3633--><!--3638--><!--3638--><!--3632--></span></span></p>
+<ul>
+<li>‌<strong>ServiceFilter</strong>‌：从 DI 容器获取实例，‌<strong>需要先注册</strong>‌，生命周期由注册方式控制。</li>
+<li>‌<strong>TypeFilter</strong>‌：不经过 DI 容器，用 <code>ObjectFactory</code> 直接实例化，‌<strong>不需要注册</strong>‌，每次创建新实例。</li>
+</ul>
+<blockquote>
+<p class="marklang-paragraph">想给过滤器传固定参数时，<code>TypeFilter</code> 更方便；想统一管理生命周期或复用已注册服务时，<code>ServiceFilter</code> 更合适。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3640--><span class="cos-tooltip"><!--3643--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3644--><!--3643--></span><!--3641--><!--3646--><!--3646--><!--3640--></span></span></p>
+</blockquote>
+<h3>📌 常见坑：全局过滤器注入 HttpContext</h3>
+<p class="marklang-paragraph">全局注册的过滤器默认是 singleton，而 <code>HttpContext</code> 是 scoped 服务，直接构造函数注入会启动报错。正确做法是在 <code>OnActionExecuting</code> 里用 <code>context.HttpContext.RequestServices.GetService&lt;T&gt;()</code> 延迟解析。‌‌<span disable-audio="true" disable-copy="true" disable-jump="true"><span rl-type="stop"><!--3648--><span class="cos-tooltip"><!--3651--><span class="cosd-citation cosd-citation-aggregated cos-link"><span class="cosd-citation-aggregated-citationId"><i class="cos-icon cos-icon-source-trace cosd-citation-aggregated-icon"></i></span></span><!--3652--><!--3651--></span><!--3649--><!--3654--><!--3654--><!--3648--></span></span></p>
+                </div></div>
+
+</body>
+</html>
