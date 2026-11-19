@@ -13,6 +13,8 @@ namespace Net6Test.TestEntrances
         {
             //await ConversionTest.ConvertCheckTestAsync();
 
+            await ThreadTasksTest.SemaphoreSlimWaitAsync_Test();
+
 
             await base.MainRunAsync();
         }
@@ -52,7 +54,7 @@ namespace Net6Test.TestEntrances
             //DateTime_Tests.DateTimeFormat_Test().Wait();
 
 
-            MemoryCache_Tests.Test();
+            //MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
             //SecurityCryptography_Tests.ToMD5_Test();

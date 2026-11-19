@@ -37,10 +37,11 @@ namespace Net6Test.TestGroups
                     await sl.WaitAsync();   //5 * 1000
                     await Task.Delay(5 * 1000);
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                 }
-                finally {
+                finally
+                {
                     try
                     {
                         if (sl.CurrentCount == 0)
@@ -49,7 +50,7 @@ namespace Net6Test.TestGroups
                             sl.Release(12);
                         }
                     }
-                    catch(Exception ex) 
+                    catch (Exception ex)
                     {
                         Console.WriteLine($"Error - {idx} - {sl.CurrentCount}");
                     }
@@ -64,8 +65,8 @@ namespace Net6Test.TestGroups
                 if (sli.CurrentCount < totalSliCount)
                     sli.Release();
             }
-            catch(Exception ex) 
-            { 
+            catch (Exception ex)
+            {
             }
             for (int i = 0; i < 10; i++)
             {
@@ -89,7 +90,8 @@ namespace Net6Test.TestGroups
             var tsk = Task.Run(async () =>
             {
                 var i = 1;
-                while (true) {
+                while (true)
+                {
                     Console.WriteLine($"1 - {i++}");
                     await Task.Delay(1000, ts.Token);
                     //Console.WriteLine("2");
@@ -99,16 +101,18 @@ namespace Net6Test.TestGroups
                     //await Task.Delay(1000, ts.Token);
                 }
             });
-            
-            try { 
+
+            try
+            {
                 //await Task.Delay(5000);
                 //ts.Cancel(true);//false
                 await tsk;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
             }
-            try {
+            try
+            {
                 //ts = new(10 * 1000);
                 var tsk1 = Task.Run(async () =>
                 {
@@ -130,7 +134,7 @@ namespace Net6Test.TestGroups
                 });
                 await tsk1;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
             }
         }
@@ -222,7 +226,7 @@ namespace Net6Test.TestGroups
             {
             }
             catch (Exception ex) when (ex.InnerException != null)
-            { 
+            {
             }
             catch (Exception ex)
             {
@@ -360,15 +364,16 @@ namespace Net6Test.TestGroups
             CancellationTokenSource ts = new CancellationTokenSource();
             var sl = new ManualResetEventSlim(false);
 
-            _ = Task.Run(async () => { 
-                await Task.Delay(5000); 
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(5000);
                 try
                 {
                     //Console.WriteLine($"To cancel token");
                     sl.Set();
                     //ts.Cancel();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                 }
             });
@@ -380,7 +385,8 @@ namespace Net6Test.TestGroups
             catch (Exception ex)
             {
             }
-            finally {
+            finally
+            {
                 sl.Reset();
             }
 
@@ -404,7 +410,8 @@ namespace Net6Test.TestGroups
                 Sids.Enqueue($"Queue - {i}");
             }
 
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await Task.Delay(10000);
                 for (int i = 0; i < 10; i++)
                 {
@@ -431,7 +438,7 @@ namespace Net6Test.TestGroups
             {
                 sl.Wait(ts.Token);
                 Console.WriteLine($"Starting......");
-                
+
                 var ccout = bags.Count;
                 if (ccout < totalTasks)
                 {
@@ -602,8 +609,8 @@ namespace Net6Test.TestGroups
                 var lst2 = bag.GetConsumingEnumerable(tokenSource.Token).ToList();
             }
             catch (Exception ex)
-            { 
-                Console.WriteLine(ex.ToString()); 
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -743,11 +750,13 @@ namespace Net6Test.TestGroups
         public async static Task ContinueWith_Test()
         {
             var tsk = Task.Run(() => { return 1; });
-            var x = await await tsk.ContinueWith( tsk => { throw new Exception("No Name"); return tsk.Result; })
-                .ContinueWith( tsk => {
+            var x = await await tsk.ContinueWith(tsk => { throw new Exception("No Name"); return tsk.Result; })
+                .ContinueWith(tsk =>
+                {
                     //throw new Exception("Second No Name");
                 }, TaskContinuationOptions.OnlyOnFaulted)
-                .ContinueWith(async tsk => {
+                .ContinueWith(async tsk =>
+                {
                     try
                     {
                         await tsk;
@@ -758,8 +767,9 @@ namespace Net6Test.TestGroups
                         return 3;
                     }
                 })
-                .ContinueWith(async tsk => { 
-                    return await await tsk; 
+                .ContinueWith(async tsk =>
+                {
+                    return await await tsk;
                 });
             await Console.Out.WriteLineAsync($"return value: {x}");
         }
@@ -767,7 +777,8 @@ namespace Net6Test.TestGroups
         public async static Task Task_SemaphoreSlim_Test()
         {
             SemaphoreSlim ss = new SemaphoreSlim(0);
-            Func<Task> func = async () => {
+            Func<Task> func = async () =>
+            {
                 await ss.WaitAsync();
                 Console.WriteLine($"Go End ------");
             };
@@ -831,7 +842,8 @@ namespace Net6Test.TestGroups
             var cs = new CancellationTokenSource(3 * 1000);
             var tksrc = new CancellationTokenSource();
             //tksrc.Cancel();
-            var tsk = Task.Run(async () => {
+            var tsk = Task.Run(async () =>
+            {
                 var i = 0;
                 while (true)
                 {
@@ -858,10 +870,11 @@ namespace Net6Test.TestGroups
             //ssl.Dispose();
             //ssl.Release();
             //ssl = new SemaphoreSlim(0);
-            var tsk = Task.Run(async () => { 
-                await Task.Delay(3_000); 
-                ssl.Dispose(); 
-                Console.WriteLine($"out delay"); 
+            var tsk = Task.Run(async () =>
+            {
+                await Task.Delay(3_000);
+                ssl.Dispose();
+                Console.WriteLine($"out delay");
             });
             bool info = ssl.Wait(10_000);
             await tsk;
@@ -876,7 +889,8 @@ namespace Net6Test.TestGroups
             await sle.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
             //await sle.AWaitAsync(TimeSpan.FromSeconds(5), CancellationToken.None);
 
-            var tsk = Task.Run(async () => {
+            var tsk = Task.Run(async () =>
+            {
                 Console.WriteLine($"Enter Sub Task OutPut - {DateTime.Now}");
                 await sle.WaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
                 //await sle.AWaitAsync(TimeSpan.FromSeconds(15), CancellationToken.None);
@@ -918,9 +932,10 @@ namespace Net6Test.TestGroups
                 //TaskCreationOptions.AttachedToParent
                 );
 
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 Console.WriteLine($"Enter delay - {DateTime.Now}");
-                await Task.Delay(3000); 
+                await Task.Delay(3000);
                 Console.WriteLine($"Exit delay - {DateTime.Now}");
                 startSignal.TrySetResult(false);
                 Console.WriteLine($"Exit delay - 1 - {DateTime.Now}");
@@ -929,7 +944,7 @@ namespace Net6Test.TestGroups
             Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
         }
 
-        
+
         public static async Task TaskCancellationTokenRegistration_Test()
         {
             CancellationTokenRegistration rgis1;
@@ -949,6 +964,18 @@ namespace Net6Test.TestGroups
             rgis = tks1.Token.Register(act1);
             tks1.Cancel();
             //rgis.Dispose();
+        }
+
+        public static async Task SemaphoreSlimWaitAsync_Test()
+        {
+            SemaphoreSlim sl = new SemaphoreSlim(1);
+
+            var ent1 = await sl.WaitAsync(TimeSpan.FromSeconds(5));
+            Console.WriteLine($"Enter 1");
+            var ent2 = await sl.WaitAsync(TimeSpan.FromSeconds(5));
+            Console.WriteLine($"Enter 2");
+
+            Console.WriteLine($"Exit SemaphoreSlim Test");
         }
     }
 }
