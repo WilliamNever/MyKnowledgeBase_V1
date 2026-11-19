@@ -24,7 +24,8 @@ EntranceBase main
 //= new TasksTestsMainEntrance();
 var o1 = EntranceBase.b0;
 
-main.MainRun();
+//main.MainRun();
+await main.MainRunAsync();
 
 var o2 = EntranceBase.b0;
 var isSame = object.ReferenceEquals(o1, o2);

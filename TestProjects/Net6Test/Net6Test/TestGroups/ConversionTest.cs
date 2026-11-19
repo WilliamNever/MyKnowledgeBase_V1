@@ -37,6 +37,15 @@ namespace Net6Test.TestGroups
                 rsl = re;
             }
         }
+
+        public static async Task ConvertCheckTestAsync()
+        {
+            object? obj = 33d;
+
+            var rsl = obj is double ? "Yes" : "No";
+            var isConvered = double.TryParse(obj?.ToString(), out var output);
+            Console.WriteLine(rsl, isConvered);
+        }
     }
 
     public class ValueClassTmp<T> : IVct<T>

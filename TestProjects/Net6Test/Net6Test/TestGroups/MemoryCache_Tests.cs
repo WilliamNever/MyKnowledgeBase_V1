@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net6Test.TestGroups
 {
@@ -12,8 +7,14 @@ namespace Net6Test.TestGroups
         public static void Test()
         {
             MemoryCache mc = new MemoryCache(new MemoryCacheOptions() { });
+            mc.Set("xxx", "xxx");
+            mc.Set("yyy", "xxx");
             mc.Remove("xxx");
-            mc.Remove(null);
+            //mc.Remove(null);  // throw exception
+
+            var rsl_xxx = mc.TryGetValue("xxx", out var rsl1);
+            var rsl_yyy = mc.TryGetValue("yyy", out var rsl2);
+            var rsl_zzz = mc.TryGetValue("zzz", out var rsl3);
         }
     }
 }

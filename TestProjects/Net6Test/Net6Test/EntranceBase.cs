@@ -47,6 +47,13 @@ namespace Net6Test
                 ;
         }
 
-        public abstract void MainRun();
+        public virtual void MainRun()
+        { 
+        }
+        public virtual Task MainRunAsync()
+        {
+            MainRun();
+            return Task.CompletedTask;
+        }
     }
 }

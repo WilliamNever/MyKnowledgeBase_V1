@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Net6Test.Models;
-using Net6Test.Services;
-using Net6Test.StaticUtilities;
 using Net6Test.TestGroups;
 using Newtonsoft.Json;
 using StandardLibrary.Helpers;
@@ -11,6 +9,13 @@ namespace Net6Test.TestEntrances
 {
     public class F3MainEntrance : EntranceBase
     {
+        public override async Task MainRunAsync()
+        {
+            //await ConversionTest.ConvertCheckTestAsync();
+
+
+            await base.MainRunAsync();
+        }
         public override void MainRun()
         {
             //InitialTest().Wait();
@@ -32,7 +37,7 @@ namespace Net6Test.TestEntrances
 
             //CollectionListTest.DictionaryExtensionsModel_Test().Wait();
             //CollectionListTest.NestListToExtraList_Test(provider).Wait();
-            CollectionListTest.DictionaryTest();
+            //CollectionListTest.DictionaryTest();
 
 
             //RecordTest.Test1Async().Wait();
@@ -47,7 +52,7 @@ namespace Net6Test.TestEntrances
             //DateTime_Tests.DateTimeFormat_Test().Wait();
 
 
-            //MemoryCache_Tests.Test();
+            MemoryCache_Tests.Test();
 
             //SecurityCryptography_Tests.ToHashSha256_Test();
             //SecurityCryptography_Tests.ToMD5_Test();
