@@ -8,7 +8,10 @@ namespace Net6Test.TestGroups
     {
         public static void DictionaryTest()
         {
-            var dic = new Dictionary<string, string>();
+            var dic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            dic.Add("AA", "aa");
+            //dic.Add("Aa", "aa");
+            var aVle = dic["aa"];
         }
         public static async Task ArrayList_Test()
         {

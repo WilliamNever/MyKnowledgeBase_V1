@@ -13,7 +13,9 @@ namespace Net6Test.TestEntrances
         {
             //await ConversionTest.ConvertCheckTestAsync();
 
-            await ThreadTasksTest.SemaphoreSlimWaitAsync_Test();
+            //await ThreadTasksTest.SemaphoreSlimWaitAsync_Test();
+
+            CollectionListTest.DictionaryTest();
 
 
             await base.MainRunAsync();
