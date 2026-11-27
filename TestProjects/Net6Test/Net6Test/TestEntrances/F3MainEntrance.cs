@@ -15,10 +15,12 @@ namespace Net6Test.TestEntrances
 
             //await ThreadTasksTest.SemaphoreSlimWaitAsync_Test();
 
-            CollectionListTest.DictionaryTest();
+            //CollectionListTest.DictionaryTest();
+
+            await SemaphoreSlim_Test.SemaphoreSlim_MaxCount_Test();
 
 
-            await base.MainRunAsync();
+            //await base.MainRunAsync();
         }
         public override void MainRun()
         {

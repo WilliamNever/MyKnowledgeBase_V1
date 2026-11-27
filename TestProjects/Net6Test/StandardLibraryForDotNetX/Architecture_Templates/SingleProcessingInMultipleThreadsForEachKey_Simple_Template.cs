@@ -19,6 +19,15 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
     ///     Carefully set EachTkeyLimit to 1 :
     ///         In a narrow window, which is in clearing the cached item/s frequently, 
     ///         the active working threads maybe double for each Key.
+    ///         
+    ///     new SemaphoreSlim(EachTkeyLimit) -
+    ///         Not restrict the max concurrent working threads.
+    ///         It grows the the number of concurrent working threads, if it gets more release count.
+    ///     
+    ///     new SemaphoreSlim(EachTkeyLimit, EachTkeyLimit) -
+    ///         It is the restricted settings. Restrict the max concurrent working threads.
+    ///         So it needs ReleaseLocker(SemaphoreSlim slim) method to release safely.
+    ///     
     /// ************************************************************************************
     /// </summary>
     public abstract class SingleProcessingInMultipleThreadsForEachKey_Simple_Template<T> where T : notnull, new()
@@ -38,7 +47,7 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
             var _Token = _cacheManage.GetAPIToken("CacheKey");
             if (!IsValid(_Token))
             {
-                var slim = _sslims.GetOrAdd(Tkey, _ => new SemaphoreSlim(EachTkeyLimit));
+                var slim = _sslims.GetOrAdd(Tkey, _ => new SemaphoreSlim(EachTkeyLimit, EachTkeyLimit));
 
                 var sAccess = false;
 
@@ -67,7 +76,10 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
                 {
                     if (sAccess)
                     {
-                        slim.Release();
+                        //slim.Release();
+
+                        ReleaseLocker(slim);
+
                         if (IsValid(_cacheManage.GetAPIToken("CacheKey")))
                         {
                             _sslims.TryRemove(Tkey, out _);
@@ -76,6 +88,17 @@ namespace StandardLibraryForDotNetX.Architecture_Templates
                 }
             }
             return new KeyValuePair<string, string>("CacheKey", _Token);
+        }
+
+        private void ReleaseLocker(SemaphoreSlim slim)
+        {
+            try
+            {
+                slim.Release();
+            }
+            catch (SemaphoreFullException ex){
+                // to log ex
+            }
         }
 
         private async Task<string> StartToProcessingAsync(CancellationToken token)
