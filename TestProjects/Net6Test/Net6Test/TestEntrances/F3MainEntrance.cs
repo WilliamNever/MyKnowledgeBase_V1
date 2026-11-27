@@ -17,7 +17,9 @@ namespace Net6Test.TestEntrances
 
             //CollectionListTest.DictionaryTest();
 
-            await SemaphoreSlim_Test.SemaphoreSlim_MaxCount_Test();
+            //await SemaphoreSlim_Test.SemaphoreSlim_MaxCount_Test();
+
+            await ThreadTasksTest.TaskCompletionSource_Text();
 
 
             //await base.MainRunAsync();

@@ -940,6 +940,7 @@ namespace Net6Test.TestGroups
                 startSignal.TrySetResult(false);
                 Console.WriteLine($"Exit delay - 1 - {DateTime.Now}");
             });
+            Console.WriteLine($"Enter main delay - {DateTime.Now}");
             var shouldRun = await startSignal.Task.ConfigureAwait(false);
             Console.WriteLine($"Enter in {shouldRun} - {DateTime.Now}");
         }
